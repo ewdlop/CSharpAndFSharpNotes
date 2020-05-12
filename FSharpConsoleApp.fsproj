@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Person.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="Number.fs" />
+    <Compile Include="Person.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

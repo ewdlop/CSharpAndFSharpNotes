@@ -9,8 +9,8 @@ module Person =
         match personName with
         | FirstOnly(firstName) -> printf "May I call you %s?" firstName
         | LastOnly(lastName) -> printf "Are you Mr. or Ms. %s?" lastName
-        | FirstLast(firstName, lastName) -> printf "Are you %s %s?" firstName lastN
-    type Person = {name : PersonName}
+        | FirstLast(firstName, lastName) -> printf "Are you %s %s?" firstName lastName
+    type Person = {First:string; Last:string}
     type Employee = 
         | Worker of Person
         | Manager of Employee list
