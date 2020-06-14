@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Stack.fs" />
+    <Compile Include="MathF.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="Number.fs" />
     <Compile Include="Person.fs" />

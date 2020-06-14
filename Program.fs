@@ -2,9 +2,13 @@
 
 open System
 open MyFSharpInterop.Color
+open MyFSharpInterop.MathF
 
 [<EntryPoint>]
 let main argv =
+    let helloWorld () = printfn "hello world"
+    let throwAwayFirstInput x y = y
     Color.printColorName Color.Color.Red
-    printfn "Hello World from F#!"
+    printfn "%i" (MathF.fib 5)
+    helloWorld()
     0 // return an integer exit code
