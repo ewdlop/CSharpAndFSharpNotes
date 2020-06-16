@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Color.fs" />
+    <Compile Include="MathF.fs" />
+    <Compile Include="Number.fs" />
+    <Compile Include="Person.fs" />
+    <Compile Include="Stack.fs" />
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+</Project>
