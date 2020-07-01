@@ -6,6 +6,7 @@ using static System.Diagnostics.Debug;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Microsoft.Quantum.Arrays;
 
 namespace CSharpConsoleApp
 {

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="SymbolicCalculation.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="MathF.fs" />
     <Compile Include="Number.fs" />
@@ -12,5 +13,7 @@
     <Compile Include="Stack.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
 </Project>
