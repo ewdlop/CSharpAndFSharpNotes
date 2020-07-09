@@ -1,4 +1,4 @@
 # CSharpAndFSharp
 
-The main entry is from the C# console app.
-Linqpad: https://www.linqpad.net/
+The main entry is from the C# console app.</br>
+LINQPAD: https://www.linqpad.net/
