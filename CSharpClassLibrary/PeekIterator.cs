@@ -8,7 +8,7 @@ namespace CSharpClassLibrary
 {
     public class PeekIterator<T> : IEnumerator<T>
     {
-        private const int CacheSize = 10;
+        public int CacheSize { get;} = 10;
         public IEnumerator<T> Enumerator { get; set; }
         public Queue<T> Queue { get; set; }
         public Stack<T> Stack { get; set; }
@@ -74,12 +74,12 @@ namespace CSharpClassLibrary
         public void Reset()
         {
             Enumerator.Reset();
-            Stack.Reverse();
-            while (Stack.Count > 0)
+            Queue.Reverse();
+            while (Queue.Count > 0)
             {
-                Queue.Enqueue(Stack.Pop());
+                Stack.Push(Queue.Dequeue());
             }
-            Stack.Reverse();
+            Queue.Reverse();
         }
 
         public void PutItBack()
