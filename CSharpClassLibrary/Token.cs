@@ -35,5 +35,43 @@ namespace CSharpClassLibrary
                     || Value.Equals("float") || Value.Equals("void")
                     || Value.Equals("string");
         }
+
+        public static Token MakeVarOrKeyword(PeekableIterator<char> iterator) {
+            string s = "";
+            while (iterator.MoveNext())
+            {
+                char lookahead = iterator.Peek();
+                if (AlphabetHelper.IsLetter(lookahead))
+                {
+                    s += lookahead;
+                }
+                else
+                {
+                    break;
+                }
+                iterator.Current();
+            }
+            if (KeyWords.IsKeyword(s))
+            {
+                return new Token
+                {
+                    Type = TokenType.KEYWORD,
+                    Value = s
+                };
+            }
+            if (s.Equals("true") || s.Equals("false"))
+            {
+                return new Token
+                {
+                    Type = TokenType.BOOLEAN,
+                    Value = s
+                };
+            }
+            return new Token
+            {
+                Type = TokenType.VARIABLE,
+                Value = s
+            };
+        }
     }
 }

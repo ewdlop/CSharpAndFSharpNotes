@@ -6,7 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace CSharpClassLibrary
 {
-    public class PeekIterator<T> : IEnumerator<T>
+    public class PeekableIterator<T> : IEnumerator<T>
     {
         public int CacheSize { get;} = 10;
         public IEnumerator<T> Enumerator { get; set; }
@@ -15,23 +15,26 @@ namespace CSharpClassLibrary
 
         public T EndToken { get; set; }
 
-        public PeekIterator(IEnumerable<T> enumerable)
+        public PeekableIterator(IEnumerable<T> enumerable)
         {
             Enumerator = enumerable.GetEnumerator();
             Queue = new Queue<T>();
             Stack = new Stack<T>();
         }
 
-        public PeekIterator(IEnumerable<T> enumerable, T endToken)
+        public PeekableIterator(IEnumerable<T> enumerable, T endToken)
         {
             Enumerator = enumerable.GetEnumerator();
             EndToken = endToken;
             Queue = new Queue<T>();
             Stack = new Stack<T>();
         }
+
         object IEnumerator.Current => Current();
         T IEnumerator<T>.Current => Current();
-        public T Current()
+        public T Current(){ return Enumerator.Current;}
+
+        public T Next()
         {
             T val;
             if (Stack.Count > 0)
@@ -40,7 +43,7 @@ namespace CSharpClassLibrary
             } 
             else
             {
-                if(!Enumerator.MoveNext())
+                if (!Enumerator.MoveNext())
                 {
                     T tmp = EndToken;
                     EndToken = default;
@@ -48,7 +51,7 @@ namespace CSharpClassLibrary
                 }
                 val = Enumerator.Current;
             }
-            while(Queue.Count > CacheSize - 1)
+            while (Queue.Count > CacheSize - 1)
             {
                 Queue.Dequeue();
             }
@@ -66,20 +69,22 @@ namespace CSharpClassLibrary
             {
                 return EndToken;
             }
-            T val = Current();
+            T val = Next();
             PutItBack();
             return val;
         }
         
         public void Reset()
         {
-            Enumerator.Reset();
-            Queue.Reverse();
-            while (Queue.Count > 0)
-            {
-                Stack.Push(Queue.Dequeue());
-            }
-            Queue.Reverse();
+            //Enumerator.Reset();
+            //Queue.Reverse();
+            //while (Queue.Count > 0)
+            //{
+            //    Stack.Push(Queue.Dequeue());
+            //}
+            //Stack.Reverse();
+            //EndToken = default;
+            throw new NotSupportedException();
         }
 
         public void PutItBack()

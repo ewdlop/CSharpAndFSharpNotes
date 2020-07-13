@@ -12,24 +12,9 @@ namespace CSharpClassLibrary
         public static Regex RegexLiteral { get; } = new Regex("^\\w$");
         public static Regex RegexOperator { get; } = new Regex("^[+-\\\\*/<>=!&|^%]$");
 
-        public static bool IsLetter(char c)
-        {
-            return RegexLetter.IsMatch(c + "");
-        }
-
-        public static bool IsNumber(char c)
-        {
-            return RegexNumber.IsMatch(c + "");
-        }
-
-        public static bool IsLiteral(char c)
-        {
-            return RegexLiteral.IsMatch(c + "");
-        }
-
-        public static bool IsOperator(char c)
-        {
-            return RegexOperator.IsMatch(c + "");
-        }
+        public static bool IsLetter(char c) => RegexLetter.IsMatch(c + "");
+        public static bool IsNumber(char c) => RegexNumber.IsMatch(c + "");
+        public static bool IsLiteral(char c) => RegexLiteral.IsMatch(c + "");
+        public static bool IsOperator(char c) => RegexOperator.IsMatch(c + "");
     }
 }
