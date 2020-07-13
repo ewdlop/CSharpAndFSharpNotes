@@ -18,12 +18,16 @@ namespace CSharpClassLibrary
         public PeekIterator(IEnumerable<T> enumerable)
         {
             Enumerator = enumerable.GetEnumerator();
+            Queue = new Queue<T>();
+            Stack = new Stack<T>();
         }
 
         public PeekIterator(IEnumerable<T> enumerable, T endToken)
         {
             Enumerator = enumerable.GetEnumerator();
             EndToken = endToken;
+            Queue = new Queue<T>();
+            Stack = new Stack<T>();
         }
         object IEnumerator.Current => Current();
         T IEnumerator<T>.Current => Current();
@@ -52,7 +56,6 @@ namespace CSharpClassLibrary
             return val;
         }
 
-
         public T Peek()
         {
             if(Stack.Count > 0)
@@ -67,10 +70,16 @@ namespace CSharpClassLibrary
             PutItBack();
             return val;
         }
-
+        
         public void Reset()
         {
-            throw new NotImplementedException();
+            Enumerator.Reset();
+            Stack.Reverse();
+            while (Stack.Count > 0)
+            {
+                Queue.Enqueue(Stack.Pop());
+            }
+            Stack.Reverse();
         }
 
         public void PutItBack()
@@ -83,9 +92,7 @@ namespace CSharpClassLibrary
             }
         }
 
-        public void Dispose()
-        {
-        }
+        void IDisposable.Dispose(){}
 
         public bool MoveNext()
         {
