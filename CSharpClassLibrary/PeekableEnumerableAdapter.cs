@@ -60,7 +60,7 @@ namespace CSharpClassLibrary
             {
                 return Stack.Peek();
             }
-            if (!NextAvailable)
+            if (!HasNext)
             {
                 return EndToken;
             }

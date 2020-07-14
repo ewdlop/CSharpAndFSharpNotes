@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CSharpClassLibrary\CSharpClassLibrary.csproj" />
     <ProjectReference Include="..\FSharpClassLibrary\FSharpClassLibrary.fsproj" />
     <ProjectReference Include="..\QSharpLibrary\QSharpLibrary.csproj" />
   </ItemGroup>

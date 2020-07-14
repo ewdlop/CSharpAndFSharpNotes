@@ -14,13 +14,13 @@ namespace XUnitTestProject
             Token token1 = Token.MakeVarOrKeyword(it1);
             Token token2 = Token.MakeVarOrKeyword(it2);
             Assert.Equal(TokenType.KEYWORD, token1.Type);
-            //Assert.Equal("if", token1.Value);
-            //Assert.Equal(TokenType.BOOLEAN, token2.Type);
-            //Assert.Equal("true", token2.Value);
-            //it1.Next();
-            //Token token3 = Token.MakeVarOrKeyword(it1);
-            //Assert.Equal(TokenType.VARIABLE, token3.Type);
-            //Assert.Equal("abc", token3.Value);
+            Assert.Equal("if", token1.Value);
+            Assert.Equal(TokenType.BOOLEAN, token2.Type);
+            Assert.Equal("true", token2.Value);
+            it1.Next();
+            Token token3 = Token.MakeVarOrKeyword(it1);
+            Assert.Equal(TokenType.VARIABLE, token3.Type);
+            Assert.Equal("abc", token3.Value);
         }
     }
 }

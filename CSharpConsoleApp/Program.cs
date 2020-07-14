@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Microsoft.Quantum.Arrays;
+using CSharpClassLibrary;
 
 namespace CSharpConsoleApp
 {
@@ -27,6 +28,10 @@ namespace CSharpConsoleApp
             Console.WriteLine($"Output: {restored.ToDelimitedString()}");
 
             Assert(bits.Parity() == restored.Parity());
+
+            PeekableEnumerableAdapter<char> it1 = new PeekableEnumerableAdapter<char>("if abc");
+            PeekableEnumerableAdapter<char> it2 = new PeekableEnumerableAdapter<char>("true abc");
+            Token token1 = Token.MakeVarOrKeyword(it1);
         }
 
         static bool Parity(this IEnumerable<bool> bitVector) =>
