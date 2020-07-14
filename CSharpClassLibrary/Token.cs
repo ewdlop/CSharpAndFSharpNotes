@@ -21,24 +21,27 @@ namespace CSharpClassLibrary
         public string Value { get; set; }
         new public string ToString => string.Format("type {0}, value {1}", Type, Value);
 
-        public bool IsScalar() {
+        public bool IsScalar()
+        {
             return Type == TokenType.INTEGER || Type == TokenType.FLOAT
                     || Type == TokenType.STRING || Type == TokenType.BOOLEAN;
         }
 
-        public bool IsVariable() {
+        public bool IsVariable()
+        {
             return Type == TokenType.VARIABLE;
         }
 
-        public bool IsType() {
+        public bool IsType()
+        {
             return Value.Equals("bool") || Value.Equals("int")
                     || Value.Equals("float") || Value.Equals("void")
                     || Value.Equals("string");
         }
 
-        public static Token MakeVarOrKeyword(PeekableIterator<char> iterator) {
+        public static Token MakeVarOrKeyword(PeekableEnumerableAdapter<char> iterator) {
             string s = "";
-            while (iterator.MoveNext())
+            while (iterator.HasNext)
             {
                 char lookahead = iterator.Peek();
                 if (AlphabetHelper.IsLetter(lookahead))
@@ -49,7 +52,7 @@ namespace CSharpClassLibrary
                 {
                     break;
                 }
-                iterator.Current();
+                iterator.Next();
             }
             if (KeyWords.IsKeyword(s))
             {

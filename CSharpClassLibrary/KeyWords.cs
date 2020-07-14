@@ -22,8 +22,6 @@ namespace CSharpClassLibrary
         };
 
         public static HashSet<string> Set { get; } = new HashSet<string>(Keywords);
-        public static bool IsKeyword(string word) {
-            return Set.Contains(word);
-        }
+        public static bool IsKeyword(string word) => Set.Contains(word);
     }
 }
