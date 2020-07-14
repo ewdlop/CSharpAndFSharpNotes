@@ -31,7 +31,7 @@ namespace CSharpConsoleApp
 
             PeekableEnumerableAdapter<char> it1 = new PeekableEnumerableAdapter<char>("if abc");
             PeekableEnumerableAdapter<char> it2 = new PeekableEnumerableAdapter<char>("true abc");
-            Token token1 = Token.MakeVarOrKeyword(it1);
+            Token token1 = Token.ParsingUsingIterator(it1);
         }
 
         static bool Parity(this IEnumerable<bool> bitVector) =>
