@@ -27,10 +27,7 @@ namespace CSharpClassLibrary
                     || Type == TokenType.STRING || Type == TokenType.BOOLEAN;
         }
 
-        public bool IsVariable()
-        {
-            return Type == TokenType.VARIABLE;
-        }
+        public bool IsVariable => Type == TokenType.VARIABLE;
 
         public bool IsType()
         {

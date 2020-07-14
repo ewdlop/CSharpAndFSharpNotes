@@ -15,8 +15,8 @@ namespace CSharpClassLibrary
         public IEnumerable<T> Enumerable { get; }
         public IEnumerator<T> Enumerator { get; }
         public int CacheSize { get; } = 10;
-        public Queue<T> Queue { get; internal set; } = new Queue<T>();
-        public Stack<T> Stack { get; internal set; } = new Stack<T>();
+        public Queue<T> Queue { get; } = new Queue<T>();
+        public Stack<T> Stack { get; } = new Stack<T>();
         public T EndToken { get; private set; }
         public T NextObject { get; private set; }
 
