@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CSharpClassLibrary
 {
-    public interface MakeStringState
+    public interface IMakeStringState
     {
         Token DoAction(MakeStringContent content, string s);
     }

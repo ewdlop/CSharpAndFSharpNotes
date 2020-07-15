@@ -15,6 +15,12 @@ namespace CSharpClassLibrary
     }
 
     public class Token {
+        public Token(TokenType type, string value)
+        {
+            Type = type;
+            Value = value;
+        }
+
         public TokenType Type { get; set; }
 
         public string Value { get; set; }
@@ -45,67 +51,26 @@ namespace CSharpClassLibrary
                 iterator.Next();
             }
             if (KeyWords.IsKeyword(s)) {
-                return new Token {
-                    Type = TokenType.KEYWORD,
-                    Value = s
-                };
+                return new Token(TokenType.KEYWORD, s);
             }
             if (s.Equals("true") || s.Equals("false")) {
-                return new Token {
-                    Type = TokenType.BOOLEAN,
-                    Value = s
-                };
+                return new Token(TokenType.BOOLEAN, s);
             }
-            return new Token {
-                Type = TokenType.VARIABLE,
-                Value = s
-            };
+            return new Token(TokenType.VARIABLE,s);
         }
 
         public static Token MakeString(PeekableEnumerableAdapter<char> iterator) {
             string s = "";
-            int state = 0;
-
+            IMakeStringState startState = new StartMakeStringState();
+            MakeStringContent content = new MakeStringContent(startState);
             while (iterator.HasNext) {
                 char c = iterator.Next();
-                switch (state){
-                    case 0:
-                        if (c == '"')
-                        {
-                            state = 1;
-                        }
-                        else 
-                        {
-                            state = 2;
-                        }
-                        s += c;
-                        break;
-                    case 1:
-                        if (c == '"') 
-                        {
-                            return new Token {
-                                Type = TokenType.STRING,
-                                Value = s + c
-                            };
-                        } 
-                        else 
-                        {
-                            s += c;
-                        }
-                        break;
-                    case 2:
-                        if (c == '\'')
-                        {
-                            return new Token {
-                                Type = TokenType.STRING,
-                                Value = s + c
-                            };
-                        } 
-                        else 
-                        {
-                            s += c;
-                        }
-                        break;
+                content.C = c;
+                Token token = content.State.DoAction(content, s + c);
+                if (token != null) {
+                    return token;
+                } else {
+                    s = content.Concat(s);
                 }
             }
             throw new LexicalException("Unexpected error");

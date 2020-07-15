@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CSharpClassLibrary
+﻿namespace CSharpClassLibrary
 {
     public class MakeStringContent
     {
-        public MakeStringState State { get;}
-        public char C { get;}
+        public IMakeStringState State { get; set; }
+        public char C { get; set; }
+
+        public MakeStringContent(IMakeStringState startState) {
+            State = startState;
+        }
 
         public string Concat(string s)
         {
