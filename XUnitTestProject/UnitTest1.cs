@@ -47,7 +47,6 @@ namespace XUnitTestProject
                     return null;
                 }
             }).ToList().ForEach(t => Assert.Equal(TokenType.STRING, t.Type));
-
         }
     }
 }
