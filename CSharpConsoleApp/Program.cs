@@ -8,13 +8,18 @@ using System;
 using System.Linq;
 using Microsoft.Quantum.Arrays;
 using CSharpClassLibrary;
+using System.Runtime.InteropServices;
 
 namespace CSharpConsoleApp
 {
     static class Program
     {
+        [DllImport("NativeClassLibrary.dll")]
+        public static extern int Test(int value);
         static async System.Threading.Tasks.Task Main(string[] args)
         {
+            Console.WriteLine(Test(2));
+
             int productOfTwo = Number.productOfTwo(1, 2);
             Console.WriteLine(string.Format("{0}", productOfTwo));
             int sumOfThree = Number.sumOfThree(1, 2, 3);

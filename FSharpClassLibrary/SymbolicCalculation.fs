@@ -29,6 +29,7 @@ module SymbolicCalculation =
         | Tanh of Expression
         | Coth of Expression
 
+    //_ = wildcards, Active Pattern
     let (|Op|_|) (e : Expression) =
         match e with
         | Add(e1, e2) -> Some(Add, e1, e2)
@@ -176,22 +177,22 @@ module SymbolicCalculation =
        | _ -> failwith(sprintf "Unrecognized operator [%A]" e)
 
     let FunctonName (e: Expression) (a : string) : string =
-           match e with
-           | Exp(_e) -> sprintf "e^(%s)" a
-           | Ln(_e) -> sprintf "ln(%s)" a
-           | Sin(_e) -> sprintf "sin(%s)" a
-           | Cos(_e) -> sprintf "cos(%s)" a
-           | Sec(_e) -> sprintf "sec(%s)" a
-           | Csc(_e) -> sprintf "csc(%s)" a
-           | Tan(_e) -> sprintf "tan(%s)" a
-           | Cot(_e) -> sprintf "cot(%s)" a
-           | Sinh(_e) -> sprintf "sinh(%s)" a
-           | Cosh(_e) -> sprintf "cosh(%s)" a
-           | Sech(_e) -> sprintf "sech(%s)" a
-           | Csch(_e) -> sprintf "csch(%s)" a
-           | Tanh(_e) -> sprintf "tanh(%s)" a
-           | Coth(_e) -> sprintf "coth(%s)" a
-           | _ -> failwith(sprintf "Unrecognized function [%A]" e)
+        match e with
+        | Exp(_e) -> sprintf "e^(%s)" a
+        | Ln(_e) -> sprintf "ln(%s)" a
+        | Sin(_e) -> sprintf "sin(%s)" a
+        | Cos(_e) -> sprintf "cos(%s)" a
+        | Sec(_e) -> sprintf "sec(%s)" a
+        | Csc(_e) -> sprintf "csc(%s)" a
+        | Tan(_e) -> sprintf "tan(%s)" a
+        | Cot(_e) -> sprintf "cot(%s)" a
+        | Sinh(_e) -> sprintf "sinh(%s)" a
+        | Cosh(_e) -> sprintf "cosh(%s)" a
+        | Sech(_e) -> sprintf "sech(%s)" a
+        | Csch(_e) -> sprintf "csch(%s)" a
+        | Tanh(_e) -> sprintf "tanh(%s)" a
+        | Coth(_e) -> sprintf "coth(%s)" a
+        | _ -> failwith(sprintf "Unrecognized function [%A]" e)
 
     let FormatExpression x =
         let rec FormatSubExpression (outer : Expression option, inner : Expression) : string =
@@ -267,10 +268,10 @@ module SymbolicCalculation =
             | head :: tail -> (head, level) :: LevelTokens tail level
 
         let GroupTokens (item : (string * int)) (acc : (string list * int) list) : (string list * int) list =
-                match acc, item with
-                | [], (s, l) -> [([s], l)]
-                | (s1, l1) :: tail, (s, l) when l = l1 -> (s :: s1, l) :: tail
-                | head :: tail, (s, l) -> ([s], l) :: head :: tail
+            match acc, item with
+            | [], (s, l) -> [([s], l)]
+            | (s1, l1) :: tail, (s, l) when l = l1 -> (s :: s1, l) :: tail
+            | head :: tail, (s, l) -> ([s], l) :: head :: tail
 
         let rec MergeExpressions (e : Expression, items : string list) : Expression =
             match items with
@@ -303,6 +304,7 @@ module SymbolicCalculation =
 
         let rec ParseTokenGroups (lst : (string list) list) : Expression =
             match lst with
+            | [] -> Empty
             | [ls] -> ParseFlatExpression(ls)
             | ls :: [op] :: tail when IsOperator(op) ->
                 ApplyOperator(op, ParseFlatExpression(ls), ParseTokenGroups(tail))
@@ -312,8 +314,10 @@ module SymbolicCalculation =
                 ApplyOperator(op, ParseFlatExpression(ls),
                     MergeTokensWithExpressions(ParseTokenGroups(tail), [optail]))
             | ls :: tail -> MergeTokensWithExpressions(ParseTokenGroups(tail), [ls])
-
-        let leveledTokens = (Tokenize s |> LevelTokens) 0
+        
+        //=LevelTokens(Tokenize(s), 0), assign each elemet of the string list the level
+        let leveledTokens = (Tokenize s |> LevelTokens) 0  // = LevelTokens (Tokenize s) 0
+        //drops the level
         let tokenGroups = List.foldBack GroupTokens leveledTokens [] |> List.map(fun (x, _y) -> x)
 
         ParseTokenGroups(tokenGroups)

@@ -15,9 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSharpClassLibrary\CSharpClassLibrary.csproj" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FSharpClassLibrary\FSharpClassLibrary.fsproj" />
-    <ProjectReference Include="..\QSharpLibrary\QSharpLibrary.csproj" />
   </ItemGroup>
 
 </Project>
