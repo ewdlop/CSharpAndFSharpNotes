@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="LambdaCalculus.fs" />
     <Compile Include="SymbolicCalculation.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="MathF.fs" />
