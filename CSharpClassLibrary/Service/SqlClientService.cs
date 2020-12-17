@@ -15,10 +15,8 @@ namespace CSharpClassLibrary.Service
             ConnectionString = connectionString;
         }
 
-        public async IAsyncEnumerable<ICollection<T>> ReadBatchAsync(int pageSize,int pageSkip = 0)
-        {
-            using (var connection = SqlClientFactory.Instance.CreateConnection())
-            {
+        public async IAsyncEnumerable<ICollection<T>> ReadBatchAsync(int pageSize, int pageSkip = 0) {
+            using (var connection = SqlClientFactory.Instance.CreateConnection()) {
                 //assume Model name match table name
                 string tableName = typeof(T).Name;
                 string queryString = $"SELECT * From {tableName} OFFSET @Skip ROWS FETCH Next @Take ROWS ONLY ";
@@ -35,19 +33,17 @@ namespace CSharpClassLibrary.Service
                     Direction = ParameterDirection.Input,
                     Value = pageSize
                 });
-                if (pageSkip> 0) {
+                if (pageSkip > 0) {
                     command.Parameters.Add(new SqlParameter("@Skip", SqlDbType.Int) {
                         Direction = ParameterDirection.Input,
                         Value = pageSkip
                     });
                 }
                 connection.Open();
-                using (DbDataReader reader = await command.ExecuteReaderAsync())
-                {
-                    while (reader.NextResult())
-                    {
+                using (DbDataReader reader = await command.ExecuteReaderAsync()) {
+                    while (reader.NextResult()) {
                         var page = new Collection<T>();
-                        while (reader.Read()) {
+                        while (await reader.ReadAsync()) {
                             var row = new T();
                             row.Parse(reader);
                             page.Add(row);
