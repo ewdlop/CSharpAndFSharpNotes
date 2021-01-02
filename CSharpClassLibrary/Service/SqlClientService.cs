@@ -15,7 +15,7 @@ namespace CSharpClassLibrary.Service
             ConnectionString = connectionString;
         }
 
-        public async IAsyncEnumerable<ICollection<T>> ReadBatchAsync(int pageSize, int pageSkip = 0) {
+        public async IAsyncEnumerable<ICollection<T>> ReadBatchAsync(int pageSize, int pageSkip = 0, bool GetOneResult = true) {
             using (var connection = SqlClientFactory.Instance.CreateConnection()) {
                 //assume Model name match table name
                 string tableName = typeof(T).Name;
@@ -40,15 +40,19 @@ namespace CSharpClassLibrary.Service
                     });
                 }
                 connection.Open();
-                using (DbDataReader reader = await command.ExecuteReaderAsync()) {
-                    while (reader.NextResult()) {
+                using (DbDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (reader.NextResult())
+                    {
                         var page = new Collection<T>();
-                        while (await reader.ReadAsync()) {
+                        while (await reader.ReadAsync())
+                        {
                             var row = new T();
                             row.Parse(reader);
                             page.Add(row);
                         }
                         yield return page;
+                        if (!GetOneResult) break;
                     }
                 }
             }

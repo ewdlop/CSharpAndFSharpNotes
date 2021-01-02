@@ -18,7 +18,7 @@ namespace CSharpConsoleApp
         public static extern int Test(int value);
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            Console.WriteLine(Test(2));
+            Console.WriteLine($"Method from native class: {Test(2)}");
 
             int productOfTwo = Number.productOfTwo(1, 2);
             Console.WriteLine(string.Format("{0}", productOfTwo));
