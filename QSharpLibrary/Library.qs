@@ -1,6 +1,6 @@
 ﻿/// # Summary
 /// 
-namespace Quantum.QSharpLibrary {
+namespace MyQSharpInterop {
 
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Intrinsic;

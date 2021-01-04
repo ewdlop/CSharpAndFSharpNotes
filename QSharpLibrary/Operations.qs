@@ -1,6 +1,6 @@
 ﻿/// # Summary
 /// 
-namespace MyQSharpInterop {
+namespace MyQSharpInterop.Operations {
 
     open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
@@ -20,7 +20,7 @@ namespace MyQSharpInterop {
     /// A qubit in arbitrary state |y⟩ (output qubit)
     operation ApplyProductWithNegationFunction (vector : Bool[], controls : Qubit[], target : Qubit)
     : Unit is Adj {
-        for ((bit, control) in Zip(vector, controls)) {
+        for ((bit, control) in Zipped(vector, controls)) {
             (ControlledOnInt(bit ? 1 | 0, X))([control], target);
         }
     }

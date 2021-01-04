@@ -12,11 +12,13 @@
 #include <iostream>
 #include <string>
 
-namespace MonoManager {
-
+namespace MonoManager
+{
 	static MonoDomain* domain = nullptr;
-	static MonoImage* image = nullptr;
-	static MonoImage* CoreAssemblyImage = nullptr;
+	static MonoImage* MainAssemblyImage = nullptr;
+	static MonoImage* IntermeidateAssemblyImage = nullptr;
+	static MonoAssembly* MainAssembly = nullptr;
+	static MonoAssembly* IntermeidateAssembly = nullptr;
 
 	static MonoMethod* GetMethod(MonoImage* image, const std::string& methodDesc);
 	struct MonoScript
@@ -26,22 +28,21 @@ namespace MonoManager {
 		std::string NamespaceName;
 
 		MonoClass* Class = nullptr;
-		MonoMethod* OnCreateMethod = nullptr;
-		MonoMethod* OnDestroyMethod = nullptr;
+		//MonoMethod* OnCreateMethod = nullptr;
+		//MonoMethod* OnDestroyMethod = nullptr;
+		MonoMethod* OnStartMethod = nullptr;
 		MonoMethod* OnUpdateMethod = nullptr;
-
-		// Physics
-		MonoMethod* OnCollision2DBeginMethod = nullptr;
-		MonoMethod* OnCollision2DEndMethod = nullptr;
+		MonoMethod* OnTriggerEnter = nullptr;
+		MonoMethod* OnTriggerStay = nullptr;
+		MonoMethod* OnTriggerExit = nullptr;
 
 		void InitClassMethods(MonoImage* image)
 		{
-			OnCreateMethod = GetMethod(image, FullName + ":OnCreate()");
-			OnUpdateMethod = GetMethod(image, FullName + ":OnUpdate(single)");
-
-			// Physics (Entity class)
-			OnCollision2DBeginMethod = GetMethod(CoreAssemblyImage, "x.Entity:OnCollision2DBegin(single)");
-			OnCollision2DEndMethod = GetMethod(CoreAssemblyImage, "x.Entity:OnCollision2DEnd(single)");
+			OnStartMethod = GetMethod(image, FullName + ":OnStart()");
+			OnUpdateMethod = GetMethod(image, FullName + ":OnUpdate(dt)");
+			MonoMethod* OnTriggerEnter = GetMethod(IntermeidateAssemblyImage, "x.Entity:OnTriggerEnter(other)");;
+			MonoMethod* OnTriggerStay = GetMethod(IntermeidateAssemblyImage, "x.Entity:OnTriggerStay(other)");;
+			MonoMethod* OnTriggerExit = GetMethod(IntermeidateAssemblyImage, "x.Entity:OnTriggerExit(other)");;
 		}
 	};
 
@@ -53,7 +54,7 @@ namespace MonoManager {
 
 	static void Init()
 	{
-		//.Net dlls
+		//.Net dlls, mabye .net Core lib?
 		//mono_set_assemblies_path("mono/lib");
 		// mono_jit_set_trace_options("--verbose");
 		auto domain = mono_jit_init("EmbeddingMono");
@@ -175,4 +176,5 @@ namespace MonoManager {
 		MonoObject* result = mono_runtime_invoke(method, object, params, &pException);
 		return result;
 	}
+
 }
