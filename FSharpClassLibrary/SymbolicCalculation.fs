@@ -206,6 +206,8 @@ module SymbolicCalculation =
                 | None -> s
                 | _ -> "(" + s + ")"
             | Func(f, e) -> FunctonName(inner) (FormatSubExpression(None, e))
+            | _ -> match outer with _ -> failwith(sprintf "Unrecognize Expression" )
+
         FormatSubExpression(None, x)
 
     let Tokenize (value : System.String) =
