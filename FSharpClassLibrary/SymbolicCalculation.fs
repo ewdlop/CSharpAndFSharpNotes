@@ -178,7 +178,7 @@ module SymbolicCalculation =
 
     let FunctonName (e: Expression) (a : string) : string =
         match e with
-        | Exp(_e) -> sprintf "e^(%s)" a
+        | Exp(_e) -> sprintf "exp(%s)" a
         | Ln(_e) -> sprintf "ln(%s)" a
         | Sin(_e) -> sprintf "sin(%s)" a
         | Cos(_e) -> sprintf "cos(%s)" a
@@ -212,7 +212,7 @@ module SymbolicCalculation =
 
     let Tokenize (value : System.String) =
         let value = value.Replace(" ", "")
-        let value = value.Replace("e^(", "e(")
+        let value = value.Replace("e", " exp ")
         let value = value.Replace("(", " ( ")
         let value = value.Replace(")", " ) ")
         let value = value.Replace("+", " + ")
@@ -229,7 +229,7 @@ module SymbolicCalculation =
 
     let IsFunction (x : string) =
         match x with
-        | "e" | "ln" | "sin" | "cos"| "sec" | "csc" | "tan" | "cot"| "sinh" | "cosh"| "sech" | "csch" | "tanh" | "coth" -> true
+        | "exp" | "ln" | "sin" | "cos"| "sec" | "csc" | "tan" | "cot"| "sinh" | "cosh"| "sech" | "csch" | "tanh" | "coth" -> true
         | _ -> false
 
     let ApplyOperator (op : string, e1 : Expression, e2 : Expression) : Expression =
@@ -243,7 +243,7 @@ module SymbolicCalculation =
 
     let ApplyFunction (func : string, e : Expression) : Expression =
         match func with
-        | "e" -> Exp(e)
+        | "exp" -> Exp(e)
         | "ln" -> Ln(e)
         | "sin" -> Sin(e)
         | "cos" -> Cos(e)
@@ -272,8 +272,8 @@ module SymbolicCalculation =
         let GroupTokens (item : (string * int)) (acc : (string list * int) list) : (string list * int) list =
             match acc, item with
             | [], (s, l) -> [([s], l)]
-            | (s1, l1) :: tail, (s, l) when l = l1 -> (s :: s1, l) :: tail
-            | head :: tail, (s, l) -> ([s], l) :: head :: tail
+            | (s1, l1) :: tail, (s, l) when l = l1 -> (s :: s1, l) :: tail //group to same level
+            | head :: tail, (s, l) -> ([s], l) :: head :: tail //group to the front
 
         let rec MergeExpressions (e : Expression, items : string list) : Expression =
             match items with
@@ -319,8 +319,7 @@ module SymbolicCalculation =
         
         //=LevelTokens(Tokenize(s), 0), assign each elemet of the string list the level
         let leveledTokens = (Tokenize s |> LevelTokens) 0  // = LevelTokens (Tokenize s) 0
-        //drops the level
-        let tokenGroups = List.foldBack GroupTokens leveledTokens [] |> List.map(fun (x, _y) -> x)
+        let tokenGroups = List.foldBack GroupTokens leveledTokens [] |> List.map(fun (x, _y) -> x) //drops the level
 
         ParseTokenGroups(tokenGroups)
 
