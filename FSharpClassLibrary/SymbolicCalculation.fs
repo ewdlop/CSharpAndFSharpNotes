@@ -212,7 +212,7 @@ module SymbolicCalculation =
 
     let Tokenize (value : System.String) =
         let value = value.Replace(" ", "")
-        let value = value.Replace("e", " exp ")
+        let value = value.Replace("e^", " exp ")
         let value = value.Replace("(", " ( ")
         let value = value.Replace(")", " ) ")
         let value = value.Replace("+", " + ")
