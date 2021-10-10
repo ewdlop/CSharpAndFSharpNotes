@@ -6,7 +6,7 @@ using System.Linq;
 
 //https://stackoverflow.com/questions/1273001/is-there-a-hasnext-method-for-an-ienumerator
 
-namespace CSharpClassLibrary
+namespace CSharpClassLibrary.RandomComplier
 {
     public sealed class PeekableEnumerableAdapter<T> : IIterable<T>, IIterator<T>
     {

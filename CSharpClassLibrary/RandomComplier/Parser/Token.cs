@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpClassLibrary
+namespace CSharpClassLibrary.RandomComplier
 {
     public enum TokenType
     {

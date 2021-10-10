@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary
+﻿namespace CSharpClassLibrary.RandomComplier
 {
     public class StartMakeStringState : IMakeStringState
     {

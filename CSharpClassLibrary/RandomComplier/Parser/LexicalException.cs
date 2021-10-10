@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace CSharpClassLibrary
+namespace CSharpClassLibrary.RandomComplier
 {
     [Serializable]
     public class LexicalException : Exception

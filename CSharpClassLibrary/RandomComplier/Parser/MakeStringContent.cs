@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary
+﻿namespace CSharpClassLibrary.RandomComplier
 {
     public class MakeStringContent
     {
@@ -9,9 +9,6 @@
             State = startState;
         }
 
-        public string Concat(string s)
-        {
-            return s + C;
-        }
+        public string Concat(string s) => $"{s}{C}";
     }
 }
