@@ -5,12 +5,15 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
     public interface ITemporaryExpressionNode
     {
-        int Number { get; set; }
+        int Number { get;}
     }
     public record TemporaryExpressionNode(TypeToken TypeToken) : ExpressionNode(WordToken.TEMP, TypeToken), ITemporaryExpressionNode
     {
-        static int Count { get; set; }
-        int ITemporaryExpressionNode.Number { get; set; } = ++Count;
-        public override string ToString() => $"t{(this as ITemporaryExpressionNode).Number}";
+        public readonly int Number = ++Count;
+        private static int Count { get; set; }
+
+        int ITemporaryExpressionNode.Number => Number;
+
+        public override string ToString() => $"t{Number}";
     }
 }

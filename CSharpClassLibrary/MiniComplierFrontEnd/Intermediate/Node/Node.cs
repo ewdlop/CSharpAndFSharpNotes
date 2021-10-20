@@ -9,17 +9,23 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
     }
     public interface INode : INodeEmitable
     {
-        int Lexline { get; init; }
+        int Lexline { get; }
         void Error(string error);
         public int NewLabel();
     }
     public record Node : INode
     {
-        int INode.Lexline { get; init; } = Lexer.Lexer.LINE;
+        private readonly int LINE;
+        int INode.Lexline => LINE;
+        public Node()
+        {
+            LINE = Lexer.Lexer.LINE;
+        }
+
         static int Labels { get; set; }
         void INode.Error(string error)
         {
-            throw new Exception($"near line {(this as INode).Lexline}: {error}");
+            throw new Exception($"near line {LINE}: {error}");
         }
         public int NewLabel()
         {

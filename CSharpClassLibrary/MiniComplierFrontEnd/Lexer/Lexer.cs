@@ -12,31 +12,24 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
     }
     public interface ILexer : IScan
     {
-        private const char EmptySpace = ' ';
-        char Peek { get; set; }
-        Dictionary<string, WordToken> WordTokens { get; init; }
-        void Reserve(WordToken wordToken) => WordTokens.Add(wordToken.Lexeme, wordToken);
-        void ResetPeek() => Peek = EmptySpace;
-        void ReadChar() => Convert.ToChar(Console.Read());
-        bool ReadChar(char c)
-        {
-            ReadChar();
-            if (Peek.CompareTo(c) != 0)
-            {
-                return false;
-            }
-            ResetPeek();
-            return true;
-        }
+        public const char EmptySpace = ' ';
+        char Peek { get; }
+        Dictionary<string, WordToken> WordTokens { get;}
+        void Reserve(WordToken wordToken);
+        void ResetPeek();
+        void ReadChar();
+        bool ReadChar(char c);
     }
     public class Lexer : ILexer
     {
-        private const char EmptySpace = ' ';
+        private readonly Dictionary<string, WordToken> _wordTokens;
+        private char _peek { get; set; }
         public static int LINE { get; set; } = 1;
-        char ILexer.Peek { get; set; } = EmptySpace;
-        Dictionary<string, WordToken> ILexer.WordTokens { get; init; } = new();
+        Dictionary<string, WordToken> ILexer.WordTokens => _wordTokens;
         public Lexer()
         {
+            _wordTokens = new();
+            _peek = ILexer.EmptySpace;
             (this as ILexer).Reserve(new("if", TokenTag.IF));
             (this as ILexer).Reserve(new("else", TokenTag.ELSE));
             (this as ILexer).Reserve(new("while", TokenTag.WHILE));
@@ -49,16 +42,29 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
             (this as ILexer).Reserve(TypeToken.CHAR);
             (this as ILexer).Reserve(TypeToken.BOOL);
         }
-
+        char ILexer.Peek => _peek;
+        void ILexer.Reserve(WordToken wordToken) => _wordTokens.Add(wordToken.Lexeme, wordToken);
+        void ILexer.ResetPeek() => _peek = ILexer.EmptySpace;
+        void ILexer.ReadChar() => Convert.ToChar(Console.Read());
+        bool ILexer.ReadChar(char c)
+        {
+            (this as ILexer).ReadChar();
+            if (_peek.CompareTo(c) != 0)
+            {
+                return false;
+            }
+            (this as ILexer).ResetPeek();
+            return true;
+        }
         public Token.Token Scan()
         {
             for (; ; (this as ILexer).ReadChar())
             {
-                if ((this as ILexer).Peek.CompareTo(EmptySpace) == 0 || (this as ILexer).Peek.CompareTo('\t') == 0)
+                if (_peek.CompareTo(ILexer.EmptySpace) == 0 || _peek.CompareTo('\t') == 0)
                 {
                     //continue;
                 }
-                else if ((this as ILexer).Peek.CompareTo(EmptySpace) == '\n')
+                else if (_peek.CompareTo(ILexer.EmptySpace) == '\n')
                 {
                     LINE++;
                 }
@@ -67,7 +73,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     break;
                 }
             }
-            switch ((this as ILexer).Peek)
+            switch (_peek)
             {
                 case '&':
                     if ((this as ILexer).ReadChar('&'))
@@ -124,15 +130,15 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                         return WordToken.GREATER_THAN;
                     }
             }
-            if (char.IsDigit((this as ILexer).Peek))
+            if (char.IsDigit(_peek))
             {
                 int number = 0;
                 do
                 {
-                    number = (10 * number) + Convert.ToInt32((this as ILexer).Peek.ToString(), 10);
+                    number = (10 * number) + Convert.ToInt32(_peek.ToString(), 10);
                     (this as ILexer).ReadChar();
-                } while (char.IsDigit((this as ILexer).Peek));
-                if ((this as ILexer).Peek.CompareTo('.') != 0)
+                } while (char.IsDigit(_peek));
+                if (_peek.CompareTo('.') != 0)
                 {
                     return new NumberToken(number);
                 }
@@ -141,22 +147,22 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                 for (; ; )
                 {
                     (this as ILexer).ReadChar();
-                    if (!char.IsDigit((this as ILexer).Peek))
+                    if (!char.IsDigit(_peek))
                     {
                         break;
                     }
-                    decimalNumber += Convert.ToInt32((this as ILexer).Peek.ToString(), 10) / tenExponent;
+                    decimalNumber += Convert.ToInt32(_peek.ToString(), 10) / tenExponent;
                     tenExponent *= 10;
                 }
             }
-            if (char.IsLetter((this as ILexer).Peek))
+            if (char.IsLetter(_peek))
             {
                 var stringBuilder = new StringBuilder();
                 do
                 {
-                    stringBuilder.Append((this as ILexer).Peek);
+                    stringBuilder.Append(_peek);
                     (this as ILexer).ReadChar();
-                } while (char.IsLetterOrDigit((this as ILexer).Peek));
+                } while (char.IsLetterOrDigit(_peek));
                 string word = stringBuilder.ToString();
                 if ((this as ILexer).WordTokens.TryGetValue(word, out WordToken wordToken))
                 {
@@ -169,7 +175,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     return wordToken;
                 }
             }
-            var token = new Token.Token((this as ILexer).Peek);
+            var token = new Token.Token(_peek);
             //var token = new Token.Token() { Tag = (this as ILexer).Peek - '0' };
             (this as ILexer).ResetPeek();
             return token;
