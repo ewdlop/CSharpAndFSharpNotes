@@ -5,18 +5,23 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
     public interface IExpressionEmitable
     {
-        public void EmitJumps(string test, int t, int f);
+        void EmitJumps(string test, int t, int f);
     }
     public interface IExpressionNode : IExpressionEmitable
     {
-        public ExpressionNode Generate();
-        public ExpressionNode Reduce();
+        ExpressionNode Generate();
+        ExpressionNode Reduce();
+        void Jumping(int t, int f);
     }
-    public record ExpressionNode(Token OperationToken, TypeToken TypeToken) : Node, IExpressionNode
+    public abstract record ExpressionNode(Token OperationToken, TypeToken TypeToken) : Node, IExpressionNode
     {
         public virtual ExpressionNode Generate() => this;
         public virtual ExpressionNode Reduce() => this;
-        public void EmitJumps(string test, int t, int f)
+        public virtual void Jumping(int t, int f)
+        {
+            EmitJumps(ToString(), t, f);
+        }
+        public virtual void EmitJumps(string test, int t, int f)
         {
             if (t != 0 && f != 0)
             {

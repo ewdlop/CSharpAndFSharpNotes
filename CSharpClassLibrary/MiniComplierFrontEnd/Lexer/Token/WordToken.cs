@@ -3,7 +3,7 @@
     public record WordToken(string Lexeme, int Tag) : Token(Tag)
     {
         public override string ToString() => Lexeme;
-        public static readonly WordToken
+        internal static readonly WordToken
             AND = new("&&", TokenTag.AND),
             OR = new("||", TokenTag.OR),
             EQUAL = new("==", TokenTag.EQUAL),

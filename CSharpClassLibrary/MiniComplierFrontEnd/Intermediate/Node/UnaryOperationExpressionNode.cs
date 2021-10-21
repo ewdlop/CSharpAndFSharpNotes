@@ -6,9 +6,6 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
         : OperationExpressionNode(Token, Symbols.TypeToken.Max(Symbols.TypeToken.INT, ExpressionNode.TypeToken))
     {
         public override ExpressionNode Generate() => new UnaryOperationExpressionNode(OperationToken, ExpressionNode.Reduce());
-        public override string ToString()
-        {
-            return $"{OperationToken} {ExpressionNode}";
-        }
+        public override string ToString() => $"{OperationToken} {ExpressionNode}";
     }
 }

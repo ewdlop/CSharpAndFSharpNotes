@@ -1,37 +1,32 @@
 ﻿using System;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexer;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
     public interface INodeEmitable
     {
-        public void EmitLable(int i);
-        public void Emit(string s);
+        void EmitLabel(int i);
+        void Emit(string s);
     }
     public interface INode : INodeEmitable
     {
         int Lexline { get; }
         void Error(string error);
-        public int NewLabel();
+        int NewLabel();
     }
-    public record Node : INode
+    public abstract record Node : INode
     {
-        private readonly int LINE;
-        int INode.Lexline => LINE;
+        private readonly ILexerCharacterReader _lexerCharacterReader;
+        public int Lexline { get; }
         public Node()
         {
-            LINE = Lexer.Lexer.LINE;
+            _lexerCharacterReader = new LexerCharacterReader();
+            Lexline = _lexerCharacterReader.Line;
         }
-
-        static int Labels { get; set; }
-        void INode.Error(string error)
-        {
-            throw new Exception($"near line {LINE}: {error}");
-        }
-        public int NewLabel()
-        {
-            return ++Labels;
-        }
-        public void EmitLable(int i) => Console.Write($"L{i}:");
+        private static int Labels { get; set; }
+        void INode.Error(string error) => throw new Exception($"near line {Lexline}: {error}");
+        public int NewLabel() => ++Labels;
+        public void EmitLabel(int i) => Console.Write($"L{i}:");
         public void Emit(string s) => Console.WriteLine($"\t{s}");
     }
 }
