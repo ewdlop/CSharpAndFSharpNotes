@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Token
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens
 {
     public record NumberToken(int Value) : Token(TokenTag.NUMBER)
     {

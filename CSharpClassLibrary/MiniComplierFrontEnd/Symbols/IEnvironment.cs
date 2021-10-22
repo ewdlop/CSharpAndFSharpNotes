@@ -1,11 +1,11 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Token;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols
 {
     public interface IEnvironment
     {
-        public IdExpressionNode Get(Token token);
-        public void Put(Token token, IdExpressionNode idExpressionNode);
+        public IdExpression Get(Token token);
+        public void Put(Token token, IdExpression idExpressionNode);
     }
 }

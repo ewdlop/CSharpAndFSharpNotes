@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Token;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
@@ -6,6 +6,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
     public class Lexer : ILexer
     {
         private readonly ILexerCharacterReader _lexerCharacterReader;
+        public IReadOnlyLexerCharacterReader ReadOnlyLexerCharacterReader => _lexerCharacterReader;
         public Lexer()
         {
             _lexerCharacterReader = new LexerCharacterReader();
@@ -21,6 +22,6 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
             _lexerCharacterReader.Reserve(TypeToken.CHAR);
             _lexerCharacterReader.Reserve(TypeToken.BOOL);
         }
-        public Token.Token Scan() => _lexerCharacterReader.Scan();
+        public Token Scan() => _lexerCharacterReader.Scan();
     }
 }

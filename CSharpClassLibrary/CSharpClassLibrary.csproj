@@ -15,7 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="MiniComplierFrontEnd\Intermediate\Node\Expression\" />
     <Folder Include="MiniComplierFrontEnd\Parser\" />
     <Folder Include="Service\" />
   </ItemGroup>

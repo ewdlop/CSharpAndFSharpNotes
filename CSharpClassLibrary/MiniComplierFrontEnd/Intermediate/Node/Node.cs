@@ -3,14 +3,8 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Lexer;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
-    public interface INodeEmitable
+    public interface INode : IReadOnlyNode
     {
-        void EmitLabel(int i);
-        void Emit(string s);
-    }
-    public interface INode : INodeEmitable
-    {
-        int Lexline { get; }
         void Error(string error);
         int NewLabel();
     }

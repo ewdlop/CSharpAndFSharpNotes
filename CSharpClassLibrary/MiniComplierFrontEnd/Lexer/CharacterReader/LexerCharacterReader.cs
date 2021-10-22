@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Token;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +26,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
         public virtual bool IsPeek(char c) => Peek.CompareTo(c) == 0;
         public virtual bool IsPeekEmptySpace() => IsPeek(ILexerCharacterReader.EmptySpace);
         public virtual void Reserve(WordToken wordToken) => WordTokens.Add(wordToken.Lexeme, wordToken);
-        public virtual Token.Token Scan()
+        public virtual Token Scan()
         {
             for (; ; ReadChar())
             {
@@ -52,7 +52,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     }
                     else
                     {
-                        return new Token.Token('&');
+                        return new Token('&');
                     }
                 case '|':
                     if (ReadChar('|'))
@@ -61,7 +61,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     }
                     else
                     {
-                        return new Token.Token('|');
+                        return new Token('|');
                     }
                 case '=':
                     if (ReadChar('='))
@@ -70,7 +70,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     }
                     else
                     {
-                        return new Token.Token('=');
+                        return new Token('=');
                     }
                 case '!':
                     if (ReadChar('='))
@@ -79,7 +79,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                     }
                     else
                     {
-                        return new Token.Token('!');
+                        return new Token('!');
                     }
                 case '<':
                     if (ReadChar('='))
@@ -148,7 +148,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
                 }
             }
 
-            var token = new Token.Token(Peek);
+            var token = new Token(Peek);
             //var token = new Token.Token() { Tag = (this as ILexer).Peek - '0' };
             ResetPeek();
             return token;

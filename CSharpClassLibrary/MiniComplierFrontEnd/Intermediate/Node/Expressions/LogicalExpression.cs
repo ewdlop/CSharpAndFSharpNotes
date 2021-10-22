@@ -1,10 +1,10 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Token;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
-    public record LogicalExpressionNode(Token Token, ExpressionNode ExpressionNode1, ExpressionNode ExpressionNode2)
-        : ExpressionNode(Token, Check(ExpressionNode1.TypeToken, ExpressionNode2.TypeToken))
+    public record LogicalExpression(Token Token, Expression Expression1, Expression Expression2)
+        : Expression(Token, Check(Expression1.TypeToken, Expression2.TypeToken))
     {
         public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
         {
@@ -18,11 +18,11 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
             }
         }
 
-        public override ExpressionNode Generate()
+        public override Expression Generate()
         {
             int f = NewLabel();
             int a = NewLabel();
-            var temporaryExpressionNode = new TemporaryExpressionNode(TypeToken);
+            var temporaryExpressionNode = new TemporaryExpression(TypeToken);
             Jumping(0, f);
             Emit($"{temporaryExpressionNode} = true");
             Emit($"goto L{a}");

@@ -2,6 +2,7 @@
 {
     public interface ILexer
     {
-        Token.Token Scan();
+        IReadOnlyLexerCharacterReader ReadOnlyLexerCharacterReader { get; }
+        Tokens.Token Scan();
     }
 }
