@@ -1,9 +1,9 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens
 {
     public static class TokenTag
     {
         internal static readonly int AND = 256,
-        PRIMITIVE = 257,
+        BASIC = 257,//PRIMITIVE
         BREAK = 258,
         DO = 259,
         ELSE = 260,

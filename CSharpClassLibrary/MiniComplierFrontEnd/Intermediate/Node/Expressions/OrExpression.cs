@@ -1,8 +1,8 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
-    public record OrExpression(Token Token, Expression Expression1, Expression Expression2)
+    public record OrExpression(Token Token, IExpression Expression1, IExpression Expression2)
         : LogicalExpression(Token, Expression1, Expression2)
     {
         public override void Jumping(int t, int f)

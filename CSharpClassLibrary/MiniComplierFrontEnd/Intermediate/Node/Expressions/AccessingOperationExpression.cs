@@ -1,9 +1,9 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node.Expressions
 {
-    public record AccessingOperationExpression(IdExpression ArrayExpression, Expression IndexExpression, TypeToken TypeToken)
+    public record AccessingOperationExpression(IdExpression ArrayExpression, IExpression IndexExpression, TypeToken TypeToken)
         : OperationExpression(new WordToken("[]", TokenTag.INDEX),TypeToken)
     {
         public override Expression Generate() => new AccessingOperationExpression(ArrayExpression, IndexExpression.Reduce(), TypeToken);

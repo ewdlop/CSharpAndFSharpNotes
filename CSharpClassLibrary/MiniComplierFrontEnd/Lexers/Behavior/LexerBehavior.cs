@@ -1,17 +1,17 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
 {
-    public class LexerCharacterReader : ILexerCharacterReader
+    public class LexerBehavior : ILexerBehavior
     {
         private Dictionary<string, WordToken> WordTokens { get; init; } = new();
         public int Line { get; private set; }
-        public char Peek { get; private set; } = ILexerCharacterReader.EmptySpace;
+        public char Peek { get; private set; } = ILexerBehavior.EmptySpace;
         public IReadOnlyDictionary<string, WordToken> ReadOnlyWordTokens => WordTokens;
-        public virtual void ResetPeek() => Peek = ILexerCharacterReader.EmptySpace;
+        public virtual void ResetPeek() => Peek = ILexerBehavior.EmptySpace;
         public virtual void ReadChar() => Peek = Convert.ToChar(Console.Read());
         public virtual bool ReadChar(char c)
         {
@@ -24,7 +24,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
             return true;
         }
         public virtual bool IsPeek(char c) => Peek.CompareTo(c) == 0;
-        public virtual bool IsPeekEmptySpace() => IsPeek(ILexerCharacterReader.EmptySpace);
+        public virtual bool IsPeekEmptySpace() => IsPeek(ILexerBehavior.EmptySpace);
         public virtual void Reserve(WordToken wordToken) => WordTokens.Add(wordToken.Lexeme, wordToken);
         public virtual Token Scan()
         {

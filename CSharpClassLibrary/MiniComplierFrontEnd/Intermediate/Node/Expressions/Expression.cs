@@ -1,22 +1,12 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
-{
-    public interface IExpressionEmitable
-    {
-        void EmitJumps(string test, int t, int f);
-    }
-    public interface IExpression : IExpressionEmitable
-    {
-        Expression Generate();
-        Expression Reduce();
-        void Jumping(int t, int f);
-    }
+{ 
     public abstract record Expression(Token OperationToken, TypeToken TypeToken) : Node, IExpression
     {
-        public virtual Expression Generate() => this;
-        public virtual Expression Reduce() => this;
+        public virtual IExpression Generate() => this;
+        public virtual IExpression Reduce() => this;
         public virtual void Jumping(int t, int f)
         {
             EmitJumps(ToString(), t, f);

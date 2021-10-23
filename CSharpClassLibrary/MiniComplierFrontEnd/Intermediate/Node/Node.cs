@@ -1,5 +1,5 @@
 ﻿using System;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexer;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
@@ -10,12 +10,14 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
     }
     public abstract record Node : INode
     {
-        private readonly ILexerCharacterReader _lexerCharacterReader;
+        private readonly ILexerBehavior _lexerBehavior;
         public int Lexline { get; }
         public Node()
         {
-            _lexerCharacterReader = new LexerCharacterReader();
-            Lexline = _lexerCharacterReader.Line;
+            //_lexerBehavior = lexerBehavior;'
+            //need to fix this
+            _lexerBehavior = new LexerBehavior();
+            Lexline = _lexerBehavior.Line;
         }
         private static int Labels { get; set; }
         void INode.Error(string error) => throw new Exception($"near line {Lexline}: {error}");

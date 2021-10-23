@@ -1,5 +1,5 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {

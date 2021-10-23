@@ -1,9 +1,9 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using System.Collections.Generic;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
 {
-    public interface IReadOnlyLexerCharacterReader
+    public interface IReadOnlyLexerBehavior
     {
         IReadOnlyDictionary<string, WordToken> ReadOnlyWordTokens { get; }
         int Line { get; }

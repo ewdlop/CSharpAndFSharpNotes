@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols
 {

@@ -1,9 +1,9 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
-    public record RelationExpression(Token Token, Expression Expression1, Expression Expression2)
+    public record RelationExpression(Token Token, IExpression Expression1, IExpression Expression2)
         : LogicalExpression(Token, Expression1, Expression2)
     {
         new public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
@@ -23,9 +23,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
         }
         public override void Jumping(int t, int f)
         {
-            Expression expression1 = Expression1.Reduce();
-            Expression expression2 = Expression2.Reduce();
-            string test = $"{expression1} {OperationToken} {expression2}";
+            string test = $"{Expression1.Reduce()} {OperationToken} {Expression2.Reduce()}";
             EmitJumps(test, t, f);
         }
     }

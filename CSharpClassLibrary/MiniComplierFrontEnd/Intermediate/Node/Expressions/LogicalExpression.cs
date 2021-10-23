@@ -1,9 +1,9 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node
 {
-    public record LogicalExpression(Token Token, Expression Expression1, Expression Expression2)
+    public record LogicalExpression(Token Token, IExpression Expression1, IExpression Expression2)
         : Expression(Token, Check(Expression1.TypeToken, Expression2.TypeToken))
     {
         public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)

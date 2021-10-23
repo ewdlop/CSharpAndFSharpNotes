@@ -1,9 +1,8 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexer.Tokens;
-using System.Collections.Generic;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexer
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
 {
-    public interface ILexerCharacterReader : IReadOnlyLexerCharacterReader
+    public interface ILexerBehavior : IReadOnlyLexerBehavior
     {
         public const char EmptySpace = ' ';
         void ResetPeek();
