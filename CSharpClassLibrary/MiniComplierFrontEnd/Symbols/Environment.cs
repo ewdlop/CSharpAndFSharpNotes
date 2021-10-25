@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using System.Collections.Generic;
 
@@ -6,15 +6,18 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols
 {
     public class Environment : IEnvironment
     {
-        private readonly IDictionary<Token, IdExpression> _tokenIdExpression;
-        public Environment()
+        private readonly Dictionary<Token, IdExpression> _tokenIdExpression;
+        public Environment(IEnvironment environment)
         {
             _tokenIdExpression = new Dictionary<Token, IdExpression>();
+            Previous = environment;
         }
-        protected Environment Previous { get; init; }
+        public IReadOnlyDictionary<Token, IdExpression> TokenIdExpression => _tokenIdExpression;
+        protected IEnvironment Previous { get; init; }
+        public IReadOnlyEnvironment PreviousEnvironment => Previous;
         public IdExpression Get(Token token)
         {
-            for (Environment environment = this; environment != null; environment = environment.Previous)
+            for (IReadOnlyEnvironment environment = this; environment != null; environment = environment.PreviousEnvironment)
             {
                 if(_tokenIdExpression.TryGetValue(token, out IdExpression Id))
                 {

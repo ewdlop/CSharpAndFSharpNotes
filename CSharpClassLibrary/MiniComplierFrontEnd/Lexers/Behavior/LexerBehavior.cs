@@ -9,9 +9,9 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
     {
         private Dictionary<string, WordToken> WordTokens { get; init; } = new();
         public int Line { get; private set; }
-        public char Peek { get; private set; } = ILexerBehavior.EmptySpace;
+        public char Peek { get; private set; } = IReadOnlyLexerBehavior.EmptySpace;
         public IReadOnlyDictionary<string, WordToken> ReadOnlyWordTokens => WordTokens;
-        public virtual void ResetPeek() => Peek = ILexerBehavior.EmptySpace;
+        public virtual void ResetPeek() => Peek = IReadOnlyLexerBehavior.EmptySpace;
         public virtual void ReadChar() => Peek = Convert.ToChar(Console.Read());
         public virtual bool ReadChar(char c)
         {
@@ -24,7 +24,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
             return true;
         }
         public virtual bool IsPeek(char c) => Peek.CompareTo(c) == 0;
-        public virtual bool IsPeekEmptySpace() => IsPeek(ILexerBehavior.EmptySpace);
+        public virtual bool IsPeekEmptySpace() => IsPeek(IReadOnlyLexerBehavior.EmptySpace);
         public virtual void Reserve(WordToken wordToken) => WordTokens.Add(wordToken.Lexeme, wordToken);
         public virtual Token Scan()
         {
@@ -147,9 +147,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior
                     return wordToken;
                 }
             }
-
             var token = new Token(Peek);
-            //var token = new Token.Token() { Tag = (this as ILexer).Peek - '0' };
             ResetPeek();
             return token;
         }

@@ -2,7 +2,7 @@
 {
     public static class TokenTag
     {
-        internal static readonly int AND = 256,
+        internal const int AND = 256,
         BASIC = 257,//PRIMITIVE
         BREAK = 258,
         DO = 259,

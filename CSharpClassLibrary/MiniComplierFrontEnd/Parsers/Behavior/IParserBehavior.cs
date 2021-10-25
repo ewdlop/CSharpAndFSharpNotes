@@ -1,13 +1,13 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node.Expressions;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node.Statements;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
 {
     public interface IParserBehavior<T1, T2,T3> : IReadOnlyParserBehavior<T1>
         where T1 : IEnvironment, new()
-        where T2 : IStatement, new()
+        where T2 : IStatement,INode, new()
         where T3 : IExpression, new()
     {
         void Move();
@@ -16,12 +16,12 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
         void Program();
         void Declare();
         TypeToken Type();
-        TypeToken Dims();
+        TypeToken Dims(TypeToken typeToken);
         T2 Block();
         T2 Statements();
         T2 Statement();
         T2 Assign();
-        T3 Bool();
+        T3 Boolean();
         T3 Join();
         T3 Equality();
         T3 Relation();

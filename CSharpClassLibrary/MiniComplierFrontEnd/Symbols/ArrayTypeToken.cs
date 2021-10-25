@@ -2,8 +2,8 @@
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols
 {
-    public record ArrayTypeToken(TypeToken TypeToken, int Size): TypeToken("[]", TokenTag.INDEX, Size * TypeToken.Width)
+    public record ArrayTypeToken(TypeToken OfTypeToken, int Size): TypeToken("[]", TokenTag.INDEX, Size * OfTypeToken.Width)
     {
-        public override string ToString() => $"[{Size}]{TypeToken}";
+        public override string ToString() => $"[{Size}]{OfTypeToken}";
     }
 }

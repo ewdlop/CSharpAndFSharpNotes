@@ -1,5 +1,6 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Node.Statements;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
@@ -7,7 +8,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers
 {
     public class Parser<T1,T2,T3> : IParser<T1, T2, T3>
         where T1 : IEnvironment, new()
-        where T2 : IStatement, new()
+        where T2 : IStatement,INode, new()
         where T3 : IExpression, new()
     {
         private readonly IParserBehavior<T1, T2, T3> _parserBehavior;
