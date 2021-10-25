@@ -10,9 +10,9 @@ using System;
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
 {
     public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
-        where T1: IEnvironment, new()
-        where T2: IStatement, INode, new()
-        where T3 : IExpression, new()
+        where T1: IEnvironment
+        where T2: IStatement
+        where T3 : IExpression
     {
         private readonly ILexer _lexer;
         private readonly Node _node;
@@ -41,10 +41,11 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
         public virtual void Program()
         {
             var statement = Block();
-            int begin = statement.NewLabel();
-            int after = statement.NewLabel();
-            statement.EmitLabel(begin);
-            statement.EmitLabel(after);
+            int begin = statement.Node.NewLabel();
+            int after = statement.Node.NewLabel();
+            statement.Node.EmitLabel(begin);
+            statement.Generate(begin,after);
+            statement.Node.EmitLabel(after);
         }
         public virtual void Declare()
         {

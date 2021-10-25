@@ -13,7 +13,10 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
             _node = node;
         }
         public int After { get; protected set; }
-        public virtual void Generate(int b, int a) { }
+        public virtual void Generate(int begin, int after) { }
+
+        public INode Node => _node;
+
         public virtual void Init(IExpression expression, IStatement statement) { }
     }
 }

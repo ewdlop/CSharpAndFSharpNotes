@@ -17,12 +17,12 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
                 _expression.Error("Boolean required in while");
             }
         }
-        public override void Generate(int b, int a)
+        public override void Generate(int begin, int after)
         {
-            int Label = _node.NewLabel();
-            _expression.Jumping(0, a);
+            int Label = Node.NewLabel();
+            _expression.Jumping(0, after);
             _node.EmitLabel(Label);
-            _statement.Generate(Label, a);
+            _statement.Generate(Label, after);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
 {
     public interface IReadOnlyStatement
     {

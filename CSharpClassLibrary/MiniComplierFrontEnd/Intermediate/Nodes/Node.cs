@@ -6,12 +6,10 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
     public class Node : INode
     {
         private readonly ILexerBehavior _lexerBehavior;
-        public int Lexline { get; }
-        public Node()
+        public int Lexline { get; init; }
+        public Node(LexerBehavior lexerBehavior)
         {
-            //_lexerBehavior = lexerBehavior;'
-            //need to fix this
-            _lexerBehavior = new LexerBehavior();
+            _lexerBehavior = lexerBehavior;
             Lexline = _lexerBehavior.Line;
         }
         private static int Labels { get; set; }

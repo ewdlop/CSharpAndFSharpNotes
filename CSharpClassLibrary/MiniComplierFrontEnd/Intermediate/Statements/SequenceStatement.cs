@@ -11,22 +11,22 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
             _statement1 = statement1;
             _statement2 = statement2;
         }
-        public override void Generate(int b, int a)
+        public override void Generate(int begin, int after)
         {
             if(_statement1 == NullStatement)
             {
-                _statement2.Generate(b, a);
+                _statement2.Generate(begin, after);
             }
             else if( _statement2 == NullStatement)
             {
-                _statement1.Generate(b, a);
+                _statement1.Generate(begin, after);
             }
             else
             {
                 int label = _node.NewLabel();
-                _statement1.Generate(b, a);
+                _statement1.Generate(begin, after);
                 _node.EmitLabel(label);
-                _statement2.Generate(b, a);
+                _statement2.Generate(begin, after);
             }
         }
     }

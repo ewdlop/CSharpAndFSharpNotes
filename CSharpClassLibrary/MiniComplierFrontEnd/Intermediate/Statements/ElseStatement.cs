@@ -19,16 +19,16 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
             _statement1 = statement1;
             _statement2 = statement2;
         }
-        public override void Generate(int b, int a)
+        public override void Generate(int begin, int after)
         {
-            int Label1 = _node.NewLabel();
-            int Label2 = _node.NewLabel();
+            int Label1 = Node.NewLabel();
+            int Label2 = Node.NewLabel();
             _expression.Jumping(0, Label2);
             _node.EmitLabel(Label1);
-            _statement1.Generate(Label1, a);
-            _node.Emit($"goto L{a}");
+            _statement1.Generate(Label1, after);
+            _node.Emit($"goto L{after}");
             _node.EmitLabel(Label2);
-            _statement2.Generate(Label2, a);
+            _statement2.Generate(Label2, after);
         }
     }
 }

@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
 {
     public interface IReadOnlyParserBehavior<T>
-        where T : IEnvironment, new()
+        where T : IEnvironment
     {
         Token LookAheadToken { get; }
         T TopSymbol { get; }

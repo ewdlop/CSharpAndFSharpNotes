@@ -6,6 +6,6 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
     {
         public BreakStatement(Node node) : base(node) {}
         public IStatement Statement { get; init; } = EnclosingStatement;
-        public override void Generate(int b, int a) => _node.Emit($"go to L{Statement.After}");
+        public override void Generate(int begin, int after) => _node.Emit($"go to L{Statement.After}");
     }
 }

@@ -32,6 +32,6 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
                 return null;
             }
         }
-        public override void Generate(int b, int a) => _node.Emit($"{_idExpression} = {_expression.Generate()}");
+        public override void Generate(int begin, int after) => _node.Emit($"{_idExpression} = {_expression.Generate()}");
     }
 }
