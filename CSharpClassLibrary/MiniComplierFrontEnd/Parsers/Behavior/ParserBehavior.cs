@@ -1,6 +1,7 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
@@ -13,18 +14,19 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior
         where T2: IStatement, INode, new()
         where T3 : IExpression, new()
     {
-        private readonly ILexerBehavior _lexerBehavior;
+        private readonly ILexer _lexer;
         private readonly Node _node;
         public Token LookAheadToken { get; private set; }
         public T1 TopSymbol { get; private set; }
         public int Used { get; private set; }
-        protected ParserBehavior(LexerBehavior lexerBehavior, Node Node)
+        protected ParserBehavior(ILexer lexer, Node Node)
         {
-            _lexerBehavior = lexerBehavior;
+            _lexer = lexer;
             _node = Node;
+            Move();
         }
-        void IParserBehavior<T1,T2,T3>.Error(string s) => throw new Exception($"near line {_lexerBehavior.Line}: {s}");
-        public virtual void Move() => LookAheadToken = _lexerBehavior.Scan();
+        void IParserBehavior<T1,T2,T3>.Error(string s) => throw new Exception($"near line {_lexer.LexLine}: {s}");
+        public virtual void Move() => LookAheadToken = _lexer.Scan();
         public virtual void Match(int tag)
         {
             if (LookAheadToken.Tag == tag)
