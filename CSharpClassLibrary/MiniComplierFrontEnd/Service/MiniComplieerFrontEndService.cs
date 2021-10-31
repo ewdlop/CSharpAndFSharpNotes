@@ -23,10 +23,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Service
                 .AddScoped<IParserBehavior<Environment, Statement, Expression>, ParserBehavior<Environment, Statement, Expression>>()
                 .AddScoped<ILexer, Lexer>()
                 .AddScoped<ILexerBehavior, LexerBehavior>()
-                .AddScoped<INode, Node>()
-                .AddScoped<IEnvironment, Environment>()
-                .AddScoped<IStatement, Statement>()
-                .AddScoped<IExpression, Expression>();
+                .AddScoped<INode, Node>();
         }
     }
 }
