@@ -2,7 +2,6 @@
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 using System;

@@ -1,7 +1,4 @@
-﻿using System;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
-
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
 {
     public interface INode : IReadOnlyNode
     {

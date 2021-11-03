@@ -3,7 +3,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record OrExpression(Token Token, IExpression Expression1, IExpression Expression2, Node Node)
+    public record OrExpression(Token Token, IExpression Expression1, IExpression Expression2, INode Node)
         : LogicalExpression(Token, Expression1, Expression2, Node)
     {
         public override void Jumping(int t, int f)
