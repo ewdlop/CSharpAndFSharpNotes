@@ -2,9 +2,6 @@
 {
     public class StringGroupoid : IGroupoid<string>
     {
-        public string Operation(string a, string b)
-        {
-            return string.Format("{0}{1}", a, b);
-        }
+        public string Operation(string a, string b) => a + b;
     }
 }
