@@ -7,6 +7,6 @@
     {
         A Addition { get; }
         M Multiplication { get; }
-        T Distrube(T a, T b);
+        T Distribute(T a, T b);
     }
 }
