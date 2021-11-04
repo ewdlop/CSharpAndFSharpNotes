@@ -11,6 +11,8 @@ using System.Buffers;
 using System.Threading.Tasks;
 using System.IO;
 using CSharpClassLibrary.Misc;
+using CSharpClassLibrary.Native;
+using CSharpClassLibrary.Reflection;
 
 namespace CSharpConsoleApp
 {
@@ -20,6 +22,8 @@ namespace CSharpConsoleApp
         public static extern int Test(int value);
         static async Task Main(string[] args)
         {
+            ReflectionTest.Test();
+
             Console.WriteLine($"Method from native class: {Test(2)}");
 
             int productOfTwo = Number.productOfTwo(1, 2);
@@ -46,8 +50,8 @@ namespace CSharpConsoleApp
             {
                 var value = Int32.Parse(Console.ReadLine());
                 var memory = owner.Memory;
-                WriteInt32ToBuffer(value, memory);
-                DisplayBufferToConsole(owner.Memory.Slice(0, value.ToString().Length));
+                Memory.WriteInt32ToBuffer(value, memory);
+                Memory.DisplayBufferToConsole(owner.Memory.Slice(0, value.ToString().Length));
             }
             catch (FormatException)
             {
@@ -86,77 +90,5 @@ namespace CSharpConsoleApp
 
         static string ToDelimitedString(this IEnumerable<bool> values) =>
             string.Join(", ", values.Select(x => x.ToString()));
-
-        static void WriteInt32ToBuffer(int value, Memory<char> buffer)
-        {
-            var strValue = value.ToString();
-
-            var span = buffer.Span;
-            for (int ctr = 0; ctr < strValue.Length; ctr++)
-                span[ctr] = strValue[ctr];
-        }
-
-        static void WriteInt32ToBuffer2(int value, Memory<char> buffer)
-        {
-            var strValue = value.ToString();
-
-            var span = buffer.Slice(0, strValue.Length).Span;
-            strValue.AsSpan().CopyTo(span);
-        }
-
-
-        static void DisplayBufferToConsole(ReadOnlyMemory<char> buffer) =>
-            Console.WriteLine($"Contents of the buffer: '{buffer}'");
-
-        private static int ToBuffer(int value, Span<char> span)
-        {
-            string strValue = value.ToString();
-            int length = strValue.Length;
-            strValue.AsSpan().CopyTo(span.Slice(0, length));
-            return length;
-        }
-        static Task Log(ReadOnlyMemory<char> message)
-        {
-            // Run in the background so that we don't block the main thread while performing IO.
-            return Task.Run(() =>
-            {
-                StreamWriter sw = File.AppendText(@".\input-numbers.dat");
-                sw.WriteLine(message);
-                sw.Flush();
-            });
-        }
-
-        static void Log2(ReadOnlyMemory<char> message)
-        {
-            string defensiveCopy = message.ToString();
-            // Run in the background so that we don't block the main thread while performing IO.
-            Task.Run(() =>
-            {
-                StreamWriter sw = File.AppendText(@".\input-numbers.dat");
-                sw.WriteLine(defensiveCopy);
-                sw.Flush();
-            });
-        }
-
-        static void Log3(ReadOnlyMemory<char> message)
-        {
-            // Run in the background so that we don't block the main thread while performing IO.
-            Task.Run(() =>
-            {
-                string defensiveCopy = message.ToString();
-                StreamWriter sw = File.AppendText(@".\input-numbers.dat");
-                sw.WriteLine(defensiveCopy);
-                sw.Flush();
-            });
-        }
-
-        static void PrintAllOddValues(ReadOnlyMemory<int> input)
-        {
-            var extractor = new OddValueExtractor(input);
-            while (extractor.TryReadNextOddValue(out int value))
-            {
-                Console.WriteLine(value);
-            }
-        }
     }
 }
