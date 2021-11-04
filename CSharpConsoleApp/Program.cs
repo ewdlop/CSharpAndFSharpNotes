@@ -14,7 +14,7 @@ namespace CSharpConsoleApp
     {
         static async Task Main(string[] args)
         {
-            ReflectionTest.Test();
+            Reflection.Test();
 
             //Console.WriteLine($"Method from native class: {Test(2)}");
 
