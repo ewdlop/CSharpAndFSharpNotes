@@ -7,8 +7,8 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
     {
         internal static readonly IStatement NullStatement = new Statement(NodeFactory.GetDummyNode());
         internal static IStatement EnclosingStatement = NullStatement;
-        protected readonly Node _node;
-        public Statement(Node node)
+        protected readonly INode _node;
+        public Statement(INode node)
         {
             _node = node;
         }

@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record Expression(Token OperationToken, TypeToken TypeToken, Node Node) : IExpression
+    public record Expression(Token OperationToken, TypeToken TypeToken, INode Node) : IExpression
     {
         public virtual IExpression Generate() => this;
         public virtual IExpression Reduce() => this;

@@ -19,11 +19,11 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Service
             //configure(options);
 
             return services
-                .AddScoped<IParser<Environment, Statement, Expression>, Parser<Environment, Statement, Expression>>()
-                .AddScoped<IParserBehavior<Environment, Statement, Expression>, ParserBehavior<Environment, Statement, Expression>>()
-                .AddScoped<ILexer, Lexer>()
                 .AddScoped<ILexerBehavior, LexerBehavior>()
-                .AddScoped<INode, Node>();
+                .AddScoped<ILexer, Lexer>()
+                .AddScoped<INode,Node>()
+                .AddScoped<IParserBehavior<Environment, Statement, Expression>, ParserBehavior<Environment, Statement, Expression>>()
+                .AddScoped<IParser<Environment, Statement, Expression>, Parser<Environment, Statement, Expression>>();
         }
     }
 }

@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record AccessingOperationExpression(IdExpression ArrayExpression, IExpression IndexExpression, TypeToken TypeToken, Node Node)
+    public record AccessingOperationExpression(IdExpression ArrayExpression, IExpression IndexExpression, TypeToken TypeToken, INode Node)
         : OperationExpression(new WordToken("[]", TokenTag.INDEX),TypeToken, Node)
     {
         public override Expression Generate() => new AccessingOperationExpression(ArrayExpression, IndexExpression.Reduce(), TypeToken, Node);

@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record LogicalExpression(Token Token, IExpression Expression1, IExpression Expression2, Node Node)
+    public record LogicalExpression(Token Token, IExpression Expression1, IExpression Expression2, INode Node)
         : Expression(Token, Check(Expression1.TypeToken, Expression2.TypeToken), Node)
     {
         public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)

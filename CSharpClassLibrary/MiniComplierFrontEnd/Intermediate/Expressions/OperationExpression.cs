@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record OperationExpression(Token Token, TypeToken TypeToken, Node Node) : Expression(Token,TypeToken, Node)
+    public record OperationExpression(Token Token, TypeToken TypeToken, INode Node) : Expression(Token,TypeToken, Node)
     {
         public override Expression Reduce()
         {

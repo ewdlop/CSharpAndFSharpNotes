@@ -4,7 +4,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
 {
-    public record ConstantExpression(Token Token, TypeToken TypeToken, Node Node)
+    public record ConstantExpression(Token Token, TypeToken TypeToken, INode Node)
         : Expression(Token, TypeToken, Node)
     {
         public ConstantExpression(int i, Node Node) : this(new NumberToken(i), TypeToken.INT, Node) { }
