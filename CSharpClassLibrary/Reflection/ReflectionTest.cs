@@ -49,14 +49,13 @@ namespace CSharpClassLibrary.Reflection
                 //IListProperties
                 //    .CartesianProduct(test)
                 //    .Select(x => string.Join("", x.)).
-                //foreach (var test2 in IListProperties.CartesianProduct(test))
-                //{
-                //    foreach(var o in )
-                //    {
-                //        Console.WriteLine(o);
-                //    }
-
-                //}
+                foreach (var test2 in IListProperties.CartesianProduct(test))
+                {
+                    foreach(var o in (IEnumerable<(PropertyInfo,object)>)test2)
+                    {
+                        Console.WriteLine();
+                    }
+                }
 
                 var nonIListProperties = test.GetType()
                     .GetProperties()
@@ -67,40 +66,40 @@ namespace CSharpClassLibrary.Reflection
             }
         }
 
-        //static IEnumerable<(string, object)> CartesianProduct(this IEnumerable<PropertyInfo> properties, object test)
-        //{
-        //    var IObjectEnumeratorTupleArray = properties
-        //           .Select(property => ( Name: property.Name, Enumerator: ((IEnumerable<object>)property.GetValue(test)).GetEnumerator()))
-        //           //.Where(IListPropertyEnumerator => IListPropertyEnumerator.MoveNext())
-        //           .ToArray();
+        static IEnumerable<object> CartesianProduct(this IEnumerable<PropertyInfo> properties, object test)
+        {
+            var IObjectEnumeratorTupleArray = properties
+                   .Select(property => ( Property: property, Enumerator: ((IEnumerable<object>)property.GetValue(test)).GetEnumerator()))
+                   .Where(IObjectEnumeratorTuple => IObjectEnumeratorTuple.Enumerator.MoveNext())
+                   .ToArray();
 
-        //    while (true)
-        //    {
-        //        // yield current values
-        //        yield return IObjectEnumeratorTupleArray
-        //            .Select(IObjectEnumeratorTuple => (IObjectEnumeratorTuple.Name, IObjectEnumeratorTuple.Enumerator.Current));
+            while (true)
+            {
+                // yield current values
+                yield return IObjectEnumeratorTupleArray
+                    .Select(IObjectEnumeratorTuple => (IObjectEnumeratorTuple.Property, IObjectEnumeratorTuple.Enumerator.Current));
 
-        //        // increase enumerators
-        //        foreach (var IObjectEnumeratorTuple in IObjectEnumeratorTupleArray)
-        //        {
-        //            // reset the slot if it couldn't move next
-        //            if (!IObjectEnumeratorTuple.Enumerator.MoveNext())//move next has side effect!!!(it moves then check)
-        //            {
-        //                // stop when the last enumerator resets
-        //                if (IObjectEnumeratorTuple == IObjectEnumeratorTupleArray.Last())
-        //                {
-        //                    yield break; //this exit the loop
-        //                }
-        //                IObjectEnumeratorTuple.Enumerator.Reset();
-        //                IObjectEnumeratorTuple.Enumerator.MoveNext();
-        //                // move to the next enumerator if this reseted
-        //                continue;
-        //            }
-        //                // we could increase the current enumerator without reset so stop here
-        //            break;
-        //        }
-        //    }
-        //}
+                // increase enumerators
+                foreach (var IObjectEnumeratorTuple in IObjectEnumeratorTupleArray)
+                {
+                    // reset the slot if it couldn't move next
+                    if (!IObjectEnumeratorTuple.Enumerator.MoveNext())//move next has side effect!!!(it moves then check)
+                    {
+                        // stop when the last enumerator resets
+                        if (IObjectEnumeratorTuple == IObjectEnumeratorTupleArray.Last())
+                        {
+                            yield break; //this exit the loop
+                        }
+                        IObjectEnumeratorTuple.Enumerator.Reset();
+                        IObjectEnumeratorTuple.Enumerator.MoveNext();
+                        // move to the next enumerator if this reseted
+                        continue;
+                    }
+                        // we could increase the current enumerator without reset so stop here
+                    break;
+                }
+            }
+        }
 
         public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
         {

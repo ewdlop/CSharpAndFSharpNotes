@@ -7,7 +7,8 @@ namespace CSharpClassLibrary.Native
 {
     class Wrapper
     {
-
+        [DllImport("NativeClassLibrary.dll")]
+        public static extern int Test(int value);
 
         //[DllImport(...)]
         private static extern unsafe int ExportedMethod(byte* pbData, int cbData);
