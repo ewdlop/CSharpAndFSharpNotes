@@ -218,7 +218,7 @@ namespace CSharpClassLibrary.Reflection
                 csvRow = null;
             }
         }
-        static IEnumerator Test(PropertyInfo propertyInfo, object original)
+        static IEnumerator GetObjectEnumerator(PropertyInfo propertyInfo, object original)
         {
             if(propertyInfo.GetValue(original) as IEnumerable<object> is null)
             {
@@ -231,7 +231,7 @@ namespace CSharpClassLibrary.Reflection
         {
             var propertiesInfo = original.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var IObjectEnumeratorTupleArray = propertiesInfo
-                  .Select(propertyInfo => (PropertyInfo: propertyInfo, Enumerator: Test(propertyInfo, original)))
+                  .Select(propertyInfo => (PropertyInfo: propertyInfo, Enumerator: GetObjectEnumerator(propertyInfo, original)))
                   .Where(IObjectEnumeratorTuple => IObjectEnumeratorTuple.Enumerator.MoveNext())
                   .ToArray();
             while (true)
