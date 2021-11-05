@@ -218,7 +218,7 @@ namespace CSharpClassLibrary.Reflection
                     }
                     foreach (var (propertyInfo, value) in decomposedObjects as IEnumerable<(PropertyInfo propertyInfo, object value)>)
                     {
-                        if (propertyInfo.PropertyType.IsValueType)
+                        if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string))
                         {
                             Console.WriteLine($"{propertyInfo.Name}: {value}, ");
                             if (!csvRow.TryAdd(propertyInfo.Name, value))
