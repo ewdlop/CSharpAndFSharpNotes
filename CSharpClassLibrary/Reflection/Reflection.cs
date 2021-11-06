@@ -37,7 +37,7 @@ namespace CSharpClassLibrary.Reflection
     public class Price
     {
         public int g { get; set; }
-
+        public string test { get; set; }
     }
 
     public static class Reflection
@@ -46,14 +46,16 @@ namespace CSharpClassLibrary.Reflection
         {
             var test = new ScoreCard()
             {
+
                 a = 4,
-                scoreSets = new List<ScoreSet>()
-                {
-                    new ScoreSet() { b = 5 },
-                    new ScoreSet(),
-                    new ScoreSet() { b = 3 },
-                    new ScoreSet() { b = 10 }
-                },
+                scoreSets = null,
+                //scoreSets = new List<ScoreSet>()
+                //{
+                //    new ScoreSet() { b = 5 },
+                //    new ScoreSet(),
+                //    new ScoreSet() { b = 3 },
+                //    new ScoreSet() { b = 10 }
+                //},
                 rankSets = new List<RankSet>()
                     {
                         new RankSet() { c = 12, d = 1 ,
@@ -178,30 +180,45 @@ namespace CSharpClassLibrary.Reflection
             }
         }
 
-        static void AttachObjectAsDecomposed(this IList<ExpandoObject> csvPage, 
-            object composedObject, 
-            //ref int count*/, 
-            //IDictionary<string, int> Dict, 
-            IDictionary<string, object> csvRow = null,
-            IDictionary<string, object> tempRow = null)
+        public static void AttachObjectAsDecomposed(this IList<ExpandoObject> csvPage,
+           object composedObject,
+           IDictionary<string, object> csvRow = null,
+           IDictionary<string, object> tempRow = null)
         {
+            //if (composedObject is null)
+            //{
+            //    if (composedObjectPropertyInfo is not null)
+            //    {
+            //        //thinking
+            //        csvPage.AddPropertiesColumn(composedObjectPropertyInfo, csvRow, tempRow);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Why?");
+            //        Console.WriteLine("How do you decompose those which are undecomposable?");
+            //        Console.WriteLine("How do you kill that which has no life?");
+            //        Console.WriteLine("Is nothing something?");
+            //        Console.Write("IS No Where somewhere?");
+            //    }
+            //}
+            //else
             if (composedObject.GetType().GetInterfaces().Any(
                 i => i.IsGenericType &&
                 i.GetGenericTypeDefinition() == typeof(IList<>)))
             {
                 IList<object> enumerableObject = (IList<object>)composedObject;
-                for (int i =0; i < enumerableObject.Count; i++)
+                for (int i = 0; i < enumerableObject.Count; i++)
                 {
                     csvPage.AttachObjectAsDecomposed(enumerableObject[i]);
                 }
             }
             else
             {
-                foreach (var decomposedObjects in composedObject.Decompose())
+                foreach (var decomposedObjects in composedObject.GetDecomposed())
                 {
-                    if (csvRow == null)
+                    if (csvRow is null)
                     {
-                        if (tempRow != null)
+                        if (tempRow is not null)
                         {
                             csvRow = new ExpandoObject();
                             csvPage.Add(csvRow as ExpandoObject);
@@ -220,33 +237,144 @@ namespace CSharpClassLibrary.Reflection
                     {
                         if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string))
                         {
-                            Console.WriteLine($"{propertyInfo.Name}: {value}, ");
+                            //not work for struct
                             if (!csvRow.TryAdd(propertyInfo.Name, value))
                             {
                                 csvRow[propertyInfo.Name] = value;
                             }
-                            //count++;
-                            //if (Dict.TryGetValue(propertyInfo.Name, out int propertyInfoCount))
-                            //{
-                            //    Dict[propertyInfo.Name] = ++propertyInfoCount;
-                            //}
-                            //else
-                            //{
-                            //    Dict.Add(propertyInfo.Name, 1);
-                            //}
                         }
                         else
                         {
-                            csvPage.AttachObjectAsDecomposed(value, /*ref count, Dict,*/ csvRow, tempRow);
+                            //csvPage.AttachObjectAsDecomposed(value, composedObjectPropertyInfo: null, csvRow, tempRow);
+
+                            csvPage.AttachObjectAsDecomposed(value, csvRow, tempRow);
                         }
                     }
                     tempRow = csvRow;
                     csvRow = null;
                 }
             }
-            
+
+        }
+        public static IEnumerable<object> GetDecomposed(this object composedObject)
+        {
+            //CartesainProduct
+            var propertiesInfo = composedObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var IObjectEnumeratorTupleArray = propertiesInfo
+                  .Select(propertyInfo => (PropertyInfo: propertyInfo, Enumerator: GetEnumeratorOfAObjectValueOfAProperty(propertyInfo, composedObject)))
+                  .Where(IObjectEnumeratorTuple => IObjectEnumeratorTuple.Enumerator.MoveNext())
+                  .OrderBy(propertyInfo => propertyInfo.GetType().IsValueType? 0 : 1)
+                  .ToArray();
+            while (true)
+            {
+                // yield current values
+                yield return IObjectEnumeratorTupleArray
+                    .Select(IObjectEnumeratorTuple => (IObjectEnumeratorTuple.PropertyInfo, IObjectEnumeratorTuple.Enumerator.Current));
+
+                // increase enumerators
+                foreach (var IObjectEnumeratorTuple in IObjectEnumeratorTupleArray)
+                {
+                    // reset the slot if it couldn't move next
+                    if (!IObjectEnumeratorTuple.Enumerator.MoveNext())//move next has side effect!!!(it moves then check)
+                    {
+                        // stop when the last enumerator resets
+                        if (IObjectEnumeratorTuple == IObjectEnumeratorTupleArray.Last())
+                        {
+                            yield break; //this exit the loop
+                        }
+                        IObjectEnumeratorTuple.Enumerator.Reset();
+                        IObjectEnumeratorTuple.Enumerator.MoveNext();
+                        // move to the next enumerator if this reseted
+                        continue;
+                    }
+                    // we could increase the current enumerator without reset so stop here
+                    break;
+                }
+            }
+        }
+        private static IEnumerator GetEnumeratorOfAObjectValueOfAProperty(PropertyInfo propertyInfo, object original)
+        {
+            if (propertyInfo.GetValue(original) is null
+                && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null)
+            {
+                if(propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    //let's pretend that the datatype supply is like IList<T> and not IList<T1,T2,T3>...
+                    //so we the T and not T1..T2....
+                    var theOneGenericArugmentType = propertyInfo.PropertyType.GetGenericArguments()[0];//expecting T
+                    //var listWiththeOneGenericArugment = typeof(List<>).MakeGenericType(theOneGenericArugmentType);//expecting List<T>
+                    var placeholderObject = Activator.CreateInstance(theOneGenericArugmentType);
+                    var placeholderObjectArray = new object[] { placeholderObject };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    //propertyInfo.PropertyType.FullName.CompareTo("System.String")== 0
+                    var placeholderObject = Activator.CreateInstance("".GetType(), Array.Empty<char>());
+                    var placeholderObjectArray = new object[] { placeholderObject };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+                else
+                {
+                    var placeholderObject = Activator.CreateInstance(propertyInfo.PropertyType);
+                    var placeholderObjectArray = new object[] { propertyInfo.GetValue(placeholderObject) };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+
+            }
+            else if (propertyInfo.GetValue(original) is not IEnumerable<object>)
+            {
+                var objectArray = new object[] { propertyInfo.GetValue(original) };
+                return objectArray.AsEnumerable().GetEnumerator();
+            }
+            else
+            {
+                return (propertyInfo.GetValue(original) as IEnumerable<object>).GetEnumerator();
+            }
+
         }
 
+
+        private static void AddPropertiesColumn(this IList<ExpandoObject> csvPage, PropertyInfo composedObjectPropertyInfo,
+           IDictionary<string, object> csvRow = null,
+           IDictionary<string, object> tempRow = null)
+        {
+            //if (csvRow is null)
+            //{
+            //    if (tempRow is not null)
+            //    {
+            //        csvRow = new ExpandoObject();
+            //        csvPage.Add(csvRow as ExpandoObject);
+            //        foreach (var keyValuePair in tempRow)
+            //        {
+            //            csvRow.Add(keyValuePair.Key, keyValuePair.Value);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        csvRow = new ExpandoObject();
+            //        csvPage.Add(csvRow as ExpandoObject);
+            //    }
+            //}
+            var properties = composedObjectPropertyInfo.PropertyType.GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                if (properties[i].PropertyType.IsValueType || (properties[i].PropertyType == typeof(string)))
+                {
+                    //not work for struct
+                    if (!csvRow.TryAdd(properties[i].Name, null))
+                    {
+                        csvRow[properties[i].Name] = null;
+                    }
+                }
+                else
+                {
+                    csvPage.AddPropertiesColumn(properties[i], csvRow, tempRow);
+                }
+            }
+            //tempRow = csvRow;
+            //csvRow = null;
+        }
         static void AttachFlatableObject2(this IList<ExpandoObject> csvPage,
            object test, ref int count,
            IDictionary<string, int> Dict,
