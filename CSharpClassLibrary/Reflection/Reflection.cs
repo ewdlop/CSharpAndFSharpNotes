@@ -162,7 +162,7 @@ namespace CSharpClassLibrary.Reflection
                             },
                              new Equipment() {
                                 Name = "Debt Free",
-                                EquipmentWorthValue = 99999,
+                                EquipmentWorthValue = 5555555,
                                 Stats = new List<Stat>()
                                 {
                                     new Stat() {
@@ -178,6 +178,7 @@ namespace CSharpClassLibrary.Reflection
             };
 
             List<ExpandoObject> csvPage = new();
+            //List<Dictionary<PropertyInfo,object>> csvPage = new();
             //csvPage.AttachFlatableObject(test);
 
             int count = 0;
@@ -197,19 +198,20 @@ namespace CSharpClassLibrary.Reflection
             foreach (var expandoObject in csvPage)
             {
                 Console.Write("---\n");
-                foreach (var pair in expandoObject as IDictionary<string, object>)
+                foreach (var pair in expandoObject)
                 {
+                    //Console.WriteLine($"{pair.Key.Name}: {pair.Value}");
                     Console.WriteLine($"{pair.Key}: {pair.Value}");
                 }
                 Console.Write("---");
             }
         }
         #region attemp1
-        public static void AppendObjectAsDecomposed(this IList<ExpandoObject> page,
-           object composedObject,
-           IDictionary<string, object> row = null,
-           IDictionary<string, object> tempRow = null,
-           int level = 0)
+        public static void AppendObjectAsDecomposed(this IList<Dictionary<PropertyInfo, object>> page,
+                                                    object composedObject,
+                                                    Dictionary<PropertyInfo, object> row = null,
+                                                    Dictionary<PropertyInfo, object> tempRow = null,
+                                                    int level = 0)
         {
             if(true)
             {
@@ -222,8 +224,8 @@ namespace CSharpClassLibrary.Reflection
                             Console.WriteLine("===========End Of Row===========");
                             Console.WriteLine("===========New Row===========");
                             Console.WriteLine("===========Copying from tempRow===========");
-                            row = new ExpandoObject();
-                            page.Add(row as ExpandoObject);
+                            row = new Dictionary<PropertyInfo, object>();
+                            page.Add(row);
                             foreach (var keyValuePair in tempRow)
                             {
                                 row.Add(keyValuePair.Key, keyValuePair.Value);
@@ -232,8 +234,8 @@ namespace CSharpClassLibrary.Reflection
                         else
                         {
                             Console.WriteLine("===========New Row===========");
-                            row = new ExpandoObject();
-                            page.Add(row as ExpandoObject);
+                            row = new Dictionary<PropertyInfo, object>();
+                            page.Add(row);
                         }
                     }
                     var spaceBuilder = new StringBuilder("");
@@ -250,18 +252,22 @@ namespace CSharpClassLibrary.Reflection
                         {
                             //not work for struct
                             Console.WriteLine($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
-                            if(!row.TryAdd(propertyInfo.Name, value))
+                            //if(!row.TryAdd(propertyInfo.Name, value))
+                            //{
+                            //    row[propertyInfo.Name] = value;
+                            //    string ToBeInsertedPropertyNameKey = propertyInfo.Name;
+                            //    int count = 1;
+                            //    do
+                            //    {
+                            //        count++;
+                            //        ToBeInsertedPropertyNameKey = $"{propertyInfo.Name}{count}";
+                            //    }
+                            //    while (row.ContainsKey(ToBeInsertedPropertyNameKey));
+                            //    row[ToBeInsertedPropertyNameKey] = value;
+                            //}
+                            if (!row.TryAdd(propertyInfo, value))
                             {
-                                row[propertyInfo.Name] = value;
-                                string ToBeInsertedPropertyNameKey = propertyInfo.Name;
-                                int count = 1;
-                                do
-                                {
-                                    count++;
-                                    ToBeInsertedPropertyNameKey = $"{propertyInfo.Name}{count}";
-                                }
-                                while (row.ContainsKey(ToBeInsertedPropertyNameKey));
-                                row[ToBeInsertedPropertyNameKey] = value;
+                                row[propertyInfo] = value;
                             }
                         }
                         else
@@ -320,7 +326,8 @@ namespace CSharpClassLibrary.Reflection
             }
         }
 
-        private static IEnumerator GetEnumeratorOfAObjectValueOfAProperty(PropertyInfo propertyInfo, object original)
+        private static IEnumerator GetEnumeratorOfAObjectValueOfAProperty(PropertyInfo propertyInfo,
+                                                                          object original)
         {
             if (propertyInfo.GetValue(original) is null
                 && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null) //for checking nullable which are struct/valuetype
@@ -386,21 +393,18 @@ namespace CSharpClassLibrary.Reflection
         #endregion
         #region attempt2
         public static void AppendObjectAsDecomposed2(this IList<ExpandoObject> page,
-           object composedObject,
-           IDictionary<string, object> row = null,
-           IDictionary<string, object> tempRow = null,
-           int level = 0)
+                                                     object composedObject,
+                                                     IDictionary<string, object> row = null,
+                                                     IDictionary<string, object> tempRow = null,
+                                                     int level = 0)
         {
             if (true)
             {
                 foreach (var decomposedObjects in composedObject.GetDecomposed2())
                 {
-                    if (row is null)
-                    {
-                        Console.WriteLine("===========New Row===========");
-                        row = new ExpandoObject();
-                        page.Add(row as ExpandoObject);
-                    }
+                    Console.WriteLine("===========New Row===========");
+                    row = new ExpandoObject();
+                    page.Add(row as ExpandoObject);
                     var spaceBuilder = new StringBuilder("");
                     for (int i = 0; i <= level; i++)
                     {
@@ -413,7 +417,7 @@ namespace CSharpClassLibrary.Reflection
                         Console.WriteLine($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
                         if (!row.TryAdd(propertyInfo.Name, value))
                         {
-                            row[propertyInfo.Name] = value;
+                            //row[propertyInfo.Name] = value;
                             string ToBeInsertedPropertyNameKey = propertyInfo.Name;
                             int count = 1;
                             do
@@ -457,7 +461,7 @@ namespace CSharpClassLibrary.Reflection
                     if (!IObjectEnumeratorDictonary.Enumerator.MoveNext())
                     {
                         // stop when the last enumerator resets
-                        if (IObjectEnumeratorDictonary == IObjectEnumerableDictonaryArray.Last())
+                        if (IObjectEnumeratorDictonary.Key == IObjectEnumerableDictonaryArray.Last().Key)
                         {
                            yield break; //this break the loop for IEnumerable
                         }
@@ -487,61 +491,36 @@ namespace CSharpClassLibrary.Reflection
             while(tupleStack.Count > 0)
             {
                 var (propertyInfo, value) = tupleStack.Pop();
-                IEnumerable<object> peekTupleEnumerable;
+
                 if (propertyInfo.PropertyType.IsValueType ||
                     propertyInfo.PropertyType == typeof(string) ||
                     Nullable.GetUnderlyingType(propertyInfo.PropertyType) is not null)
                 {
-                    peekTupleEnumerable = new object[] { propertyInfo.GetValue(value) }.AsEnumerable();
-                }
-                else
-                {
-                    peekTupleEnumerable = GetEnumerableOfAObjectValueOfAProperty2(propertyInfo, propertyInfo.GetValue(value));
-                }
-                if (visitedTuple.TryGetValue(propertyInfo, out IEnumerable<object> enumerable))
-                {
-                    foreach(var current in peekTupleEnumerable)
+                    var peekTupleEnumerable = new List<object> { propertyInfo.GetValue(value) };
+                    if (visitedTuple.TryGetValue(propertyInfo, out IEnumerable<object> enumerable))
                     {
-                        enumerable.Append(current);
+                        var combinedEnumerable = new List<object>()
+;                       combinedEnumerable.AddRange(enumerable);
+                        combinedEnumerable.AddRange(peekTupleEnumerable);
+                        visitedTuple[propertyInfo] = combinedEnumerable;
+                    }
+                    else
+                    {
+                        visitedTuple.Add(propertyInfo, peekTupleEnumerable);
                     }
                 }
                 else
                 {
-                    visitedTuple.Add(propertyInfo, peekTupleEnumerable);
+                    var peekTupleEnumerable = GetEnumerableOfAObjectValueOfAProperty2(propertyInfo, propertyInfo.GetValue(value));
                     var enumerator = peekTupleEnumerable.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
                         var current = enumerator.Current;
-                        //if (!current.GetType()
-                        //    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                        //    .Any(property => property.GetType().IsGenericType &&
-                        //        property.GetType().GetGenericTypeDefinition() == typeof(IList<>)))
-                        //{
-                        //    break;
-                        //}
-                        if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) is not null)//for nullable
+                        var deeperProperties = current.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                        for (int i = 0; i < deeperProperties.Length; i++)
                         {
-                            var deeperTuple = (propertyInfo, current);
+                            var deeperTuple = (deeperProperties[i], current);
                             tupleStack.Push(deeperTuple);
-                            enumerator.Reset();
-                            break;
-                        }
-                        else if (propertyInfo.PropertyType.IsValueType ||
-                                propertyInfo.PropertyType == typeof(string))
-                        {
-                            var deeperTuple = (propertyInfo, current);
-                            tupleStack.Push(deeperTuple);
-                            enumerator.Reset();
-                            break;
-                        }
-                        else
-                        {
-                            var deeperProperties = current.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                            for (int i = 0; i < deeperProperties.Length; i++)
-                            {
-                                var deeperTuple = (deeperProperties[i], current);
-                                tupleStack.Push(deeperTuple);
-                            }
                         }
                     }
                     enumerator.Reset();
@@ -549,7 +528,8 @@ namespace CSharpClassLibrary.Reflection
             }
             return visitedTuple;
         }
-        private static IEnumerable<object> GetEnumerableOfAObjectValueOfAProperty2(PropertyInfo propertyInfo, object original)
+        private static IEnumerable<object> GetEnumerableOfAObjectValueOfAProperty2(PropertyInfo propertyInfo,
+                                                                                   object original)
         {
             if (original is null
                 && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null) //for checking nullable which are struct/valuetype
