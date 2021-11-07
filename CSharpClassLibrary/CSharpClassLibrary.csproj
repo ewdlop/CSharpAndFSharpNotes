@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="CQRS\Queries\" />
     <Folder Include="CSharp10\" />
     <Folder Include="Service\" />
   </ItemGroup>

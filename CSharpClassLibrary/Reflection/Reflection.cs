@@ -4,129 +4,177 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace CSharpClassLibrary.Reflection
 {
-    public class ScoreCard
+    public class Player
     {
-        public int a { get; set; }
-        public IList<ScoreSet> scoreSets { get; set; }
-        public IList<RankSet> rankSets { get; set; }
-    }
-
-    public class ScoreSet
-    {
-        public int b { get; set; }
-    }
-
-    public class RankSet
-    {
-        public int c { get; set; }
-        public int d { get; set; }
-        public IList<Rank> rank { get; set; }
-    }
-
-    public class Rank
-    {
-        public int e { get; set; }
-        public int? f { get; set; }
-        public IList<Price> price { get; set; }
+        public string Name { get; set; }
+        public int Health { get; set; }
+        public int Gold { get; set; }
+        public IList<MiscItem> MiscItems { get; set; }
+        public IList<EquipmentSet> EquipmentSets { get; set; }
 
     }
 
-    public class Price
+    public class MiscItem
+    { 
+        public string MiscItemName { get; set; }
+        public int MiscItemWorthValue { get; set; }
+    }
+
+    public class EquipmentSet
     {
-        public int g { get; set; }
-        public string test { get; set; }
+        public string EquipmentSetName { get; set; }
+        public int? Priceless { get; set; }
+        public IList<Equipment> Equipments { get; set; }
+    }
+
+    public class Equipment
+    {
+        public string Name { get; set; }
+        public int EquipmentWorthValue { get; set; }
+        public IList<Stat> Stats { get; set; }
+    }
+
+    public class Stat
+    {
+        public string EquipmentStatName { get; set; }
+        public int EquipmentStatBonus { get; set; }
     }
 
     public static class Reflection
     {
         public static void Test()
         {
-            var test = new ScoreCard()
+            var player = new Player()
             {
-
-                a = 4,
-                scoreSets = null,
-                //scoreSets = new List<ScoreSet>()
-                //{
-                //    new ScoreSet() { b = 5 },
-                //    new ScoreSet(),
-                //    new ScoreSet() { b = 3 },
-                //    new ScoreSet() { b = 10 }
-                //},
-                rankSets = new List<RankSet>()
-                    {
-                        new RankSet() { c = 12, d = 1 ,
-                            rank = new List<Rank>() {
-                                        new Rank() {
-                                            e = 100,
-                                            price = new List<Price>()
-                                            {
-                                                new Price(),
-                                                new Price(),
-                                                new Price()
-                                            }
-                                        }, 
-                                        new Rank() { 
-                                            e = 335,
-                                            price = new List<Price>()
-                                            {
-                                                new Price(),
-                                                new Price()
-                                            }
-                                        } 
-                            } 
-                        }, 
-                        new RankSet() { c = 12, d = 2,
-                            rank = new List<Rank> { 
-                                        new Rank() { 
-                                            e = 123,
-                                            price = new List<Price>()
-                                            {
-                                                new Price() { g = -24 },
-                                                new Price()
-                                            }
-                                        } 
-                            } 
-                        },
-                        new RankSet() { c = 23, d = 22,
-                            rank = new List<Rank> { 
-                                        new Rank() { 
-                                            e = 15,
-                                            price = new List<Price>()
-                                            {
-                                                new Price(),
-                                                new Price()
-                                            }
-                                        }, 
-                                        new Rank() { 
-                                            e = 3435,
-                                            price = new List<Price>()
-                                            {
-                                                new Price() { g = 10000 },
-                                                new Price() { g = -500 }
-                                            }
-                                        }
+                Name= "Random Dude",
+                Health = 4,
+                MiscItems = new List<MiscItem>()
+                {
+                    new MiscItem() { 
+                        MiscItemName = "Random item",
+                        MiscItemWorthValue = 5
+                    },
+                    new MiscItem() {
+                        MiscItemName = "Empty Wallet",
+                        MiscItemWorthValue = 5
+                    },
+                    new MiscItem() { 
+                        MiscItemName = "Unknown",
+                        MiscItemWorthValue = -99
+                    },
+                    new MiscItem() { 
+                        MiscItemName = "Apple",
+                        MiscItemWorthValue = 33333
+                    }
+                },
+                EquipmentSets = new List<EquipmentSet>()
+                {
+                    new EquipmentSet() { 
+                        EquipmentSetName = "SpeedRunSet",
+                        Equipments = new List<Equipment>() {
+                            new Equipment() {
+                                Name ="IFrame",
+                                EquipmentWorthValue = 100,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() { EquipmentStatName ="DamageTaken", EquipmentStatBonus = 0 },
+                                }
+                            },
+                            new Equipment() {
+                                Name = "Bunny Hop Physics",
+                                EquipmentWorthValue = 335,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() { EquipmentStatName ="Weight", EquipmentStatBonus = -999 },
+                                    new Stat() { EquipmentStatName ="SpeedBonus", EquipmentStatBonus = 9999 },
+                                }
+                            }
+                        }
+                    },
+                    new EquipmentSet() { 
+                        EquipmentSetName = "Very Basic",
+                        Priceless = -1,
+                        Equipments = new List<Equipment> {
+                            new Equipment() {
+                                Name = "Sword",
+                                EquipmentWorthValue = 1234,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() { 
+                                        EquipmentStatName ="Damage",
+                                        EquipmentStatBonus = 1 
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    new EquipmentSet() { 
+                        EquipmentSetName = "Me Poor Man's Dream",
+                        Equipments = new List<Equipment> {
+                            new Equipment() {
+                                Name = "Sports Car",
+                                EquipmentWorthValue = 99999,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() {
+                                        EquipmentStatName ="Speed",
+                                        EquipmentStatBonus = 10000
+                                    },
+                                    new Stat() {
+                                        EquipmentStatName ="Cool",
+                                        EquipmentStatBonus = -500
+                                    }
+                                }
+                            },
+                            new Equipment() {
+                                Name = "Big Mansion",
+                                EquipmentWorthValue = 99999,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() {
+                                        EquipmentStatName ="Size",
+                                        EquipmentStatBonus = 10000 
+                                    },
+                                    new Stat() { 
+                                        EquipmentStatName = "Price",
+                                        EquipmentStatBonus = 999999
+                                    }
+                                }
+                            },
+                            new Equipment() {
+                                Name = "Pretty Lady",
+                                EquipmentWorthValue = 99999,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() { 
+                                        EquipmentStatName = "Pretty",
+                                        EquipmentStatBonus = 9999
+                                    },
+                                    new Stat() {
+                                        EquipmentStatName = "FaithFul",
+                                        EquipmentStatBonus = 9999
+                                    }
+                                }
+                            },
+                             new Equipment() {
+                                Name = "Debt Free",
+                                EquipmentWorthValue = 99999,
+                                Stats = new List<Stat>()
+                                {
+                                    new Stat() {
+                                        EquipmentStatName = "Debt",
+                                        EquipmentStatBonus = 0
+                                    }
+                                }
                             }
                         }
                     }
-            };
-
-            var test2 = new RankSet() 
-            { 
-                c = 2, 
-                d = 3, 
-                rank = new List<Rank> {
-                    new Rank() {
-                        price = new List<Price>()
-                            {
-                                new Price() ,
-                                new Price()
-                            }
-                        }
-                }
+                },
+                Gold = 0
             };
 
             List<ExpandoObject> csvPage = new();
@@ -134,25 +182,433 @@ namespace CSharpClassLibrary.Reflection
 
             int count = 0;
             IDictionary<string, int> Dict = new Dictionary<string, int>();
-            csvPage.AttachObjectAsDecomposed(test);
+
+            //var test = GetDecomposedPropertyTuple(player);
+
+            csvPage.AppendObjectAsDecomposed2(player);
             //Console.WriteLine("============");
             //Console.WriteLine($"Count: {count}");
             //foreach (var keyValuePair in Dict)
             //{
             //    Console.WriteLine($"{keyValuePair.Key}: {keyValuePair.Value}");
             //}
-            Console.WriteLine($"============================");
+            Console.WriteLine("============================");
+
             foreach (var expandoObject in csvPage)
             {
-                Console.Write($"---\n");
+                Console.Write("---\n");
                 foreach (var pair in expandoObject as IDictionary<string, object>)
                 {
                     Console.WriteLine($"{pair.Key}: {pair.Value}");
                 }
-                Console.Write($"---");
+                Console.Write("---");
+            }
+        }
+        #region attemp1
+        public static void AppendObjectAsDecomposed(this IList<ExpandoObject> page,
+           object composedObject,
+           IDictionary<string, object> row = null,
+           IDictionary<string, object> tempRow = null,
+           int level = 0)
+        {
+            if(true)
+            {
+                foreach (var decomposedObjects in composedObject.GetDecomposed())
+                {
+                    if (row is null)
+                    {
+                        if (tempRow is not null)
+                        {
+                            Console.WriteLine("===========End Of Row===========");
+                            Console.WriteLine("===========New Row===========");
+                            Console.WriteLine("===========Copying from tempRow===========");
+                            row = new ExpandoObject();
+                            page.Add(row as ExpandoObject);
+                            foreach (var keyValuePair in tempRow)
+                            {
+                                row.Add(keyValuePair.Key, keyValuePair.Value);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("===========New Row===========");
+                            row = new ExpandoObject();
+                            page.Add(row as ExpandoObject);
+                        }
+                    }
+                    var spaceBuilder = new StringBuilder("");
+                    for(int i = 0; i<=level; i++)
+                    {
+                        spaceBuilder.Append('=');
+                    }
+                    Console.WriteLine($"{spaceBuilder}===========Level {level} Modificiton===========");
+                    Console.WriteLine($"{spaceBuilder}{{");
+                    foreach (var (propertyInfo, value) in decomposedObjects as IEnumerable<(PropertyInfo propertyInfo, object value)>)
+                    {
+                        if (propertyInfo.PropertyType.IsValueType
+                            || propertyInfo.PropertyType == typeof(string))//string is a reference type
+                        {
+                            //not work for struct
+                            Console.WriteLine($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
+                            if(!row.TryAdd(propertyInfo.Name, value))
+                            {
+                                row[propertyInfo.Name] = value;
+                                string ToBeInsertedPropertyNameKey = propertyInfo.Name;
+                                int count = 1;
+                                do
+                                {
+                                    count++;
+                                    ToBeInsertedPropertyNameKey = $"{propertyInfo.Name}{count}";
+                                }
+                                while (row.ContainsKey(ToBeInsertedPropertyNameKey));
+                                row[ToBeInsertedPropertyNameKey] = value;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{spaceBuilder}==========={propertyInfo.Name}({propertyInfo.PropertyType.Name}):===========");
+                            Console.WriteLine($"{spaceBuilder}[");
+                            page.AppendObjectAsDecomposed(value, row, tempRow, level + 1);
+                            Console.WriteLine($"{spaceBuilder}]");
+                        }
+                    }
+                    Console.WriteLine($"{spaceBuilder}}}");
+                    Console.WriteLine($"{spaceBuilder}===========End of the Level {level} Modificiton===========");
+                    Console.WriteLine($"{spaceBuilder}===========Overwrite tempRow===========");
+                    tempRow = row;
+                    row = null;
+                }
+            }
+        }  
+        public static IEnumerable<object> GetDecomposed(this object composedObject)
+        {
+            //CartesainProduct
+            var propertiesInfo = composedObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var IObjectEnumeratorTupleArray = propertiesInfo
+                  //.OrderByDescending(propertyInfo => propertyInfo.GetType().IsValueType ? 0 : 1)
+                  .Select(propertyInfo => (PropertyInfo: propertyInfo, Enumerator: GetEnumeratorOfAObjectValueOfAProperty(propertyInfo, composedObject)))
+                  .Where(IObjectEnumeratorTuple => IObjectEnumeratorTuple.Enumerator.MoveNext())
+                  .ToArray();
+            while (true)
+            {
+                // yield current values
+                yield return IObjectEnumeratorTupleArray
+                    .Select(IObjectEnumeratorTuple => (IObjectEnumeratorTuple.PropertyInfo, IObjectEnumeratorTuple.Enumerator.Current));
+
+                // increase enumerators
+                foreach (var IObjectEnumeratorTuple in IObjectEnumeratorTupleArray)
+                {
+                    // reset the slot if it couldn't move next
+                    //move next has side effect!!!(it moves then check)
+                    //wonder why there is no HasNext()?
+                    if (!IObjectEnumeratorTuple.Enumerator.MoveNext())
+                    {
+                        // stop when the last enumerator resets
+                        if (IObjectEnumeratorTuple == IObjectEnumeratorTupleArray.Last())
+                        {
+                            yield break; //this break the loop for IEnumerable
+                        }
+                        IObjectEnumeratorTuple.Enumerator.Reset();
+                        IObjectEnumeratorTuple.Enumerator.MoveNext();
+                        // move to the next enumerator if this reseted
+                        // this has to be done because some enuermator has a longer "cycle"
+                        continue;
+                    }
+                    // we could increase the current enumerator without reset so stop here
+                    break;
+                }
             }
         }
 
+        private static IEnumerator GetEnumeratorOfAObjectValueOfAProperty(PropertyInfo propertyInfo, object original)
+        {
+            if (propertyInfo.GetValue(original) is null
+                && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null) //for checking nullable which are struct/valuetype
+            {
+                if (propertyInfo.PropertyType.IsGenericType 
+                    && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    //let's pretend that the datatype supply is like IList<T> and not IList<T1,T2,T3>...
+                    //so we the T and not T1..T2....
+                    var theOneGenericArugmentType = propertyInfo.PropertyType.GetGenericArguments()[0];//expecting T
+                    //var listWiththeOneGenericArugment = typeof(List<>).MakeGenericType(theOneGenericArugmentType);//expecting List<T>
+                    var placeholderObject = Activator.CreateInstance(theOneGenericArugmentType);
+                    var placeholderObjectArray = new object[] { placeholderObject };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    var placeholderObject = Activator.CreateInstance("".GetType(), Array.Empty<char>());
+                    var placeholderObjectArray = new object[] { placeholderObject };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+                else if (propertyInfo.PropertyType.IsInterface)
+                {
+                    return null;
+                    //make a provider for this later
+                    //switch (propertyInfo.PropertyType.Name)
+                    //{
+                    //    case "x":
+                    //        var CalculatedScore = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedScoreObjectArray = new object[] { CalculatedScore };
+                    //        return CalculatedScoreObjectArray.AsEnumerable().GetEnumerator();
+                    //    case "x":
+                    //        var CalculatedDecile = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedDecileObjectArray = new object[] { CalculatedDecile };
+                    //        return CalculatedDecileObjectArray.AsEnumerable().GetEnumerator();
+                    //    case "x":
+                    //        var CalculatedRank = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedRankArray = new object[] { CalculatedRank };
+                    //        return CalculatedRankArray.AsEnumerable().GetEnumerator();
+                    //    default:
+                    //        throw new System.Exception("Not Mapped Interface");
+                    //}
+                }
+                else
+                {
+                    var placeholderObject = Activator.CreateInstance(propertyInfo.PropertyType);
+                    var placeholderObjectArray = new object[] { placeholderObject };
+                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
+                }
+
+            }
+            else if (propertyInfo.GetValue(original) is not IEnumerable<object>)
+            {
+                var objectArray = new object[] { propertyInfo.GetValue(original) };
+                return objectArray.AsEnumerable().GetEnumerator();
+            }
+            else
+            {
+                return (propertyInfo.GetValue(original) as IEnumerable<object>).GetEnumerator();
+            }
+
+        }
+        #endregion
+        #region attempt2
+        public static void AppendObjectAsDecomposed2(this IList<ExpandoObject> page,
+           object composedObject,
+           IDictionary<string, object> row = null,
+           IDictionary<string, object> tempRow = null,
+           int level = 0)
+        {
+            if (true)
+            {
+                foreach (var decomposedObjects in composedObject.GetDecomposed2())
+                {
+                    if (row is null)
+                    {
+                        Console.WriteLine("===========New Row===========");
+                        row = new ExpandoObject();
+                        page.Add(row as ExpandoObject);
+                    }
+                    var spaceBuilder = new StringBuilder("");
+                    for (int i = 0; i <= level; i++)
+                    {
+                        spaceBuilder.Append('=');
+                    }
+                    Console.WriteLine($"{spaceBuilder}===========Level {level} Modificiton===========");
+                    Console.WriteLine($"{spaceBuilder}{{");
+                    foreach (var (propertyInfo, value) in decomposedObjects)
+                    {
+                        Console.WriteLine($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
+                        if (!row.TryAdd(propertyInfo.Name, value))
+                        {
+                            row[propertyInfo.Name] = value;
+                            string ToBeInsertedPropertyNameKey = propertyInfo.Name;
+                            int count = 1;
+                            do
+                            {
+                                count++;
+                                ToBeInsertedPropertyNameKey = $"{propertyInfo.Name}{count}";
+                            }
+                            while (row.ContainsKey(ToBeInsertedPropertyNameKey));
+                            row[ToBeInsertedPropertyNameKey] = value;
+                        }
+                    }
+                    Console.WriteLine($"{spaceBuilder}}}");
+                    Console.WriteLine($"{spaceBuilder}===========End of the Level {level} Modificiton===========");
+                    Console.WriteLine("===========End Of Row===========");
+                }
+            }
+        }
+        public static IEnumerable<IEnumerable<(PropertyInfo,object)>> GetDecomposed2(this object composedObject)
+        {
+            //CartesainProduct
+            var IObjectEnumerableDictonaryArray = composedObject.GetDecomposedPropertyTuple()
+                .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Key, Enumerator: IObjectEnumeratorDictonary.Value.GetEnumerator()))
+                .Where(IObjectEnumeratorDictonary => 
+                       (IObjectEnumeratorDictonary.Key.PropertyType.IsValueType ||
+                       IObjectEnumeratorDictonary.Key.PropertyType == typeof(string) ||
+                       Nullable.GetUnderlyingType(IObjectEnumeratorDictonary.Key.PropertyType) != null) &&
+                       IObjectEnumeratorDictonary.Enumerator.MoveNext())
+                .ToArray();
+            
+            while(true)
+            {
+                yield return IObjectEnumerableDictonaryArray
+                   .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Key, IObjectEnumeratorDictonary.Enumerator.Current));
+
+                // increase enumerators
+                foreach (var IObjectEnumeratorDictonary in IObjectEnumerableDictonaryArray)
+                {
+                    // reset the slot if it couldn't move next
+                    //move next has side effect!!!(it moves then check)
+                    //wonder why there is no HasNext()?
+                    if (!IObjectEnumeratorDictonary.Enumerator.MoveNext())
+                    {
+                        // stop when the last enumerator resets
+                        if (IObjectEnumeratorDictonary == IObjectEnumerableDictonaryArray.Last())
+                        {
+                           yield break; //this break the loop for IEnumerable
+                        }
+                        IObjectEnumeratorDictonary.Enumerator.Reset();
+                        IObjectEnumeratorDictonary.Enumerator.MoveNext();
+                        // move to the next enumerator if this reseted
+                        // this has to be done because some enuermator has a longer "cycle"
+                        continue;
+                    }
+                    // we could increase the current enumerator without reset so stop here
+                    break;
+                }
+            }
+        }
+        public static Dictionary<PropertyInfo, IEnumerable<object>> GetDecomposedPropertyTuple(this object composedObject)
+        {
+            //List<PropertyInfo> decomposedProperties = new();
+            Dictionary<PropertyInfo, IEnumerable<object>> visitedTuple = new();//no duplicate
+            //HashSet<PropertyInfo> visitedProperties = new();//no duplicate
+            Stack<(PropertyInfo, object)> tupleStack = new();
+            var propertiesInfo = composedObject
+                .GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            for(int i = 0; i < propertiesInfo.Length; i++)
+            {
+                tupleStack.Push((propertiesInfo[i], composedObject));
+            }
+            while(tupleStack.Count > 0)
+            {
+                var (propertyInfo, value) = tupleStack.Pop();
+                IEnumerable<object> peekTupleEnumerable;
+                if (propertyInfo.PropertyType.IsValueType ||
+                    propertyInfo.PropertyType == typeof(string) ||
+                    Nullable.GetUnderlyingType(propertyInfo.PropertyType) is not null)
+                {
+                    peekTupleEnumerable = new object[] { propertyInfo.GetValue(value) }.AsEnumerable();
+                }
+                else
+                {
+                    peekTupleEnumerable = GetEnumerableOfAObjectValueOfAProperty2(propertyInfo, propertyInfo.GetValue(value));
+                }
+                if (visitedTuple.TryGetValue(propertyInfo, out IEnumerable<object> enumerable))
+                {
+                    foreach(var current in peekTupleEnumerable)
+                    {
+                        enumerable.Append(current);
+                    }
+                }
+                else
+                {
+                    visitedTuple.Add(propertyInfo, peekTupleEnumerable);
+                    var enumerator = peekTupleEnumerable.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        var current = enumerator.Current;
+                        //if (!current.GetType()
+                        //    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        //    .Any(property => property.GetType().IsGenericType &&
+                        //        property.GetType().GetGenericTypeDefinition() == typeof(IList<>)))
+                        //{
+                        //    break;
+                        //}
+                        if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) is not null)//for nullable
+                        {
+                            var deeperTuple = (propertyInfo, current);
+                            tupleStack.Push(deeperTuple);
+                            enumerator.Reset();
+                            break;
+                        }
+                        else if (propertyInfo.PropertyType.IsValueType ||
+                                propertyInfo.PropertyType == typeof(string))
+                        {
+                            var deeperTuple = (propertyInfo, current);
+                            tupleStack.Push(deeperTuple);
+                            enumerator.Reset();
+                            break;
+                        }
+                        else
+                        {
+                            var deeperProperties = current.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                            for (int i = 0; i < deeperProperties.Length; i++)
+                            {
+                                var deeperTuple = (deeperProperties[i], current);
+                                tupleStack.Push(deeperTuple);
+                            }
+                        }
+                    }
+                    enumerator.Reset();
+                }
+            }
+            return visitedTuple;
+        }
+        private static IEnumerable<object> GetEnumerableOfAObjectValueOfAProperty2(PropertyInfo propertyInfo, object original)
+        {
+            if (original is null
+                && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null) //for checking nullable which are struct/valuetype
+            {
+                if (propertyInfo.PropertyType.IsGenericType
+                    && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    //let's pretend that the datatype supply is like IList<T> and not IList<T1,T2,T3>...
+                    //so we the T and not T1..T2....
+                    var theOneGenericArugmentType = propertyInfo.PropertyType.GetGenericArguments()[0];//expecting T
+                    //var listWiththeOneGenericArugment = typeof(List<>).MakeGenericType(theOneGenericArugmentType);//expecting List<T>
+                    var placeholderObject = Activator.CreateInstance(theOneGenericArugmentType);
+                    return new object[] { placeholderObject }.AsEnumerable();
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    var placeholderObject = Activator.CreateInstance("".GetType(), Array.Empty<char>());
+                    return new object[] { placeholderObject }.AsEnumerable();
+                }
+                else if (propertyInfo.PropertyType.IsInterface)
+                {
+                    return null;
+                    //make a provider for this later
+                    //switch (propertyInfo.PropertyType.Name)
+                    //{
+                    //    case "x":
+                    //        var CalculatedScore = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedScoreObjectArray = new object[] { CalculatedScore };
+                    //        return CalculatedScoreObjectArray.AsEnumerable().GetEnumerator();
+                    //    case "x":
+                    //        var CalculatedDecile = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedDecileObjectArray = new object[] { CalculatedDecile };
+                    //        return CalculatedDecileObjectArray.AsEnumerable().GetEnumerator();
+                    //    case "x":
+                    //        var CalculatedRank = Activator.CreateInstance(typeof(x));
+                    //        var CalculatedRankArray = new object[] { CalculatedRank };
+                    //        return CalculatedRankArray.AsEnumerable().GetEnumerator();
+                    //    default:
+                    //        throw new System.Exception("Not Mapped Interface");
+                    //}
+                }
+                else
+                {
+                    var placeholderObject = Activator.CreateInstance(propertyInfo.PropertyType);
+                    return new object[] { placeholderObject }.AsEnumerable();
+                }
+            }
+            else if (original is not IEnumerable<object>)
+            {
+                return new object[] { original }.AsEnumerable();
+            }
+            else
+            {
+                return original as IEnumerable<object>;
+            }
+
+        }
+        #endregion
+        #region different
         static void Show(object test, ref int count, IDictionary<string, int> Dict)
         {
             foreach (var results in Decompose(test))
@@ -161,7 +617,7 @@ namespace CSharpClassLibrary.Reflection
                 {
                     if (propertyInfo.PropertyType.IsValueType)
                     {
-                        Console.WriteLine($"{propertyInfo.Name}: {value}, ");
+                        Console.WriteLine($"{propertyInfo.Name}({propertyInfo.GetType()}): {value}, ");
                         count++;
                         if (Dict.TryGetValue(propertyInfo.Name, out int propertyInfoCount))
                         {
@@ -179,162 +635,6 @@ namespace CSharpClassLibrary.Reflection
                 }
             }
         }
-
-        public static void AttachObjectAsDecomposed(this IList<ExpandoObject> csvPage,
-           object composedObject,
-           IDictionary<string, object> csvRow = null,
-           IDictionary<string, object> tempRow = null)
-        {
-            //if (composedObject is null)
-            //{
-            //    if (composedObjectPropertyInfo is not null)
-            //    {
-            //        //thinking
-            //        csvPage.AddPropertiesColumn(composedObjectPropertyInfo, csvRow, tempRow);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Why?");
-            //        Console.WriteLine("How do you decompose those which are undecomposable?");
-            //        Console.WriteLine("How do you kill that which has no life?");
-            //        Console.WriteLine("Is nothing something?");
-            //        Console.Write("IS No Where somewhere?");
-            //    }
-            //}
-            //else
-            if (composedObject.GetType().GetInterfaces().Any(
-                i => i.IsGenericType &&
-                i.GetGenericTypeDefinition() == typeof(IList<>)))
-            {
-                IList<object> enumerableObject = (IList<object>)composedObject;
-                for (int i = 0; i < enumerableObject.Count; i++)
-                {
-                    csvPage.AttachObjectAsDecomposed(enumerableObject[i]);
-                }
-            }
-            else
-            {
-                foreach (var decomposedObjects in composedObject.GetDecomposed())
-                {
-                    if (csvRow is null)
-                    {
-                        if (tempRow is not null)
-                        {
-                            csvRow = new ExpandoObject();
-                            csvPage.Add(csvRow as ExpandoObject);
-                            foreach (var keyValuePair in tempRow)
-                            {
-                                csvRow.Add(keyValuePair.Key, keyValuePair.Value);
-                            }
-                        }
-                        else
-                        {
-                            csvRow = new ExpandoObject();
-                            csvPage.Add(csvRow as ExpandoObject);
-                        }
-                    }
-                    foreach (var (propertyInfo, value) in decomposedObjects as IEnumerable<(PropertyInfo propertyInfo, object value)>)
-                    {
-                        if (propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string))
-                        {
-                            //not work for struct
-                            if (!csvRow.TryAdd(propertyInfo.Name, value))
-                            {
-                                csvRow[propertyInfo.Name] = value;
-                            }
-                        }
-                        else
-                        {
-                            //csvPage.AttachObjectAsDecomposed(value, composedObjectPropertyInfo: null, csvRow, tempRow);
-
-                            csvPage.AttachObjectAsDecomposed(value, csvRow, tempRow);
-                        }
-                    }
-                    tempRow = csvRow;
-                    csvRow = null;
-                }
-            }
-
-        }
-        public static IEnumerable<object> GetDecomposed(this object composedObject)
-        {
-            //CartesainProduct
-            var propertiesInfo = composedObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var IObjectEnumeratorTupleArray = propertiesInfo
-                  .Select(propertyInfo => (PropertyInfo: propertyInfo, Enumerator: GetEnumeratorOfAObjectValueOfAProperty(propertyInfo, composedObject)))
-                  .Where(IObjectEnumeratorTuple => IObjectEnumeratorTuple.Enumerator.MoveNext())
-                  .OrderBy(propertyInfo => propertyInfo.GetType().IsValueType? 0 : 1)
-                  .ToArray();
-            while (true)
-            {
-                // yield current values
-                yield return IObjectEnumeratorTupleArray
-                    .Select(IObjectEnumeratorTuple => (IObjectEnumeratorTuple.PropertyInfo, IObjectEnumeratorTuple.Enumerator.Current));
-
-                // increase enumerators
-                foreach (var IObjectEnumeratorTuple in IObjectEnumeratorTupleArray)
-                {
-                    // reset the slot if it couldn't move next
-                    if (!IObjectEnumeratorTuple.Enumerator.MoveNext())//move next has side effect!!!(it moves then check)
-                    {
-                        // stop when the last enumerator resets
-                        if (IObjectEnumeratorTuple == IObjectEnumeratorTupleArray.Last())
-                        {
-                            yield break; //this exit the loop
-                        }
-                        IObjectEnumeratorTuple.Enumerator.Reset();
-                        IObjectEnumeratorTuple.Enumerator.MoveNext();
-                        // move to the next enumerator if this reseted
-                        continue;
-                    }
-                    // we could increase the current enumerator without reset so stop here
-                    break;
-                }
-            }
-        }
-        private static IEnumerator GetEnumeratorOfAObjectValueOfAProperty(PropertyInfo propertyInfo, object original)
-        {
-            if (propertyInfo.GetValue(original) is null
-                && Nullable.GetUnderlyingType(propertyInfo.PropertyType) is null)
-            {
-                if(propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
-                {
-                    //let's pretend that the datatype supply is like IList<T> and not IList<T1,T2,T3>...
-                    //so we the T and not T1..T2....
-                    var theOneGenericArugmentType = propertyInfo.PropertyType.GetGenericArguments()[0];//expecting T
-                    //var listWiththeOneGenericArugment = typeof(List<>).MakeGenericType(theOneGenericArugmentType);//expecting List<T>
-                    var placeholderObject = Activator.CreateInstance(theOneGenericArugmentType);
-                    var placeholderObjectArray = new object[] { placeholderObject };
-                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
-                }
-                else if (propertyInfo.PropertyType == typeof(string))
-                {
-                    //propertyInfo.PropertyType.FullName.CompareTo("System.String")== 0
-                    var placeholderObject = Activator.CreateInstance("".GetType(), Array.Empty<char>());
-                    var placeholderObjectArray = new object[] { placeholderObject };
-                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
-                }
-                else
-                {
-                    var placeholderObject = Activator.CreateInstance(propertyInfo.PropertyType);
-                    var placeholderObjectArray = new object[] { propertyInfo.GetValue(placeholderObject) };
-                    return placeholderObjectArray.AsEnumerable().GetEnumerator();
-                }
-
-            }
-            else if (propertyInfo.GetValue(original) is not IEnumerable<object>)
-            {
-                var objectArray = new object[] { propertyInfo.GetValue(original) };
-                return objectArray.AsEnumerable().GetEnumerator();
-            }
-            else
-            {
-                return (propertyInfo.GetValue(original) as IEnumerable<object>).GetEnumerator();
-            }
-
-        }
-
-
         private static void AddPropertiesColumn(this IList<ExpandoObject> csvPage, PropertyInfo composedObjectPropertyInfo,
            IDictionary<string, object> csvRow = null,
            IDictionary<string, object> tempRow = null)
@@ -648,5 +948,6 @@ namespace CSharpClassLibrary.Reflection
                     stack.Push(child);
             }
         }
+        #endregion
     }
 }
