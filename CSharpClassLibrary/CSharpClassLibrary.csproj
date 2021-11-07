@@ -15,15 +15,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Queries\" />
     <Folder Include="CSharp10\" />
     <Folder Include="Service\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="FluentNHibernate" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="NHibernate" Version="5.3.10" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.24.3" />
   </ItemGroup>
 
 </Project>

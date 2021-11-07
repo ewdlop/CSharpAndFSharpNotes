@@ -1,8 +1,10 @@
-﻿namespace CSharpClassLibrary.CQRS.Commands
+﻿using CSharpFunctionalExtensions;
+
+namespace CSharpClassLibrary.CQRS.Commands
 {
     public interface ICommandHandler<TCommand>
         where TCommand : ICommand
     {
-        void Handle(TCommand command);
+        Result Handle(TCommand command);
     }
 }

@@ -394,16 +394,14 @@ namespace CSharpClassLibrary.Reflection
         #region attempt2
         public static void AppendObjectAsDecomposed2(this IList<ExpandoObject> page,
                                                      object composedObject,
-                                                     IDictionary<string, object> row = null,
-                                                     IDictionary<string, object> tempRow = null,
                                                      int level = 0)
         {
             if (true)
             {
+                IDictionary<string,object> row = new Dictionary<string,object>();
                 foreach (var decomposedObjects in composedObject.GetDecomposed2())
                 {
                     Console.WriteLine("===========New Row===========");
-                    row = new ExpandoObject();
                     page.Add(row as ExpandoObject);
                     var spaceBuilder = new StringBuilder("");
                     for (int i = 0; i <= level; i++)
@@ -418,7 +416,7 @@ namespace CSharpClassLibrary.Reflection
                         if (!row.TryAdd(propertyInfo.Name, value))
                         {
                             //row[propertyInfo.Name] = value;
-                            string ToBeInsertedPropertyNameKey = propertyInfo.Name;
+                            string ToBeInsertedPropertyNameKey;
                             int count = 1;
                             do
                             {

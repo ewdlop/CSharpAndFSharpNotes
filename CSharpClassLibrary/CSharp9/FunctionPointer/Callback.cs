@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 
 namespace CSharpClassLibrary.CSharp9.FunctionPointer
 {
