@@ -437,34 +437,35 @@ namespace CSharpClassLibrary.Reflection
         {
             //CartesainProduct
             var IObjectEnumerableDictonaryArray = composedObject.GetDecomposedPropertyTuple()
-                .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Key, Enumerator: IObjectEnumeratorDictonary.Value.GetEnumerator()))
+                .Select(IObjectEnumeratorDictonary => (Property: IObjectEnumeratorDictonary.Key, Enumerator: IObjectEnumeratorDictonary.Value.GetEnumerator()))
                 .Where(IObjectEnumeratorDictonary => 
-                       (IObjectEnumeratorDictonary.Key.PropertyType.IsValueType ||
-                       IObjectEnumeratorDictonary.Key.PropertyType == typeof(string) ||
-                       Nullable.GetUnderlyingType(IObjectEnumeratorDictonary.Key.PropertyType) != null) &&
+                       (IObjectEnumeratorDictonary.Property.PropertyType.IsValueType ||
+                       IObjectEnumeratorDictonary.Property.PropertyType == typeof(string) ||
+                       Nullable.GetUnderlyingType(IObjectEnumeratorDictonary.Property.PropertyType) != null) &&
                        IObjectEnumeratorDictonary.Enumerator.MoveNext())
                 .ToArray();
             
             while(true)
             {
                 yield return IObjectEnumerableDictonaryArray
-                   .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Key, IObjectEnumeratorDictonary.Enumerator.Current));
+                   .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Property, IObjectEnumeratorDictonary.Enumerator.Current));
 
                 // increase enumerators
-                foreach (var IObjectEnumeratorDictonary in IObjectEnumerableDictonaryArray)
+                foreach (var Object in IObjectEnumerableDictonaryArray)
                 {
+                    Console.WriteLine(Object.Property.Name);
                     // reset the slot if it couldn't move next
                     //move next has side effect!!!(it moves then check)
                     //wonder why there is no HasNext()?
-                    if (!IObjectEnumeratorDictonary.Enumerator.MoveNext())
+                    if (!Object.Enumerator.MoveNext())
                     {
                         // stop when the last enumerator resets
-                        if (IObjectEnumeratorDictonary.Key == IObjectEnumerableDictonaryArray.Last().Key)
+                        if (Object.Property == IObjectEnumerableDictonaryArray.Last().Property)
                         {
                            yield break; //this break the loop for IEnumerable
                         }
-                        IObjectEnumeratorDictonary.Enumerator.Reset();
-                        IObjectEnumeratorDictonary.Enumerator.MoveNext();
+                        Object.Enumerator.Reset();
+                        Object.Enumerator.MoveNext();
                         // move to the next enumerator if this reseted
                         // this has to be done because some enuermator has a longer "cycle"
                         continue;
