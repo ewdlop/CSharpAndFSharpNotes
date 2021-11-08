@@ -1,0 +1,151 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static async Task Main()
+        {
+            var cts = new CancellationTokenSource();
+            int i = 0;
+            await foreach (var item in Print().WithCancellation(cts.Token))
+            {
+                i++;
+                Console.Out.WriteLine(item);
+                if(i > 10)
+                {
+                    break;
+                }
+            }
+        }
+
+        static async IAsyncEnumerable<string> Print(
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            while(true)
+            {
+                await Task.Delay(1000, cancellationToken);
+                yield return "test";
+            }
+        }
+    }
+}
+
+Counter.razor
+
+@page "/counter"
+
+<button class="btn btn-primary" @onclick="Run">Click me</button>
+@error
+@foreach (var item in _stdins)
+{
+    <div>
+        @item
+    </div>
+}
+
+Count.razor.cs
+
+using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace WebApplication1.Pages
+{
+    public partial class Counter : ComponentBase
+    {
+        private IList<string> _stdins { get; set; } = new List<string>();
+        private string error = "";
+
+        private async void Run()
+        {
+            //await StringsGenerator();
+            await foreach (var item in StringsGeneratorX())
+            {
+                _stdins.Add(item);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        private async Task StringsGenerator()
+        {
+            var Process = new System.Diagnostics.Process()
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo(@"C:\Users\Ray\Desktop\Code\Test\ConsoleApp1\bin\Debug\net5.0\ConsoleApp1.exe") // change path here
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
+                }
+            };
+            var Message = string.Empty;
+
+            try
+            {
+                Process.Start();
+                Process.BeginOutputReadLine();
+                Process.OutputDataReceived += async (sender, line) => {
+                    if (line.Data != null)
+                    {
+                        _stdins.Add(line.Data);
+                        await InvokeAsync(StateHasChanged);
+                    }
+                };
+                await Process.WaitForExitAsync();
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                Message = ex.Message;
+                _stdins.Add(Message);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        private async IAsyncEnumerable<string> StringsGeneratorX()
+        {
+            var Process = new System.Diagnostics.Process()
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo(@"C:\Users\Ray\Desktop\Code\Test\ConsoleApp1\bin\Debug\net5.0\ConsoleApp1.exe") // change path here
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                }
+            };
+            var Message = string.Empty;
+            var HasError = false;
+
+            //cannot use yield inside try-catch block RIP
+            try
+            {
+                Process.Start();
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                Message = ex.Message;
+                HasError = true;
+            }
+            if(HasError)
+            {
+                yield return Message;
+            }
+
+            var stdout = Process.StandardOutput;
+            string line;
+            while ((line = await stdout.ReadLineAsync()) != null)
+            {
+                yield return line;
+            }
+
+            await Process.WaitForExitAsync();
+            yield return Message;
+        }
+    }
+}
+
+
+
+
+
