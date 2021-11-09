@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -50,7 +52,7 @@ namespace CSharpClassLibrary.Reflection
         {
             var player = new Player()
             {
-                Name= "Random Dude",
+                PlayerName= "Random Dude",
                 Health = 4,
                 MiscItems = new List<MiscItem>()
                 {
@@ -176,6 +178,13 @@ namespace CSharpClassLibrary.Reflection
                 },
                 Gold = 0
             };
+            Log.Logger = new LoggerConfiguration()
+                        .MinimumLevel.Information()
+                        .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+                        //.WriteTo.File("log.txt",
+                        //    rollingInterval: RollingInterval.Minute,
+                        //    rollOnFileSizeLimit: true)
+                        .CreateLogger();
 
             List<ExpandoObject> csvPage = new();
             //List<Dictionary<PropertyInfo,object>> csvPage = new();
@@ -193,18 +202,19 @@ namespace CSharpClassLibrary.Reflection
             //{
             //    Console.WriteLine($"{keyValuePair.Key}: {keyValuePair.Value}");
             //}
-            Console.WriteLine("============================");
+            Log.Information("============================");
 
             foreach (var expandoObject in csvPage)
             {
-                Console.Write("---\n");
+                Log.Information("---\n");
                 foreach (var pair in expandoObject)
                 {
                     //Console.WriteLine($"{pair.Key.Name}: {pair.Value}");
                     Console.WriteLine($"{pair.Key}: {pair.Value}");
                 }
-                Console.Write("---");
+                Log.Information("---");
             }
+            Log.CloseAndFlush();
         }
         #region attemp1
         public static void AppendObjectAsDecomposed(this IList<Dictionary<PropertyInfo, object>> page,
@@ -237,7 +247,7 @@ namespace CSharpClassLibrary.Reflection
                             row = new Dictionary<PropertyInfo, object>();
                             page.Add(row);
                         }
-                    }
+                    }   
                     var spaceBuilder = new StringBuilder("");
                     for(int i = 0; i<=level; i++)
                     {
@@ -401,18 +411,18 @@ namespace CSharpClassLibrary.Reflection
                 IDictionary<string,object> row = new Dictionary<string,object>();
                 foreach (var decomposedObjects in composedObject.GetDecomposed2())
                 {
-                    Console.WriteLine("===========New Row===========");
+                    //Log.Warning("===========New Row===========");
                     page.Add(row as ExpandoObject);
                     var spaceBuilder = new StringBuilder("");
                     for (int i = 0; i <= level; i++)
                     {
                         spaceBuilder.Append('=');
                     }
-                    Console.WriteLine($"{spaceBuilder}===========Level {level} Modificiton===========");
-                    Console.WriteLine($"{spaceBuilder}{{");
+                    //Log.Information($"{spaceBuilder}===========Level {level} Modificiton===========");
+                    //Log.Information($"{spaceBuilder}{{");
                     foreach (var (propertyInfo, value) in decomposedObjects)
                     {
-                        Console.WriteLine($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
+                        //Log.Information($"{spaceBuilder}{propertyInfo.Name}({propertyInfo.PropertyType.Name}): {value}, ");
                         if (!row.TryAdd(propertyInfo.Name, value))
                         {
                             //row[propertyInfo.Name] = value;
@@ -427,9 +437,9 @@ namespace CSharpClassLibrary.Reflection
                             row[ToBeInsertedPropertyNameKey] = value;
                         }
                     }
-                    Console.WriteLine($"{spaceBuilder}}}");
-                    Console.WriteLine($"{spaceBuilder}===========End of the Level {level} Modificiton===========");
-                    Console.WriteLine("===========End Of Row===========");
+                    //Log.Information($"{spaceBuilder}}}");
+                    //Log.Information($"{spaceBuilder}===========End of the Level {level} Modificiton===========");
+                    //Log.Warning("===========End Of Row===========");
                 }
             }
         }
@@ -453,7 +463,11 @@ namespace CSharpClassLibrary.Reflection
                 // increase enumerators
                 foreach (var Object in IObjectEnumerableDictonaryArray)
                 {
-                    Console.WriteLine(Object.Property.Name);
+                    if(Object.Property.Name.CompareTo("PlayerName")==0)
+                    {
+                        Log.Warning(Object.Property.Name);
+                    }
+                    Log.Warning(Object.Property.Name);
                     // reset the slot if it couldn't move next
                     //move next has side effect!!!(it moves then check)
                     //wonder why there is no HasNext()?
