@@ -52,7 +52,7 @@ namespace CSharpClassLibrary.Reflection
         {
             var player = new Player()
             {
-                PlayerName= "Random Dude",
+                Name = "Random Dude",
                 Health = 4,
                 MiscItems = new List<MiscItem>()
                 {
