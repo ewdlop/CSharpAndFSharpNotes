@@ -7,7 +7,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
     {
         private readonly ILexerBehavior _lexerBehavior;
         public int Lexline { get; init; }
-        public Node(LexerBehavior lexerBehavior)
+        public Node(ILexerBehavior lexerBehavior)
         {
             _lexerBehavior = lexerBehavior;
             Lexline = _lexerBehavior.Line;

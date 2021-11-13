@@ -12,7 +12,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers
         where T3 : IExpression
     {
         private readonly IParserBehavior<T1, T2, T3> _parserBehavior;
-        public Parser(ParserBehavior<T1, T2, T3> parserBehavior)
+        public Parser(IParserBehavior<T1, T2, T3> parserBehavior)
         {
             _parserBehavior = parserBehavior;
         }

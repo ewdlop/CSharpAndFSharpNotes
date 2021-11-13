@@ -8,7 +8,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers
     {
         private readonly ILexerBehavior _lexerBehavior;
         public IReadOnlyLexerBehavior ReadOnlyLexerCharacterReader => _lexerBehavior;
-        public Lexer(LexerBehavior lexerBehavior)
+        public Lexer(ILexerBehavior lexerBehavior)
         {
             _lexerBehavior = lexerBehavior;
             _lexerBehavior.Reserve(new("if", TokenTag.IF));
