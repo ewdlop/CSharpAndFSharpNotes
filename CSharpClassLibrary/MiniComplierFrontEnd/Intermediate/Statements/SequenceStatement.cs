@@ -6,7 +6,9 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements
     {
         private readonly IStatement _statement1;
         private readonly IStatement _statement2;
-        public SequenceStatement(IStatement statement1, IStatement statement2, Node node):base(node)
+        public SequenceStatement(IStatement statement1,
+                                 IStatement statement2,
+                                 Node node) :base(node)
         {
             _statement1 = statement1;
             _statement2 = statement2;

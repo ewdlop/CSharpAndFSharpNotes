@@ -18,12 +18,12 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
             return new Node(dummyLexerBehavior);
         });
 
-        public INode CreateNode()
+        public Node CreateNode()
         {
             return new Node(_lexerBehavior);
         }
 
-        public static INode CreateNode(LexerBehavior lexerBehavior)
+        public static Node CreateNode(LexerBehavior lexerBehavior)
         {
             return new Node(lexerBehavior);
         }

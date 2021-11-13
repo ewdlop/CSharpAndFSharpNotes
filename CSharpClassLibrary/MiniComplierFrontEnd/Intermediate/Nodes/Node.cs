@@ -12,7 +12,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
             _lexerBehavior = lexerBehavior;
             Lexline = _lexerBehavior.Line;
         }
-        private static int Labels { get; set; }
+        private int Labels { get; set; }
         public void Error(string error) => throw new Exception($"near line {Lexline}: {error}");
         public int NewLabel() => ++Labels;
         public virtual void EmitLabel(int i) => Console.Write($"L{i}:");
