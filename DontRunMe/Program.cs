@@ -17,9 +17,9 @@ catch (OverflowException)
 
 bool FourtyTwo(string filename, string[] args)
 {
-    bool RunningMyself = true;
+    bool noanswer = true;
     int i = 0;
-    while(RunningMyself)
+    while(noanswer)
     {
         checked
         {
