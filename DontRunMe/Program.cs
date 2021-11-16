@@ -8,21 +8,43 @@ Console.WriteLine("Hello, World!");
 
 string filename = $"{AssemblyDirectory}/DontRunMe.exe";
 {
-    if (FourtyTwo(filename, args))
+    try
+    {
+        foreach (var halted in FourtyTwo(filename, args))
+        {
+            if(halted)
+            {
+                break;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+    catch (Exception)
+    {
         for (; ; );
-    else
-        return;
-}
-catch (Win32Exception)
-{
+    }
     for (; ; );
 }
 
-bool FourtyTwo(string filename, string[] args)
+
+IEnumerable<bool> FourtyTwo(string filename, string[] args)
 {
-    var process = Process.Start(filename, args);
-    process.WaitForExit();
-    return true;
+    yield return true;
+    //try
+    //{
+    //    var process = Process.Start(filename, args);
+    //    while (!process.HasExited)
+    //    {
+    //        yield return false;
+    //    }
+    //}
+    //catch(Win32Exception)
+    //{
+    //    yield return true;
+    //}
 }
 
 string? AssemblyDirectory()
