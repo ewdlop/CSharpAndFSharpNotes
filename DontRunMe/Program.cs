@@ -40,6 +40,7 @@ IEnumerable<bool> FourtyTwo(string filename, string[] args)
     //    {
     //        yield return false;
     //    }
+    //    yield return true;
     //}
     //catch(Win32Exception)
     //{
