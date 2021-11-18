@@ -36,7 +36,7 @@ IEnumerable<bool> FourtyTwo(string filename, string[] args)
     //try
     //{
     //    var process = Process.Start(filename, args);
-    //    while (!process.HasExited)
+    //    while (!process.HasExited && process.Responding)
     //    {
     //        yield return false;
     //    }
@@ -54,4 +54,14 @@ string? AssemblyDirectory()
     UriBuilder uri = new UriBuilder(codeBase);
     string path = Uri.UnescapeDataString(uri.Path);
     return Path.GetDirectoryName(path);
+}
+
+public record test
+{
+
+}
+
+public class X : test
+{
+
 }
