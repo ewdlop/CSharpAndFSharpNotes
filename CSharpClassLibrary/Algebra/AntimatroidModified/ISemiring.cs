@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary.Algebra.One
+﻿namespace CSharpClassLibrary.Algebra.AntimatroidModified
 {
     public interface ISemiring<T, A, M> : IRingoid<T, A, M>
         where A : IMonoid<T>

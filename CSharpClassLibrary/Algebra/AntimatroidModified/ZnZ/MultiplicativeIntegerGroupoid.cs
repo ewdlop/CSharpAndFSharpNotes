@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary.Algebra.One.ZnZ
+﻿namespace CSharpClassLibrary.Algebra.AntimatroidModified.ZnZ
 {
     public class MultiplicativeIntegerGroupoid : IGroupoid<long>
     {

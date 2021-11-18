@@ -1,4 +1,4 @@
-﻿namespace CSharpClassLibrary.Algebra.One.D8
+﻿namespace CSharpClassLibrary.Algebra.AntimatroidModified.D8
 {
 
     public class D8SymmetryGroup : D8SymmetryMonoid, IGroup<D8Symmetry>

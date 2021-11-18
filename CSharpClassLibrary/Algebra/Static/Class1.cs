@@ -18,3 +18,4 @@
         public static int Zero  => 0;
     }
 }
+
