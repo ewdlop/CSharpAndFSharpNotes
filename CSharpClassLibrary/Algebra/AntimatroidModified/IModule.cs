@@ -1,6 +1,6 @@
 ﻿namespace CSharpClassLibrary.Algebra.One
 {
-    public interface IMoudle<
+    public interface IModule<
         TScalar,
         TVector,
         TScalarRing,

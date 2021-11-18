@@ -7,7 +7,7 @@
         TScalarAdditiveGroup,
         TScalarMultiplicativeMonoid,
         TVectorAdditiveAbelianGroup
-    > : IMoudle<
+    > : IModule<
         TScalar,
         TVector,
         TScalarRingWithUnity,

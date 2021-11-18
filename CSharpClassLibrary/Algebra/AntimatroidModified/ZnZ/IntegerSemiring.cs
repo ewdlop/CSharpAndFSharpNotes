@@ -1,7 +1,7 @@
 ﻿namespace CSharpClassLibrary.Algebra.One.ZnZ
 {
 
-    public class IntegerSemiring : IntegerRingoid, ISemiring<long, AdditiveIntegerMonoid, MultiplicativeIntegerMonoid>
+    public record IntegerSemiring : IntegerRingoid, ISemiring<long, AdditiveIntegerMonoid, MultiplicativeIntegerMonoid>
     {
         public new AdditiveIntegerMonoid Addition { get; init; }
         public new MultiplicativeIntegerMonoid Multiplication { get; init; }

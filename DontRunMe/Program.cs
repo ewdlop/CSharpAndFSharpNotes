@@ -55,13 +55,3 @@ string? AssemblyDirectory()
     string path = Uri.UnescapeDataString(uri.Path);
     return Path.GetDirectoryName(path);
 }
-
-public record test
-{
-
-}
-
-public class X : test
-{
-
-}
