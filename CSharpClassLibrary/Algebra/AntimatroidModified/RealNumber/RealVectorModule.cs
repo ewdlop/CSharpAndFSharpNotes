@@ -33,4 +33,34 @@
             return c;
         }
     }
+
+    //public class RealVectorUnitaryModule : RealVectorModule, IUnitaryModule<double, Vector<double>, RealRingWithUnity, AddativeRealGroup, MultiplicativeRealMonoid, VectorAbelianGroup<double>>
+    //{
+    //    public new RealRingWithUnity Scalar
+    //    {
+    //        get;
+    //        private set;
+    //    }
+
+    //    public RealVectorUnitaryModule()
+    //        : base()
+    //    {
+    //        Scalar = new RealRingWithUnity();
+    //    }
+    //}
+
+    //public class RealVectorVectorSpace : RealVectorUnitaryModule, IVectorSpace<double, Vector<double>, RealField, AddativeRealAbelianGroup, MultiplicativeRealAbelianGroup, VectorAbelianGroup<double>>
+    //{
+    //    public new RealField Scalar
+    //    {
+    //        get;
+    //        private set;
+    //    }
+
+    //    public RealVectorVectorSpace()
+    //        : base()
+    //    {
+    //        Scalar = new RealField();
+    //    }
+    //}
 }
