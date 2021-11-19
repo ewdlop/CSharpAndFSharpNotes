@@ -1,0 +1,13 @@
+﻿<div class= "btn-group" role = "group" >
+@foreach (var tabPage in TabPages)
+{
+    <button type = "button"
+        class= "btn-primary"
+        @onclick =@(() => ActivateTabPage(tabPage)) >
+        Test
+    </button>
+}
+</div>
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
