@@ -1,0 +1,111 @@
+﻿@page "/form-example-2"
+@using Microsoft.Extensions.Logging
+@using BlazorWebAssemblyApp.Shared.Models
+@using static BlazorWebAssemblyApp.Shared.Models.ComponentEnums
+@inject ILogger<FormExample2> Logger
+
+<h1>Starfleet Starship Database</h1>
+
+<h2>New Ship Entry Form</h2>
+
+<EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="@starship" />
+
+    <p>
+        <label>
+            Identifier:
+            <InputText @bind-Value="starship.Identifier" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Description (optional):
+            <InputTextArea @bind-Value="starship.Description" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Primary Classification:
+            <InputSelect @bind-Value="starship.Classification">
+                <option value="">Select classification ...</option>
+                <option value="Exploration">Exploration</option>
+                <option value="Diplomacy">Diplomacy</option>
+                <option value="Defense">Defense</option>
+            </InputSelect>
+        </label>
+    </p>
+    <p>
+        <label>
+            Maximum Accommodation:
+            <InputNumber @bind-Value="starship.MaximumAccommodation" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Engineering Approval:
+            <InputCheckbox @bind-Value="starship.IsValidatedDesign" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Production Date:
+            <InputDate @bind-Value="starship.ProductionDate" 
+                       DisplayName="Production Date" 
+                       ParsingErrorMessage="The {0} field has an incorrect date value." />
+        </label>
+    </p>
+    <p>
+    <InputRadioGroup @bind-Value="starship.Manufacturer">
+        Manufacturer:
+        <br>
+        @foreach (var manufacturer in (Manufacturer[])Enum
+            .GetValues(typeof(Manufacturer)))
+        {
+            <InputRadio Value="manufacturer" />
+            <text>&nbsp;</text>@manufacturer<br>
+        }
+    </InputRadioGroup>
+    </p>
+    <p>
+        Select one engine and one color. Recommendations are paired but any 
+        combination of engine and color is allowed:<br>
+        <InputRadioGroup Name="engine" @bind-Value="starship.Engine">
+            <InputRadioGroup Name="color" @bind-Value="starship.Color">
+                <InputRadio Name="engine" Value="Engine.Ion" />
+                Engine: Ion<br>
+                <InputRadio Name="color" Value="Color.ImperialRed" />
+                Color: Imperial Red<br><br>
+                <InputRadio Name="engine" Value="Engine.Plasma" />
+                Engine: Plasma<br>
+                <InputRadio Name="color" Value="Color.SpacecruiserGreen" />
+                Color: Spacecruiser Green<br><br>
+                <InputRadio Name="engine" Value="Engine.Fusion" />
+                Engine: Fusion<br>
+                <InputRadio Name="color" Value="Color.StarshipBlue" />
+                Color: Starship Blue<br><br>
+                <InputRadio Name="engine" Value="Engine.Warp" />
+                Engine: Warp<br>
+                <InputRadio Name="color" Value="Color.VoyagerOrange" />
+                Color: Voyager Orange
+            </InputRadioGroup>
+        </InputRadioGroup>
+    </p>
+    <button type="submit">Submit</button>
+    <p>
+        <a href="http://www.startrek.com/">Star Trek</a>, 
+        &copy;1966-2019 CBS Studios, Inc. and 
+        <a href="https://www.paramount.com">Paramount Pictures</a>
+    </p>
+</EditForm>
+
+@code {
+    private Starship starship = new() { ProductionDate = DateTime.UtcNow };
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+
+        // Process the valid form
+    }
+}

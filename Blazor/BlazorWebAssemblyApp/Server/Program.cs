@@ -4,6 +4,7 @@ using BlazorWebAssemblyApp.Server.Services;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,7 +40,21 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("role");
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        if (context.HttpContext.Request.Path == "/StarshipValidation")
+        {
+            return new BadRequestObjectResult(context.ModelState);
+        }
+        else
+        {
+            return new BadRequestObjectResult(
+                new ValidationProblemDetails(context.ModelState));
+        }
+    };
+});
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

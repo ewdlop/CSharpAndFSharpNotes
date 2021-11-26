@@ -1,0 +1,7 @@
+﻿.validField {
+    border-color: lawngreen;
+}
+
+.invalidField {
+    background-color: tomato;
+}

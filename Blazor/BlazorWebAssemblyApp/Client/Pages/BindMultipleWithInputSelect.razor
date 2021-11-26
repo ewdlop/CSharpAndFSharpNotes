@@ -1,0 +1,54 @@
+﻿@page "/bind-multiple-with-inputselect"
+@using System.ComponentModel.DataAnnotations 
+@using Microsoft.Extensions.Logging
+@inject ILogger<BindMultipleWithInputSelect> Logger 
+
+<h1>Bind Multiple <code>InputSelect</code>Example</h1>
+
+<EditForm EditContext="@_editContext" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Select classifications (Minimum: 2, Maximum: 3):
+            <InputSelect @bind-Value="starship.SelectedClassification">
+                <option value="@Classification.Exploration">Exploration</option>
+                <option value="@Classification.Diplomacy">Diplomacy</option>
+                <option value="@Classification.Defense">Defense</option>
+                <option value="@Classification.Research">Research</option>
+            </InputSelect>
+        </label>
+    </p>
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+<p>
+    Selected Classifications: 
+    @string.Join(", ", starship.SelectedClassification)
+</p>
+
+@code {
+    private EditContext _editContext;
+    private Starship starship = new();
+
+    protected override void OnInitialized()
+    {
+        _editContext = new(starship);
+    }
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+    }
+
+    private class Starship
+    {
+        [Required, MinLength(2), MaxLength(3)]
+        public Classification[] SelectedClassification { get; set; } =
+            new[] { Classification.Diplomacy };
+    }
+
+    private enum Classification { Exploration, Diplomacy, Defense, Research }
+}

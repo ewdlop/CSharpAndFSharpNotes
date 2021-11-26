@@ -1,0 +1,30 @@
+﻿@*@page "/form-example-7"
+@using Microsoft.Extensions.Logging
+@using BlazorWebAssemblyApp.Shared.Models
+@using BlazorWebAssemblyApp.Shared
+@inject ILogger<FormExample7> Logger
+
+<EditForm Model="@_person" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <CustomInputText @bind-Value="_person.Name" />
+    <InputText id="description" @bind-Value="exampleModel.Description" />
+
+    <button type="submit">Submit</button>
+
+</EditForm>
+
+<p>
+    CurrentValue: @_person.Name
+</p>
+
+@code {
+    private Person _person = new();
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+
+        // Process the valid form
+    }
+}*@
