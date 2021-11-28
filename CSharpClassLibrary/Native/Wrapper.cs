@@ -38,6 +38,18 @@ namespace CSharpClassLibrary.Native
             }
         }
 
+        [DllImport("kernel32", EntryPoint = "LoadLibrary")]
+        private static extern IntPtr Kernel32LoadLibrary(string fileName);
+
+        [DllImport("kernel32", EntryPoint = "GetProcAddress")]
+        private static extern IntPtr Kernel32GetProcAddress(IntPtr module, string procName);
+
+        [DllImport("libdl", EntryPoint = "dlopen")]
+        private static extern IntPtr LibDLLoadLibrary(string fileName, int flags);
+
+        [DllImport("libdl", EntryPoint = "dlsym")]
+        private static extern IntPtr LibDLGetProcAddress(IntPtr handle, string name);
+
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void OnCompletedCallback(IntPtr state, int result);
 
