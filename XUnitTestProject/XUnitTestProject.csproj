@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSharpClassLibrary\CSharpClassLibrary.csproj" />
+    <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
   </ItemGroup>
 
 </Project>
