@@ -6,4 +6,29 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Databases\**" />
+    <Compile Remove="FileSystem\**" />
+    <Compile Remove="Migrations\**" />
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Databases\**" />
+    <EmbeddedResource Remove="FileSystem\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Databases\**" />
+    <None Remove="FileSystem\**" />
+    <None Remove="Migrations\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Factories\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Queries\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

@@ -5,5 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Databases\" />
+    <Folder Include="FileSystem\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
 
+	
+	
 </Project>
