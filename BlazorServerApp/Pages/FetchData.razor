@@ -1,0 +1,53 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Weather forecast</PageTitle>
+
+@using BlazorServerApp.Data
+@using BlazorServerApp.Data.CQRS
+@using MediatR
+@inject IMediator Mediator
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (weatherForecastDTO == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in weatherForecastDTO.Forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ListAll.WeatherForecastList? weatherForecastDTO;
+
+    protected override async Task OnInitializedAsync()
+    {
+        weatherForecastDTO = await Mediator.Send(new ListAll.WeatherForecastQuery { 
+            StartDate = DateTime.Now 
+        });
+    }
+}

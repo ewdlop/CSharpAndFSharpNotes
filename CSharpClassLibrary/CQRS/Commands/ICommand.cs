@@ -1,6 +1,9 @@
-﻿namespace CSharpClassLibrary.CQRS.Commands
+﻿using System;
+
+namespace CSharpClassLibrary.CQRS.Commands
 {
     public interface ICommand
     {
+        Guid Id { get; }
     }
 }
