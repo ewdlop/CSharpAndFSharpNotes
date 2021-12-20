@@ -4,8 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>VeryComplicatedBlazorApp.Server-E99062E8-B67C-4EDA-AA46-D0220B9E2C62</UserSecretsId>
-    <WebProject_DirectorVeryComplicatedBlazorApp.DomainyAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
   </PropertyGroup>
 
   <ItemGroup>
