@@ -56,19 +56,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Four", "Four", "{BD7780F5-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerApp", "BlazorServerApp\BlazorServerApp.csproj", "{0554C287-5755-43DB-81A2-7E33BE73376C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Server", "Blazor\VeryComplicatedBlazorApp\Server\VeryComplicatedBlazorApp.Server.csproj", "{49A5BBC8-6DFD-449C-AAA0-A5228B022679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Server", "Blazor\VeryComplicatedBlazorApp\Server\VeryComplicatedBlazorApp.Server.csproj", "{49A5BBC8-6DFD-449C-AAA0-A5228B022679}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Client", "Blazor\VeryComplicatedBlazorApp\Client\VeryComplicatedBlazorApp.Client.csproj", "{CD5C98B1-29A6-4C6E-942A-4350EB43B45B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Client", "Blazor\VeryComplicatedBlazorApp\Client\VeryComplicatedBlazorApp.Client.csproj", "{CD5C98B1-29A6-4C6E-942A-4350EB43B45B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Shared", "Blazor\VeryComplicatedBlazorApp\Shared\VeryComplicatedBlazorApp.Shared.csproj", "{4E7F8B5B-3D5D-4F09-A7C1-8AE94C1B6F2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Shared", "Blazor\VeryComplicatedBlazorApp\Shared\VeryComplicatedBlazorApp.Shared.csproj", "{4E7F8B5B-3D5D-4F09-A7C1-8AE94C1B6F2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Domain", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Domain\VeryComplicatedBlazorApp.Domain.csproj", "{EE8071DF-E394-4821-B593-5DBF8086FE13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Domain", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Domain\VeryComplicatedBlazorApp.Domain.csproj", "{EE8071DF-E394-4821-B593-5DBF8086FE13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Infrastructure", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Infrastructure\VeryComplicatedBlazorApp.Infrastructure.csproj", "{301022B4-3510-4E50-A64D-EF715A08298B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Infrastructure", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Infrastructure\VeryComplicatedBlazorApp.Infrastructure.csproj", "{301022B4-3510-4E50-A64D-EF715A08298B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.Application", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Application\VeryComplicatedBlazorApp.Application\VeryComplicatedBlazorApp.Application.csproj", "{2E315D13-59EB-4980-A58F-B4B335C7CC74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.Application", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.Application\VeryComplicatedBlazorApp.Application\VeryComplicatedBlazorApp.Application.csproj", "{2E315D13-59EB-4980-A58F-B4B335C7CC74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryComplicatedBlazorApp.InventoryBoundedContext", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.InventoryBoundedContext\VeryComplicatedBlazorApp.InventoryBoundedContext.csproj", "{FD3F8B32-6EC9-4249-AC27-A5F39652B0DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryComplicatedBlazorApp.InventoryBoundedContext", "Blazor\VeryComplicatedBlazorApp\VeryComplicatedBlazorApp.InventoryBoundedContext\VeryComplicatedBlazorApp.InventoryBoundedContext.csproj", "{FD3F8B32-6EC9-4249-AC27-A5F39652B0DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureSearchIndxer", "AzureSearchIndxer\AzureSearchIndxer.csproj", "{C4015EFC-3B29-45B1-9873-527719BDCDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionAppDI", "AzureFunctionAppDI\AzureFunctionAppDI.csproj", "{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -402,6 +406,30 @@ Global
 		{FD3F8B32-6EC9-4249-AC27-A5F39652B0DA}.Release|x64.Build.0 = Release|Any CPU
 		{FD3F8B32-6EC9-4249-AC27-A5F39652B0DA}.Release|x86.ActiveCfg = Release|Any CPU
 		{FD3F8B32-6EC9-4249-AC27-A5F39652B0DA}.Release|x86.Build.0 = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|x64.Build.0 = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2}.Release|x86.Build.0 = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|x64.Build.0 = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Debug|x86.Build.0 = Debug|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|x64.ActiveCfg = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|x64.Build.0 = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|x86.ActiveCfg = Release|Any CPU
+		{ABD2C2CA-FD2A-43A9-9BEE-B983ECDC224B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

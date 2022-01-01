@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@page "/";
+@inject IMediator Mediator;
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +8,13 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<input type="color" @oninput=@((args)=>OnColorChanged(args))/>
+
+@code{
+
+    private async Task OnColorChanged(ChangeEventArgs args)
+    {
+        
+    }
+}
