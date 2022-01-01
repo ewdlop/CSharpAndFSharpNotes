@@ -18,7 +18,8 @@ builder.ConfigureServices((HostBuilderContext context, IServiceCollection servic
                     options.Retry.MaxRetries = 10;
                 });
     });
-    services.AddScoped<AzurSearcIndexerService>();
+    services.AddScoped<AzurSearchIndexerService>();
+    services.AddScoped<AzurSearchService>();
     services.AddHostedService<AzureSearchIndxer.Host>();
 });
 

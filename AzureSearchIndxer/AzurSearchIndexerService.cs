@@ -1,5 +1,4 @@
 ﻿using Azure;
-using Azure.Search.Documents;
 using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
 using Microsoft.Extensions.Options;
@@ -8,28 +7,21 @@ using System.Net;
 
 namespace AzureSearchIndxer
 {
-    internal class AzurSearcIndexerService : IRunable
-    {
-    //    private readonly SearchClient _searchClient;
-    //    private readonly SearchIndexClient _searchIndexClient;
 
+    internal class AzurSearchIndexerService : IRunable
+    {
         private readonly IOptions<AzureBlobOptions> _azureBlobOptions;
         private readonly SearchIndexer _azureBlobIndexer;
         private readonly SearchIndexerClient _searchIndexerClient;
         private readonly IndexingParameters _indexingParameters;
         private readonly SearchIndexerDataContainer _searchIndexerDataContainer;
 
-        public AzurSearcIndexerService(
+        public AzurSearchIndexerService(
             IOptions<AzureBlobOptions> azureBlobOptions,
             IOptions<SearchIndexerClientOptions> searchIndexerClientOptions
-            //SearchClient searchClient,
-            //SearchIndexClient searchIndexClient
             )
         {
             _azureBlobOptions = azureBlobOptions;
-
-            //_searchClient = searchClient;
-            //_searchIndexClient = searchIndexClient;
 
             _indexingParameters = new();
             _indexingParameters.Configuration.Add("parsingMode", "json");
