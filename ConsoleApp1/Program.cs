@@ -23,6 +23,8 @@ builder.ConfigureServices((context, services) =>
         //    return new SecretClient(appOptions.Value.KeyVaultEndpoint, credential, options);
         //});
     });
+
+    services.AddHostedService<Startup>();
 });
 
 await builder.Build().RunAsync();

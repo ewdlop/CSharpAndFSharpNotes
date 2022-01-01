@@ -4,6 +4,7 @@ using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
 using Azure.Search.Documents.Models;
 using System;
+using System.Collections.Generic;
 
 namespace LearningAzureSearch
 {
@@ -179,14 +180,29 @@ namespace LearningAzureSearch
 
         }
 
-        private static void WriteDocuments(SearchResults<Hotel> searchResults)
+        private static async void WriteDocuments(SearchResults<Hotel> searchResults)
         {
-            foreach (SearchResult<Hotel> result in searchResults.GetResults())
+            string? contineueToken = null;
+            int pageSize = 5;
+
+            var asyncEnumerator = searchResults.GetResultsAsync()
+                .AsPages(contineueToken, pageSize)
+                .GetAsyncEnumerator();
+
+            while (await asyncEnumerator.MoveNextAsync())
+            {
+                var result = asyncEnumerator.Current;
+                foreach(SearchResult<Hotel> hotel in result.Values)
+                {
+                    Console.WriteLine(hotel.ToString());
+                }
+                // contineueToken = result.ContinuationToken;
+            }
+
+            await foreach(SearchResult<Hotel> result in searchResults.GetResultsAsync())
             {
                 Console.WriteLine(result.Document.ToString());
             }
-
-            Console.WriteLine();
         }
 
         private static void RunQueries(SearchClient srchclient)

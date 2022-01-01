@@ -1,0 +1,20 @@
+﻿{
+  "SearchClient": {
+    "endpoint": "my resource url",
+    "credential": {
+      "key": "my resource key"
+    }
+  },
+  "SearchIndexClient": {
+    "endpoint": "my resource url",
+    "credential": {
+      "key": "my resource key"
+    }
+  },
+  "SearchIndexerClient": {
+
+  },
+  "AzureBlob": {
+
+  }
+}

@@ -1,14 +1,17 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-public class SearchHostedService : IHostedService
+namespace ConsoleApp1
 {
-    public Task StartAsync(CancellationToken cancellationToken)
+    public class SearchHostedService : IHostedService
     {
-        throw new NotImplementedException();
-    }
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
