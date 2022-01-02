@@ -25,20 +25,20 @@ namespace LearningAzureSearch
 
             // Create index
             //Console.WriteLine("{0}", "Creating index...\n");
-            //CreateIndex(indexName, adminClient);
+            CreateIndex(indexName, adminClient);
 
             // Create a SearchClient to load and query documents
             SearchClient srchclient = new SearchClient(serviceEndpoint, indexName, credential);
 
             SearchClient ingesterClient = adminClient.GetSearchClient(indexName);
 
-            //// Load documents
+            // Load documents
             //Console.WriteLine("{0}", "Uploading documents...\n");
             //UploadDocuments(ingesterClient);
 
-            //// Merge or Upload documents
-            Console.WriteLine("{0}", "Merge or Upload documents...\n");
-            MergeOrUploadDocuments(ingesterClient);
+            // Merge or Upload documents
+            //Console.WriteLine("{0}", "Merge or Upload documents...\n");
+            //MergeOrUploadDocuments(ingesterClient);
 
             //// Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
             //Console.WriteLine("Waiting for indexing...\n");

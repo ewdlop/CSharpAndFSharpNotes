@@ -10,7 +10,7 @@ namespace LearningAzureSearch
         [SimpleField(IsKey = true, IsFilterable = true)]
         public string HotelId { get; set; }
 
-        [SearchableField(IsSortable = true)]
+        [SearchableField(IsSortable = true, IsFacetable = true)]
         public string HotelName { get; set; }
 
         [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene)]
