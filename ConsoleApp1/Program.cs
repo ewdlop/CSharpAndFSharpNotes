@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.Security.KeyVault.Secrets;
+using ConsoleApp1;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +25,7 @@ builder.ConfigureServices((context, services) =>
         //});
     });
 
-    services.AddHostedService<Startup>();
+    services.AddHostedService<SearchHostedService>();
 });
 
 await builder.Build().RunAsync();

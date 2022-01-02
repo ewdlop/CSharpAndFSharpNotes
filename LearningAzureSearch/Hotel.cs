@@ -37,5 +37,9 @@ namespace LearningAzureSearch
 
         [SearchableField]
         public Address Address { get; set; }
+
+
+        [SimpleField]
+        public int Floors { get; set; }
     }
 }

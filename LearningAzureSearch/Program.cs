@@ -12,41 +12,45 @@ namespace LearningAzureSearch
     {
         private static void Main(string[] args)
         {
-            string indexName = "";
-            string apiKey = "";
+            string indexName = "hotels-quickstart";
+            string apiKey = "EADCF1EB09D72582F1DEE134EF503D1D";
 
             // Create a SearchIndexClient to send create/delete index commands
-            Uri serviceEndpoint = new Uri($"");
+            Uri serviceEndpoint = new Uri($"https://raymondqnamaker-asuyqjza6zwaqiw.search.windows.net");
             AzureKeyCredential credential = new AzureKeyCredential(apiKey);
             SearchIndexClient adminClient = new SearchIndexClient(serviceEndpoint, credential);
 
-            Console.WriteLine("{0}", "Deleting index...\n");
-            DeleteIndexIfExists(indexName, adminClient);
+            //Console.WriteLine("{0}", "Deleting index...\n");
+            //DeleteIndexIfExists(indexName, adminClient);
 
             // Create index
-            Console.WriteLine("{0}", "Creating index...\n");
-            CreateIndex(indexName, adminClient);
+            //Console.WriteLine("{0}", "Creating index...\n");
+            //CreateIndex(indexName, adminClient);
 
             // Create a SearchClient to load and query documents
             SearchClient srchclient = new SearchClient(serviceEndpoint, indexName, credential);
 
             SearchClient ingesterClient = adminClient.GetSearchClient(indexName);
 
-            // Load documents
-            Console.WriteLine("{0}", "Uploading documents...\n");
-            UploadDocuments(ingesterClient);
+            //// Load documents
+            //Console.WriteLine("{0}", "Uploading documents...\n");
+            //UploadDocuments(ingesterClient);
 
-            // Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
-            Console.WriteLine("Waiting for indexing...\n");
-            System.Threading.Thread.Sleep(2000);
+            //// Merge or Upload documents
+            Console.WriteLine("{0}", "Merge or Upload documents...\n");
+            MergeOrUploadDocuments(ingesterClient);
+
+            //// Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
+            //Console.WriteLine("Waiting for indexing...\n");
+            //System.Threading.Thread.Sleep(2000);
 
             // Call the RunQueries method to invoke a series of queries
-            Console.WriteLine("Starting queries...\n");
-            RunQueries(srchclient);
+            //Console.WriteLine("Starting queries...\n");
+            //RunQueries(srchclient);
 
-            // End the program
-            Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
-            Console.ReadKey();
+            //// End the program
+            //Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
+            //Console.ReadKey();
         }
 
         private static void DeleteIndexIfExists(string indexName, SearchIndexClient adminClient)
@@ -93,14 +97,14 @@ namespace LearningAzureSearch
                         ParkingIncluded = false,
                         LastRenovationDate = new DateTimeOffset(1970, 1, 18, 0, 0, 0, TimeSpan.Zero),
                         Rating = 3.6,
-                        Address = new Address()
-                        {
-                            StreetAddress = "677 5th Ave",
-                            City = "New York",
-                            StateProvince = "NY",
-                            PostalCode = "10022",
-                            Country = "USA"
-                        }
+                        //Address = new Address()
+                        //{
+                        //    StreetAddress = "677 5th Ave",
+                        //    City = "New York",
+                        //    StateProvince = "NY",
+                        //    PostalCode = "10022",
+                        //    Country = "USA"
+                        //}
                     }),
                 IndexDocumentsAction.Upload(
                     new Hotel()
@@ -114,14 +118,14 @@ namespace LearningAzureSearch
                         ParkingIncluded = false,
                         LastRenovationDate = new DateTimeOffset(1979, 2, 18, 0, 0, 0, TimeSpan.Zero),
                         Rating = 3.60,
-                        Address = new Address()
-                        {
-                            StreetAddress = "140 University Town Center Dr",
-                            City = "Sarasota",
-                            StateProvince = "FL",
-                            PostalCode = "34243",
-                            Country = "USA"
-                        }
+                        //Address = new Address()
+                        //{
+                        //    StreetAddress = "140 University Town Center Dr",
+                        //    City = "Sarasota",
+                        //    StateProvince = "FL",
+                        //    PostalCode = "34243",
+                        //    Country = "USA"
+                        //}
                     }),
                 IndexDocumentsAction.Upload(
                     new Hotel()
@@ -135,14 +139,14 @@ namespace LearningAzureSearch
                         ParkingIncluded = true,
                         LastRenovationDate = new DateTimeOffset(2015, 9, 20, 0, 0, 0, TimeSpan.Zero),
                         Rating = 4.80,
-                        Address = new Address()
-                        {
-                            StreetAddress = "3393 Peachtree Rd",
-                            City = "Atlanta",
-                            StateProvince = "GA",
-                            PostalCode = "30326",
-                            Country = "USA"
-                        }
+                        //Address = new Address()
+                        //{
+                        //    StreetAddress = "3393 Peachtree Rd",
+                        //    City = "Atlanta",
+                        //    StateProvince = "GA",
+                        //    PostalCode = "30326",
+                        //    Country = "USA"
+                        //}
                     }),
                 IndexDocumentsAction.Upload(
                     new Hotel()
@@ -156,14 +160,39 @@ namespace LearningAzureSearch
                         ParkingIncluded = true,
                         LastRenovationDate = new DateTimeOffset(1960, 2, 06, 0, 0, 0, TimeSpan.Zero),
                         Rating = 4.60,
-                        Address = new Address()
-                        {
-                            StreetAddress = "7400 San Pedro Ave",
-                            City = "San Antonio",
-                            StateProvince = "TX",
-                            PostalCode = "78216",
-                            Country = "USA"
-                        }
+                        //Address = new Address()
+                        //{
+                        //    StreetAddress = "7400 San Pedro Ave",
+                        //    City = "San Antonio",
+                        //    StateProvince = "TX",
+                        //    PostalCode = "78216",
+                        //    Country = "USA"
+                        //}
+                    })
+                );
+
+            try
+            {
+                IndexDocumentsResult result = searchClient.IndexDocuments(batch);
+            }
+            catch (Exception e)
+            {
+                // If for some reason any documents are dropped during indexing, you can compensate by delaying and
+                // retrying. This simple demo just logs the failed document keys and continues.
+                Console.WriteLine($"Failed to index some of the documents: {e}");
+            }
+
+        }
+
+        private static void MergeOrUploadDocuments(SearchClient searchClient)
+        {
+            IndexDocumentsBatch<Hotel> batch = IndexDocumentsBatch.Create(
+                IndexDocumentsAction.MergeOrUpload(
+                    new Hotel()
+                    {
+                        HotelId = "4",
+                        Rating = 1,
+                        Tags = new[] { "concierge", "view", "24-hour front desk service" },
                     })
                 );
 
@@ -182,22 +211,22 @@ namespace LearningAzureSearch
 
         private static async void WriteDocuments(SearchResults<Hotel> searchResults)
         {
-            string? contineueToken = null;
-            int pageSize = 5;
+            //string? contineueToken = null;
+            //int pageSize = 5;
 
-            var asyncEnumerator = searchResults.GetResultsAsync()
-                .AsPages(contineueToken, pageSize)
-                .GetAsyncEnumerator();
+            //var asyncEnumerator = searchResults.GetResultsAsync()
+            //    .AsPages(contineueToken, pageSize)
+            //    .GetAsyncEnumerator();
 
-            while (await asyncEnumerator.MoveNextAsync())
-            {
-                var result = asyncEnumerator.Current;
-                foreach(SearchResult<Hotel> hotel in result.Values)
-                {
-                    Console.WriteLine(hotel.ToString());
-                }
-                // contineueToken = result.ContinuationToken;
-            }
+            //while (await asyncEnumerator.MoveNextAsync())
+            //{
+            //    var result = asyncEnumerator.Current;
+            //    foreach(SearchResult<Hotel> hotel in result.Values)
+            //    {
+            //        Console.WriteLine(hotel.ToString());
+            //    }
+            //    // contineueToken = result.ContinuationToken;
+            //}
 
             await foreach(SearchResult<Hotel> result in searchResults.GetResultsAsync())
             {
@@ -277,6 +306,8 @@ namespace LearningAzureSearch
             lookupResponse = srchclient.GetDocument<Hotel>("3");
 
             Console.WriteLine(lookupResponse.Value.HotelId);
+
+            Console.WriteLine(lookupResponse.Value);
         }
     }
 }
