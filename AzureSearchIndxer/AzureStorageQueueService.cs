@@ -15,7 +15,7 @@ namespace AzureSearchIndxer
 
                 if (properties.ApproximateMessagesCount > 0)
                 {
-                    QueueMessage[] retrievedMessage = await theQueue.ReceiveMessagesAsync(1).Result.r;
+                    QueueMessage[] retrievedMessage = await theQueue.ReceiveMessagesAsync(1);
                     string theMessage = retrievedMessage[0].Body.ToString();
                     await theQueue.DeleteMessageAsync(retrievedMessage[0].MessageId, retrievedMessage[0].PopReceipt);
                     return theMessage;
@@ -73,5 +73,4 @@ namespace AzureSearchIndxer
                 e.RequestInformation.ExtendedErrorInformation.ErrorCode.Equals(QueueErrorCode.QueueBeingDeleted);
         }
     }
-}
 }

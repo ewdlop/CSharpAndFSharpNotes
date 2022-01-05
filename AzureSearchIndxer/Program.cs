@@ -45,6 +45,36 @@ var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
         services.AddHostedService<AzureSearchIndxer.Host>();
     });
 
-await builder.Build().RunAsync();
+try
+{
+    IHost host = builder.Build();
 
+    await host.StartAsync();
+
+    //OR
+
+    using (var serviceScope = host.Services.CreateScope())
+    {
+        var services = serviceScope.ServiceProvider;
+
+        try
+        {
+            var app = services.GetRequiredService<App>();
+            app.Run();
+            Log.Information("Success");
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex,"Error Occured");
+        }
+    }
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application start-up failed");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
