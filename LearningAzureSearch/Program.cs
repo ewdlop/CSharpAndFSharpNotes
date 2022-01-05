@@ -13,10 +13,10 @@ namespace LearningAzureSearch
         private static void Main(string[] args)
         {
             string indexName = "hotels-quickstart";
-            string apiKey = "EADCF1EB09D72582F1DEE134EF503D1D";
+            string apiKey = "";
 
             // Create a SearchIndexClient to send create/delete index commands
-            Uri serviceEndpoint = new Uri($"https://raymondqnamaker-asuyqjza6zwaqiw.search.windows.net");
+            Uri serviceEndpoint = new Uri($"");
             AzureKeyCredential credential = new AzureKeyCredential(apiKey);
             SearchIndexClient adminClient = new SearchIndexClient(serviceEndpoint, credential);
 

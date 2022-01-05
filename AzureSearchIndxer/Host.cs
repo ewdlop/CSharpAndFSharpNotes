@@ -4,19 +4,19 @@ namespace AzureSearchIndxer;
 
 internal class Host : IHostedService
 {
-    private readonly AzurSearchIndexerService _azurSearchDocumentService;
+    private readonly AzurSearchIndexerService _azurSearchIndexerService;
 
     public Host(AzurSearchIndexerService azurSearchDocumentService)
     {
-        _azurSearchDocumentService = azurSearchDocumentService;
+        _azurSearchIndexerService = azurSearchDocumentService;
     }
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await _azurSearchDocumentService.Run(cancellationToken);
+        await _azurSearchIndexerService.Run(cancellationToken);
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _azurSearchDocumentService.Stop(cancellationToken);
+        await _azurSearchIndexerService.Stop(cancellationToken);
     }
 }
