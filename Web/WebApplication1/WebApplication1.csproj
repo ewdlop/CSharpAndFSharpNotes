@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationInsightsResourceId>/subscriptions/58c02e47-43d2-4827-a783-5ff7eccca2c2/resourceGroups/PipelineTesting/providers/microsoft.insights/components/PipelineTestingApp220210917194215</ApplicationInsightsResourceId>
+    <UserSecretsId>7f52171f-3055-421f-b4a0-c1a889a2ac0b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+  </ItemGroup>
+
+</Project>
