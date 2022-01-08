@@ -1,10 +1,8 @@
 ﻿using Azure;
-using Azure.Security.KeyVault.Secrets;
 using ConsoleApp1;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 var builder = Host.CreateDefaultBuilder(args);
 builder.ConfigureServices((context, services) =>

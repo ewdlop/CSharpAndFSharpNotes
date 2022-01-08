@@ -8,6 +8,18 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/microsoft.insights/components/PipelineTestingApp220210917194215",
       "type": "appInsights.azure",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "secrets2": {
+      "secretStore": null,
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/BlazorServerApp-0-kv",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri"
+    },
+    "appConfig1": {
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.AppConfiguration/configurationStores/raymonfazureappconfig",
+      "type": "appConfig.azure",
+      "connectionId": "AppConfig"
     }
   }
 }
