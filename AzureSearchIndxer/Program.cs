@@ -7,22 +7,23 @@ using Serilog.Events;
 
 //Two-stage initialization
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Verbose)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.File(
-        @"log.txt",
+        "log.txt",
         fileSizeLimitBytes: 1_000_000,
         rollOnFileSizeLimit: true,
         shared: true,
         flushToDiskInterval: TimeSpan.FromSeconds(1),
         rollingInterval: RollingInterval.Day)
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-    .UseSerilog((context, services, configuration) => configuration
-                    .ReadFrom.Configuration(context.Configuration)
-                    .ReadFrom.Services(services))
+    .UseSerilog()
+    //.UseSerilog((context, services, configuration) => configuration
+    //                .ReadFrom.Configuration(context.Configuration)
+    //                .ReadFrom.Services(services))
     .ConfigureServices((HostBuilderContext context, IServiceCollection services) =>
     {
         services.AddOptions<AzureBlobOptions>().Bind(context.Configuration.GetSection(AzureBlobOptions.AzureBlob));
@@ -42,7 +43,8 @@ var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
         });
         services.AddScoped<AzurSearchIndexerService>();
         services.AddScoped<AzurSearchService>();
-        services.AddHostedService<AzureSearchIndxer.Host>();
+        //services.AddHostedService<AzureSearchIndxer.Host>();
+        services.AddScoped<Genearator>();
     });
 
 try
@@ -53,21 +55,25 @@ try
 
     //OR
 
-    using (var serviceScope = host.Services.CreateScope())
+    int[] targets = Enumerable.Range(0, 5).ToArray();
+    await Parallel.ForEachAsync(targets, async (target, token) =>
     {
-        var services = serviceScope.ServiceProvider;
+        using (var serviceScope = host.Services.CreateScope())
+        {
+            var services = serviceScope.ServiceProvider;
 
-        try
-        {
-            var app = services.GetRequiredService<App>();
-            app.Run();
-            Log.Information("Success");
+            try
+            {
+                var genearator = services.GetRequiredService<Genearator>();
+                await genearator.Run(target);
+                Log.Information("Success");
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Error Occured");
+            }
         }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex,"Error Occured");
-        }
-    }
+    });
 }
 catch (Exception ex)
 {

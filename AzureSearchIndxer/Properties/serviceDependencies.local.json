@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "storage1": {
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/blazorserverappstorage",
+      "type": "storage.azure",
+      "connectionId": "Storage"
+    },
+    "appInsights1": {
+      "type": "appInsights.sdk"
+    }
+  }
+}

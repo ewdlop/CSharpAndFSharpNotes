@@ -2,12 +2,13 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Azure.Identity;
 using Microsoft.Extensions.Azure;
+using WebApplication1.Provider;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
-builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-builder.Configuration.AddAzureAppConfiguration("");
+//var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+//builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+//builder.Configuration.AddAzureAppConfiguration("");
 builder.Configuration.AddApplicationInsightsSettings();
 
 // Add services to the container.
@@ -21,7 +22,10 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddQueueServiceClient(builder.Configuration["Test:queue"], preferMsi: true);
 });
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+builder.Services.AddScoped<AzureBlobStorageServiceProvider>();
 
 var app = builder.Build();
 
