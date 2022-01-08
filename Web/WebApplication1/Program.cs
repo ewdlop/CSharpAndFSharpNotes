@@ -1,6 +1,7 @@
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Azure.Identity;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton(typeof(ITelemetryChannel),
                         new ServerTelemetryChannel() { StorageFolder = "/tmp/myfolder" });
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["Test:blob"], preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["Test:queue"], preferMsi: true);
+});
 
 var app = builder.Build();
 
