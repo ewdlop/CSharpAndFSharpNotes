@@ -20,6 +20,11 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.AppConfiguration/configurationStores/raymonfazureappconfig",
       "type": "appConfig.azure",
       "connectionId": "AppConfig"
+    },
+    "compute.appService1": {
+      "group": "connections",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/WebApplication120220107234304",
+      "type": "compute.appService.windows"
     }
   }
 }
