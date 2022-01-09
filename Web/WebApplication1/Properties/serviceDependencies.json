@@ -22,6 +22,10 @@
     "storage1": {
       "type": "storage",
       "connectionId": "Test"
+    },
+    "storage2": {
+      "type": "storage",
+      "connectionId": "Test2:blob"
     }
   }
 }

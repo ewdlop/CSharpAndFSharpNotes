@@ -31,6 +31,14 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/blazorserverappstorage",
       "type": "storage.azure",
       "connectionId": "Test"
+    },
+    "storage2": {
+      "containerPorts": "10000:10000,10001:10001,10002:10002",
+      "secretStore": "LocalSecretsFile",
+      "containerName": "azurite",
+      "containerImage": "mcr.microsoft.com/azure-storage/azurite",
+      "type": "storage.container",
+      "connectionId": "Test2:blob"
     }
   }
 }
