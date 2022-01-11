@@ -1,26 +1,19 @@
-using BlazorServerApp.Data;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.Negotiate;
-using System.Reflection;
+using FluxorBlazorApp.Data;
+using Fluxor;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using FluxorBlazorApp.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
-
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy.
-    options.FallbackPolicy = options.DefaultPolicy;
-});
-
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped(sp => new HttpClient { });
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-
+builder.Services.AddFluxor(o => o
+                .ScanAssemblies(typeof(Program).Assembly)
+                .UseRouting()
+                .AddMiddleware<LoggingMiddleware>());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,9 +29,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

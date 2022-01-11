@@ -1,17 +1,12 @@
 ﻿@page "/fetchdata"
-
-<PageTitle>Weather forecast</PageTitle>
-
-@using BlazorServerApp.Data
-@using BlazorServerApp.Data.CQRS
-@inject IMediator Mediator
-@inject WeatherForecastService ForecastService
+@using BlazorServerApp.Products
+@inject HttpClient Http
 
 <h1>Weather forecast</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
+<p>This component demonstrates fetching data from the server.</p>
 
-@if (weatherForecastDTO == null)
+@if (_forecasts == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,9 +22,9 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in weatherForecastDTO.Forecasts)
+            @foreach (var forecast in _forecasts)
             {
-                <tr>
+                <tr @onclick="async () => _addProductToCartResponse = await mediatr.Send(new AddProductToCartCommand { Product = new Product { Price = forecast.TemperatureF } })">
                     <td>@forecast.Date.ToShortDateString()</td>
                     <td>@forecast.TemperatureC</td>
                     <td>@forecast.TemperatureF</td>
@@ -38,15 +33,31 @@ else
             }
         </tbody>
     </table>
+    if (_addProductToCartResponse is not null && _addProductToCartResponse.Succeeded is false)
+    {
+        <div class="alert alert-danger">
+            @_addProductToCartResponse.Message
+        </div>
+    }
 }
 
 @code {
-    private ListAll.WeatherForecastList? weatherForecastDTO;
+    private AddProductToCartResponse _addProductToCartResponse;
+    private WeatherForecast[] _forecasts;
 
     protected override async Task OnInitializedAsync()
     {
-        weatherForecastDTO = await Mediator.Send(new ListAll.WeatherForecastQuery { 
-            StartDate = DateTime.Now 
-        });
+        //_forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+    }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }

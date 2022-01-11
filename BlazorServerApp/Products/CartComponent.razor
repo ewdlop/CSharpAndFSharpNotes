@@ -1,0 +1,18 @@
+﻿@implements IDisposable
+
+<style>
+    .CartContainer {
+        padding: 5px;
+        width: 100px;
+        border: 2px solid black;
+        border-radius: 4px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="CartContainer">
+    <img src="/shoppingCart.png" height="30" />
+    <h9>@(_products.Sum(y => y.Price).ToString("C"))</h9>
+</div>
