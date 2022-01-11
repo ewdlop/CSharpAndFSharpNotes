@@ -1,5 +1,6 @@
 ﻿@page "/";
-@inject IMediator Mediator;
+@using BlazorServerApp.Colors
+@inject IMediator mediator;
 
 <PageTitle>Index</PageTitle>
 
@@ -9,7 +10,7 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-<input type="color" @oninput=@((args)=>OnColorChanged(args))/>
+<input type="color" @oninput="async args => await mediator.Publish(new UpdateColorCommand { Color = args.Value.ToString() })" />
 
 @code{
 
