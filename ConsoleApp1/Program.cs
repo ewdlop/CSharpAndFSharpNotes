@@ -1,29 +1,45 @@
-﻿using Azure;
-using ConsoleApp1;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using ConsoleApp1;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Configs;
 
-var builder = Host.CreateDefaultBuilder(args);
-builder.ConfigureServices((context, services) =>
-{
-    //services.Configure<MyApplicationOptions>(
-    //      context.Configuration.GetSection(nameof(MyApplicationOptions)));
+BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<LazyTasks>();
 
-    services.AddAzureClients(builder =>
-    {
+////Two-stage initialization
+//Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Override("Microsoft", LogEventLevel.Verbose)
+//    .Enrich.FromLogContext()
+//    .WriteTo.Console()
+//    .WriteTo.File(
+//        "log.txt",
+//        fileSizeLimitBytes: 1_000_000,
+//        rollOnFileSizeLimit: true,
+//        shared: true,
+//        flushToDiskInterval: TimeSpan.FromSeconds(1),
+//        rollingInterval: RollingInterval.Day)
+//    .CreateLogger();
 
-        builder.AddSearchIndexClient(context.Configuration.GetSection("SearchDocument"))
-            .ConfigureOptions(options => options.Retry.MaxRetries = 10) ;
-        builder.AddSearchClient(new Uri(""), "", new AzureKeyCredential(""));
-        //builder.AddClient<SecretClient, SecretClientOptions>((provider, credential, options) =>
-        //{
-        //    var appOptions = provider.GetService<IOptions<MyApplicationOptions>>();
-        //    return new SecretClient(appOptions.Value.KeyVaultEndpoint, credential, options);
-        //});
-    });
+//var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+//    .UseSerilog()
+//    //.UseSerilog((context, services, configuration) => configuration
+//    //                .ReadFrom.Configuration(context.Configuration)
+//    //                .ReadFrom.Services(services))
+//    .ConfigureServices((HostBuilderContext context, IServiceCollection services) =>
+//    {
+//    });
 
-    services.AddHostedService<SearchHostedService>();
-});
-
-await builder.Build().RunAsync();
+//try
+//{
+//    //await Parallel.ForEachAsync(Enumerable.Range(0, 2), async (target, token) =>
+//    //{
+//    //    int x = await LazyTasks._lazyInt.Value;
+//    //    Log.Information(x.ToString());
+//    //});
+//}
+//catch (Exception ex)
+//{
+//    Log.Fatal(ex, "Application start-up failed");
+//}
+//finally
+//{
+//    Log.CloseAndFlush();
+//}

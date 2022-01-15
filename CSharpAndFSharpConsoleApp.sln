@@ -45,6 +45,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebAssemblyApp.Shared", "Blazor\BlazorWebAssemblyApp\Shared\BlazorWebAssemblyApp.Shared.csproj", "{05CA06D1-4ED9-4BC6-BBA2-4EADC49ED2AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F596DAB0-8B4E-401D-953C-C68D78FD160B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4015EFC-3B29-45B1-9873-527719BDCDB2} = {C4015EFC-3B29-45B1-9873-527719BDCDB2}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "One", "One", "{060D0E81-AF8D-452B-9746-A27621001C39}"
 EndProject
@@ -84,7 +87,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "Web\WebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "TestProject1\TestProject1.csproj", "{B17F221D-BF90-4FC4-B6B7-EBDE20EA7ECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxorBlazorApp", "FluxorBlazorApp\FluxorBlazorApp.csproj", "{ECBB92E0-778C-47A5-BF81-E6D3574E6F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluxorBlazorApp", "FluxorBlazorApp\FluxorBlazorApp.csproj", "{ECBB92E0-778C-47A5-BF81-E6D3574E6F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
