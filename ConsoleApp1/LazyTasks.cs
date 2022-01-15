@@ -3,24 +3,25 @@
 namespace ConsoleApp1;
 
 //[ThreadingDiagnoser]
-[MemoryDiagnoser]
+
 //[RPlotExporter]
+[MemoryDiagnoser]
 [SimpleJob(BenchmarkDotNet.Jobs.RuntimeMoniker.Net60)]
 public class LazyTasks
 {
-    private static string data;
-    private static string data2;
+    private static string data = "";
+    private static string data2 = "";
     private int[] numbers;
 
-    public static Lazy<Task<string>> _lazyIntTask = new Lazy<Task<string>>(async () =>
+    public static Lazy<Task<string>> _lazyStringTask = new Lazy<Task<string>>(async () =>
     {
-        if(data is null)
+        if(data2 is null)
         {
             await Task.Delay(1000);
-            data = "test";
+            data2 = "test";
         }
 
-        return data;
+        return data2;
     });
 
     public static Lazy<ValueTask<string>> _lazyIntValueTask = new Lazy<ValueTask<string>>(async () =>
@@ -34,31 +35,38 @@ public class LazyTasks
         return data;
     });
 
-    public async Task LazyIntTask()
-    {
-        await _lazyIntTask.Value;
-    }
-
-    public async Task LazyIntValueTask()
-    {
-        await _lazyIntValueTask.Value;
-    }
-
-    [GlobalSetup]
-    public void Setup()
-    {
-        numbers = Enumerable.Range(0, 16).ToArray();
-    }
-
+    [Benchmark]
+    public async Task<string> LazyStringTask() => await _lazyStringTask.Value;
 
     [Benchmark]
-    public void Run()
+    public async ValueTask<string> ValueTask()
     {
-        Parallel.ForEachAsync(numbers, async (x, token) =>
+
+        if (data is null)
         {
-            await Task.Delay(100,token);
-        });
-    }
+            await Task.Delay(1000);
+            data = "test";
+        }
+
+         return data;
+     }
+
+
+    //[GlobalSetup]
+    //public void Setup()
+    //{
+    //    numbers = Enumerable.Range(0, 16).ToArray();
+    //}
+
+
+    //[Benchmark]
+    //public void Run()
+    //{
+    //    Parallel.ForEachAsync(numbers, async (x, token) =>
+    //    {
+    //        await Task.Delay(100,token);
+    //    });
+    //}
 
     //[Benchmark]
     //public async ValueTask<string> ValueTasks()
