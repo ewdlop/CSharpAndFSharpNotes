@@ -2,7 +2,8 @@
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 
-BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<LazyTasks>();
+//BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<LazyTasks>();
+BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<ParallelCalls>();
 
 ////Two-stage initialization
 //Log.Logger = new LoggerConfiguration()
