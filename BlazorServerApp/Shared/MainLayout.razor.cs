@@ -14,26 +14,23 @@ using Microsoft.JSInterop;
 using BlazorServerApp;
 using BlazorServerApp.Shared;
 using MediatR;
+using BlazorServerApp.Colors;
 
-namespace BlazorServerApp.Products;
-
-public partial class CartComponent: IDisposable
+namespace BlazorServerApp.Shared
 {
-    private List<Product> _products;
-    protected override async Task OnInitializedAsync()
+    public partial class MainLayout : IDisposable
     {
-        _products = new List<Product>();
-        ProductAdded += AddProduct;
-    }
+        private EventHandler<UpdateColorEventArgs> eventHandler;
+        protected override void OnInitialized()
+        {
+            eventHandler = async (sender, eventArgs) => { await OnColorChanged(sender, eventArgs); };
+            ColorChanged += eventHandler;
+            base.OnInitialized();
+        }
 
-    public void Dispose()
-    {
-        ProductAdded -= AddProduct;
-    }
-
-    public async void AddProduct(object sender, AddProductToBasketEventArgs args)
-    {
-        _products.Add(args.Product);
-        await InvokeAsync(StateHasChanged);
+        public void Dispose()
+        {
+            ColorChanged -= eventHandler;
+        }
     }
 }

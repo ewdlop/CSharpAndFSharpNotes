@@ -14,26 +14,21 @@ using Microsoft.JSInterop;
 using BlazorServerApp;
 using BlazorServerApp.Shared;
 using MediatR;
+using BlazorServerApp.Products;
+using BlazorServerApp.Data;
 
-namespace BlazorServerApp.Products;
-
-public partial class CartComponent: IDisposable
+namespace BlazorServerApp.Pages
 {
-    private List<Product> _products;
-    protected override async Task OnInitializedAsync()
+    public partial class FetchData
     {
-        _products = new List<Product>();
-        ProductAdded += AddProduct;
-    }
-
-    public void Dispose()
-    {
-        ProductAdded -= AddProduct;
-    }
-
-    public async void AddProduct(object sender, AddProductToBasketEventArgs args)
-    {
-        _products.Add(args.Product);
-        await InvokeAsync(StateHasChanged);
+        [Inject]
+        private WeatherForecastService WeatherForecastService { get; init; }
+        private AddProductToCartResponse _addProductToCartResponse;
+        private WeatherForecast[] _forecasts;
+        protected override async Task OnInitializedAsync()
+        {
+            _forecasts = await WeatherForecastService.GetForecastAsync(DateTime.Now);
+            await base.OnInitializedAsync();
+        }
     }
 }
