@@ -4,6 +4,7 @@ open System
 open MyFSharpInterop.Color
 open MyFSharpInterop.MathF
 open System.IO
+open Sandwich
 
 let printTotalFileBytes path =
     async {
@@ -15,6 +16,8 @@ let printTotalFileBytes path =
 
 [<EntryPoint>]
 let main argv =
+    let r = MemoizationTailRecursion.MemoizedTailRecursionFactorial 4
+    printfn "%d" r
     let helloWorld () = printfn "hello world"
     let throwAwayFirstInput x y = y
     Color.printColorName Color.Color.Red
