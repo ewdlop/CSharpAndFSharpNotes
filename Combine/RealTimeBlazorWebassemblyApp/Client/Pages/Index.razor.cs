@@ -15,15 +15,15 @@ namespace RealTimeBlazorWebassemblyApp.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             _hubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/realtimehub")).Build();
-            _hubConnection.On<string, string>("ReceiveMessages", (user, message) =>
+            //_hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            //{
+            //    var encodedMsg = $"{user}: {message}";
+            //    _messages.Add(encodedMsg);
+            //    StateHasChanged();
+            //});
+            _hubConnection.On<string>("ReceiveMessage", (message) =>
             {
-                var encodedMsg = $"{user}: {message}";
-                _messages.Add(encodedMsg);
-                StateHasChanged();
-            });
-            _hubConnection.On<string, string[]>("ReceiveMessages", (user, messages) =>
-            {
-                _messages = _messages.Union(messages).ToList();
+                _messages.Add(message);
                 StateHasChanged();
             });
             await _hubConnection.StartAsync();

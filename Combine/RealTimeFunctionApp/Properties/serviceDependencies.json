@@ -1,14 +1,15 @@
 {
   "dependencies": {
-    "appInsights1": {
-      "type": "appInsights"
-    },
     "secrets1": {
       "type": "secrets"
     },
     "signalr1": {
       "type": "signalr",
       "connectionId": "AzureSignalRConnectionString"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
     }
   }
 }

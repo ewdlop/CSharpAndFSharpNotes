@@ -91,13 +91,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluxorBlazorApp", "FluxorBl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Combine", "Combine", "{B19398E9-1392-48AA-AF05-49EE818EA5AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeBlazorWebassemblyApp.Server", "Combine\RealTimeBlazorWebassemblyApp\Server\RealTimeBlazorWebassemblyApp.Server.csproj", "{6031F601-052E-496F-897C-722C07A4BA74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeBlazorWebassemblyApp.Server", "Combine\RealTimeBlazorWebassemblyApp\Server\RealTimeBlazorWebassemblyApp.Server.csproj", "{6031F601-052E-496F-897C-722C07A4BA74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeBlazorWebassemblyApp.Client", "Combine\RealTimeBlazorWebassemblyApp\Client\RealTimeBlazorWebassemblyApp.Client.csproj", "{ADB0C36E-FC20-46D8-AD33-89D9F81191E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeBlazorWebassemblyApp.Client", "Combine\RealTimeBlazorWebassemblyApp\Client\RealTimeBlazorWebassemblyApp.Client.csproj", "{ADB0C36E-FC20-46D8-AD33-89D9F81191E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeBlazorWebassemblyApp.Shared", "Combine\RealTimeBlazorWebassemblyApp\Shared\RealTimeBlazorWebassemblyApp.Shared.csproj", "{6A03F4FE-30E7-4BA4-B80C-B98397A98599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeBlazorWebassemblyApp.Shared", "Combine\RealTimeBlazorWebassemblyApp\Shared\RealTimeBlazorWebassemblyApp.Shared.csproj", "{6A03F4FE-30E7-4BA4-B80C-B98397A98599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeFunctionApp", "Combine\RealTimeFunctionApp\RealTimeFunctionApp.csproj", "{51E6DEF9-AF48-422F-9347-9A2356788A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeFunctionApp", "Combine\RealTimeFunctionApp\RealTimeFunctionApp.csproj", "{51E6DEF9-AF48-422F-9347-9A2356788A08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

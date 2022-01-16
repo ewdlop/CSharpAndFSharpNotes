@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RealTimeFunctionApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--verbose"
+    }
+  }
+}

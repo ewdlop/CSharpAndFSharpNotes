@@ -9,6 +9,7 @@ namespace RealTimeFunctionApp
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+
         }
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
