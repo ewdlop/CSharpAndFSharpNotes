@@ -99,6 +99,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeBlazorWebassemblyAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RealTimeFunctionApp", "Combine\RealTimeFunctionApp\RealTimeFunctionApp.csproj", "{51E6DEF9-AF48-422F-9347-9A2356788A08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeFunctionAppOld", "Combine\RealTimeFunctionAppOld\RealTimeFunctionAppOld.csproj", "{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -563,6 +565,18 @@ Global
 		{51E6DEF9-AF48-422F-9347-9A2356788A08}.Release|x64.Build.0 = Release|Any CPU
 		{51E6DEF9-AF48-422F-9347-9A2356788A08}.Release|x86.ActiveCfg = Release|Any CPU
 		{51E6DEF9-AF48-422F-9347-9A2356788A08}.Release|x86.Build.0 = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|x64.Build.0 = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|x64.Build.0 = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -589,6 +603,7 @@ Global
 		{ADB0C36E-FC20-46D8-AD33-89D9F81191E2} = {B19398E9-1392-48AA-AF05-49EE818EA5AB}
 		{6A03F4FE-30E7-4BA4-B80C-B98397A98599} = {B19398E9-1392-48AA-AF05-49EE818EA5AB}
 		{51E6DEF9-AF48-422F-9347-9A2356788A08} = {B19398E9-1392-48AA-AF05-49EE818EA5AB}
+		{B5F0A83D-D1C3-41A1-A241-ADB30B19AEE1} = {B19398E9-1392-48AA-AF05-49EE818EA5AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B8C798CE-D354-4653-9281-21DE436B6288}

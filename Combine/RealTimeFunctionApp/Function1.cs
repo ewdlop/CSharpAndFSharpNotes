@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs;
 
@@ -17,16 +18,15 @@ namespace RealTimeFunctionApp
         //}
         [FunctionName("Function1")]
         [SignalROutput(HubName = "realtimehub", ConnectionStringSetting = "AzureSignalRConnectionString")]
-        public static  MyMessage Run([BlobTrigger("realtime-container/{name}", Connection = "AzureStorageConnectionString")] Stream myBlob, string name, ILogger log)
+        public static async Task Run([BlobTrigger("realtime-container/{name}", Connection = "AzureStorageConnectionString")] Stream myBlob, string name, ILogger log)
         {
             string message = $"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes";
             log.LogInformation(message);
-            //_telemetryClient.TrackTrace(message);
-            return new MyMessage()
+            await Task.FromResult(new MyMessage()
             {
                 Target = "ReceiveMessage",
                 Arguments = new[] { message }
-            };
+            });
         }
     }
 
