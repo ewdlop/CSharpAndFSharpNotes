@@ -18,11 +18,16 @@ public class ParallelCalls
     [Benchmark]
     public async Task Test()
     {
-        ParallelOptions option = new()
-        {
-            MaxDegreeOfParallelism = 5
-        };
-        await Parallel.ForEachAsync(numbers, option, async (x, token) =>
+        //ParallelOptions option = new()
+        //{
+        //    MaxDegreeOfParallelism = 5
+        //};
+        //await Parallel.ForEachAsync(numbers, option, async (x, token) =>
+        //{
+        //    await Task.Delay(1, token);
+        //});
+
+        await Parallel.ForEachAsync(numbers, async (x, token) =>
         {
             await Task.Delay(1, token);
         });
@@ -35,6 +40,6 @@ public class ParallelCalls
         {
             CancellationToken cancellationToken = new CancellationToken();
             await Task.Delay(1, cancellationToken);
-        }, maxDegreeOfParallelism: 5);
+        }/*, maxDegreeOfParallelism: 5*/);
     }
 }
