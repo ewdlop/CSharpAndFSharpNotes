@@ -5,6 +5,24 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//not webhost..host for Asp.net core app okay....
+builder.Host.ConfigureAppConfiguration((hostcontext, configuration) =>
+{
+    configuration.AddAzureAppConfiguration(options =>
+    {
+        IConfiguration settings = configuration.Build();
+        options.Connect(settings["AppConfig"])
+               .ConfigureRefresh(refresh =>
+               {
+                   refresh.Register("TestApp:Settings", refreshAll: true)
+                                          .SetCacheExpiration(new TimeSpan(0, 5, 0));
+               });
+    });
+}).ConfigureServices((hostcontext, service) =>
+{
+    service.Configure<Settings>(hostcontext.Configuration.GetSection("TestApp:Settings"));
+});
+
 // Add services to the container.
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();
@@ -20,6 +38,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped(sp => new HttpClient { });
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddAzureAppConfiguration();
 
 var app = builder.Build();
 
@@ -30,6 +49,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseAzureAppConfiguration();
 
 app.UseHttpsRedirection();
 
