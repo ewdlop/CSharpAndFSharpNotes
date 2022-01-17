@@ -2,25 +2,30 @@ using BlazorServerApp.Data;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using System.Reflection;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//not webhost..host for Asp.net core app okay....
+//not webhost..host for Asp.net core app okay....01/06/2021
 builder.Host.ConfigureAppConfiguration((hostcontext, configuration) =>
 {
     configuration.AddAzureAppConfiguration(options =>
     {
         IConfiguration settings = configuration.Build();
         options.Connect(settings["AppConfig"])
-               .ConfigureRefresh(refresh =>
-               {
-                   refresh.Register("TestApp:Settings", refreshAll: true)
-                                          .SetCacheExpiration(new TimeSpan(0, 5, 0));
-               });
+               .UseFeatureFlags(featureFlagOptions => {
+                   featureFlagOptions.CacheExpirationInterval = TimeSpan.FromMinutes(5);
+                });
+               //.ConfigureRefresh(refresh =>
+               //{
+               //    refresh.Register("TestApp:Settings", refreshAll: true)
+               //                           .SetCacheExpiration(new TimeSpan(0, 5, 0));
+               //});
     });
 }).ConfigureServices((hostcontext, service) =>
 {
     service.Configure<Settings>(hostcontext.Configuration.GetSection("TestApp:Settings"));
+    service.AddFeatureManagement();
 });
 
 // Add services to the container.
