@@ -1,20 +1,20 @@
-using FluxorBlazorApp.Data;
-using Fluxor;
+using BlazorApp1.Areas.Identity.Data;
+using BlazorApp1.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using FluxorBlazorApp.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("BlazorApp1ContextConnection");builder.Services.AddDbContext<BlazorApp1Context>(options =>
+    options.UseSqlite(connectionString));
+builder.Services.AddDefaultIdentity<BlazorApp1User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<BlazorApp1Context>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddFluxor(o => o
-                .ScanAssemblies(typeof(Program).Assembly)
-                .UseRouting()
-                .AddMiddleware<LoggingMiddleware>());
-builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
@@ -31,7 +31,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
