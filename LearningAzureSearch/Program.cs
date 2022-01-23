@@ -63,12 +63,12 @@ namespace LearningAzureSearch
 
         private static void CreateIndex(string indexName, SearchIndexClient adminClient)
         {
-            FieldBuilder fieldBuilder = new FieldBuilder();
-            var searchFields = fieldBuilder.Build(typeof(Hotel));
+            FieldBuilder fieldBuilder = new();
+            IList<SearchField> searchFields = fieldBuilder.Build(typeof(Hotel));
 
-            var definition = new SearchIndex(indexName, searchFields);
+            SearchIndex definition = new(indexName, searchFields);
 
-            var suggester = new SearchSuggester("sg", new[] { "HotelName", "Category", "Address/City", "Address/StateProvince" });
+            SearchSuggester suggester = new("sg", new[] { "HotelName", "Category", "Address/City", "Address/StateProvince" });
             definition.Suggesters.Add(suggester);
 
             adminClient.CreateOrUpdateIndex(definition);
@@ -302,8 +302,7 @@ namespace LearningAzureSearch
 
             Console.WriteLine("Query #5: Look up a specific document...\n");
 
-            Response<Hotel> lookupResponse;
-            lookupResponse = srchclient.GetDocument<Hotel>("3");
+            Response<Hotel> lookupResponse = srchclient.GetDocument<Hotel>("3");
 
             Console.WriteLine(lookupResponse.Value.HotelId);
 

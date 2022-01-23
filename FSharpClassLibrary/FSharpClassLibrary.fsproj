@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="HuffmanTree.fs" />
+    <Compile Include="Request.fs" />
+    <Compile Include="FizzBuzz.fs" />
     <Compile Include="LambdaCalculus.fs" />
     <Compile Include="SymbolicCalculation.fs" />
     <Compile Include="Color.fs" />
