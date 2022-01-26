@@ -1,4 +1,4 @@
-﻿namespace DM2BD.Europa.DAL.Generators.Common;
+﻿namespace ConsoleApp1.Portraits.Common;
 
 public static class RandomNumberGenerator
 {

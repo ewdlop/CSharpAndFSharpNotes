@@ -1,6 +1,7 @@
-﻿using DM2BD.Europa.DAL.Generators.Common;
-using DM2BD.Europa.DAL.Generators.Portraits.Interfaces;
-using DM2BD.Europa.DAL.Generators.Portraits.Options;
+﻿using ConsoleApp1.Portraits;
+using ConsoleApp1.Portraits.Common;
+using ConsoleApp1.Portraits.Interfaces;
+using ConsoleApp1.Portraits.Options;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DM2BD.Europa.DAL.Generators.Portraits;
+namespace ConsoleApp1.Portraits;
 
 public partial class PortraitImageProvider : IProvideIndividualImages
 {

@@ -1,7 +1,7 @@
-﻿using DM2BD.Europa.DAL.Generators.Common;
-using DM2BD.Europa.DAL.Generators.Portraits;
-using DM2BD.Europa.DAL.Generators.Portraits.Options;
-using DM2BD.Europa.DAL.Generators.Portraits.Services;
+﻿using ConsoleApp1.Portraits.Common;
+using ConsoleApp1.Portraits.Interfaces;
+using ConsoleApp1.Portraits.Services;
+using ConsoleApp1.Portraits.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

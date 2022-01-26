@@ -1,4 +1,4 @@
-﻿namespace DM2BD.Europa.DAL.Generators.Portraits.Options;
+﻿namespace ConsoleApp1.Portraits.Options;
 
 public partial class PortraitImageProviderOptions
 {

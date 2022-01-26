@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace DM2BD.Europa.DAL.Generators.Portraits;
+namespace ConsoleApp1.Portraits;
 
 public static class SkiaSharpContext
 {

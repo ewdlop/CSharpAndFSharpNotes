@@ -1,4 +1,4 @@
-﻿namespace DM2BD.Europa.DAL.Generators.Portraits.Interfaces;
+﻿namespace ConsoleApp1.Portraits.Interfaces;
 
 public interface IProvideIndividualImages
 {
