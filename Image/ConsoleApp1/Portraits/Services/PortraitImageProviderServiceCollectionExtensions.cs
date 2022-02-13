@@ -1,9 +1,10 @@
-﻿using DM2BD.Europa.DAL.Generators.Portraits.Options;
+﻿using ConsoleApp1.Portraits.Interfaces;
+using ConsoleApp1.Portraits.Options;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DM2BD.Europa.DAL.Generators.Portraits.Services;
+namespace ConsoleApp1.Portraits.Services;
 
 public static class PortraitImageProviderServiceCollectionExtensions
 {
@@ -15,7 +16,7 @@ public static class PortraitImageProviderServiceCollectionExtensions
         services.Configure<PortraitImageProviderOptions>(configuration.GetSection(PortraitImageProviderOptions.CONFIGURE_SECTION_NAME));
         if (options != null)
         {
-            services.Configure<PortraitImageProviderOptions>(options);
+            services.Configure(options);
         }
 
         //makig sure atleast a IMemoryCache service exists

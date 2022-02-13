@@ -1,6 +1,4 @@
-﻿using DM2BD.Europa.DAL.Generators.Portraits.Interfaces;
-
-namespace DM2BD.Europa.DAL.Generators.Portraits;
+﻿namespace ConsoleApp1.Portraits.Interfaces;
 
 public partial interface IImageProvider : IProvideIndividualImages
 {
