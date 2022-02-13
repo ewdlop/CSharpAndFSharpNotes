@@ -34,4 +34,12 @@
 		<NativeFileReference Include="Test.c" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Pages\BlazorComponent1.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Pages\BlazorComponent1.razor" />
+	</ItemGroup>
+
 </Project>
