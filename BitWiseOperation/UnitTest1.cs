@@ -22,6 +22,14 @@ namespace BitWiseOperation
             return GetEnumerator();
         }
     }
+    
+    public static class Mask
+    {
+        public static double MagicMask(uint k, uint d)//2-adic fraction -1/(2^(2k+1)+)
+        {
+            return (Math.Pow(2, Math.Pow(2, d)) - 1) / (Math.Pow(2, Math.Pow(2, k)) + 1);
+        }
+    }
 
     public static class PrimeNumber
     {
@@ -79,7 +87,40 @@ namespace BitWiseOperation
         {
             return (date>>9, (date>>5)%16,date%32);
         }
+
+        public static int GetRuler(this int x)
+        {
+            if (x == 0) throw new NotDefineException();
+            int k = 0;
+            int max = k;
+            int powerOfTwo = (int)Math.Pow(2, k);
+            while (powerOfTwo<=x)
+            {
+                if (x % powerOfTwo == 0) max = k;
+                powerOfTwo = (int)Math.Pow(2, ++k);
+            }
+            return max;
+        }
+
+        //public static int GetRuler2(this int x)
+        //{
+        //    int rho = 0;
+        //    int y = x & (~x + 1);
+        //    uint k = 0;
+        //    uint d = 64;
+        //    while (k <= 64)
+        //    {
+        //        if(y&Mask.MagicMask(k, d).To2AdicRepresentation())==0) rho += (int)Math.Pow(2, k);
+        //        k++;
+        //    }
+        //    return rho;
+        //}
     }
+
+    public class NotDefineException : Exception
+    {
+    }
+
     public static class ByteArrayExtension
     {
         //C#11?
@@ -155,6 +196,18 @@ namespace BitWiseOperation
         {
             const int power = 2;
             Assert.Equal(x% (int)Math.Pow(2, power), x&((int)Math.Pow(2, power)-1));
+        }
+
+        [Theory]
+        [InlineData(9, 0)]
+        [InlineData(8, 3)]
+        [InlineData(10,1)]
+        [InlineData(20,2)]
+        public void Ruler(int x, int y)
+        {
+            Assert.Equal(y, x.GetRuler());
+            Assert.Equal(x.GetRuler()+1,(2*x).GetRuler());
+            Assert.Equal((x ^ y).GetRuler(), (x - y).GetRuler());
         }
     }
 }
