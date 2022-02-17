@@ -1,6 +1,6 @@
 ﻿module QuickSort
 
-let rec quicksort2 list =
+let rec quicksort list =
     match list with
     | [] -> []                         
     | first::rest -> 

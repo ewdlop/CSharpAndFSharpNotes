@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="99Problems.fs" />
     <None Include="QuickSort.fs" />
     <Compile Include="HuffmanTree.fs" />
     <Compile Include="Request.fs" />
@@ -22,8 +23,6 @@
     <Compile Include="Stack.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="FsLexYacc" Version="10.2.0" />
