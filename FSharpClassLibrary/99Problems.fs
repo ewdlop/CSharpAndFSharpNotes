@@ -155,3 +155,48 @@ let dropEveryNthElement' xs n =
             |_::xs,1 -> drop xs n
             |x::xs,_ -> x::drop xs (count-1)
     drop xs n
+
+// Problem 17 : Split a list into two parts; the length of the first part is given.
+let splitListIntoTwo xs n :('a list * 'a list) = 
+    let rec take n xs =
+        match xs, n with
+            | _,0 -> []
+            | [],_-> []
+            | x::xs, n -> x::take (n-1) xs
+    let rec drop n xs =
+        match xs, n with
+            | xs,0 -> xs
+            | [],_ -> []
+            | _::xs,n -> drop (n-1) xs
+    (take n xs, drop n xs)
+
+// Problem 18 : Extract a slice from a list.
+let slicAList xs s e = 
+    let rec take n xs =
+        match xs, n with
+            | _,0 -> []
+            | [],_-> []
+            | x::xs, n -> x::take (n-1) xs
+    let rec drop n xs =
+        match xs, n with
+            | xs,0 -> xs
+            | [],_ -> []
+            | _::xs,n -> drop (n-1) xs
+    let diff = e - s
+    xs |> drop (s-1) |> take(diff-1)
+let slicAList' xs s e = [for (x,j) in Seq.zip xs [1..e] do if s <=j then yield x]
+let slicAList'' xs s e = xs |> Seq.zip (seq{1..e}) |> Seq.filter(fst >> (<=)s) |> Seq.map snd
+
+// Problem 19 : Rotate(Shuffle) a list N places to the left.
+let rotate xs n = 
+    let at = 
+        let ln = List.length xs in abs <| (ln + n)%ln
+    let st, nd = splitListIntoTwo xs at
+    nd @ st
+
+let rec rotate' xs n = 
+    match xs, n with
+        | [], _-> []
+        | xs, 0 -> xs
+        | x::xs, n when n > 0 -> rotate' (xs@[x]) (n-1)
+        | xs, n -> rotate' xs (List.length xs + n)
