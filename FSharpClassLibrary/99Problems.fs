@@ -47,19 +47,20 @@ let reverse'' xs = List.rev
 let IsPalindrome xs = xs = List.rev xs
 
 type 'a NestedList = List of 'a NestedList list | Elem of 'a
-let flatten ls =
+let flatten (ls :'a NestedList):('a List) =
     let rec loop acc ls =
         match ls with
         | Elem x -> x::acc
         | List xs -> List.foldBack (fun x acc -> loop acc x) xs acc
     loop [] ls
-let flatten' ls =
+#nowarn "40"
+let flatten' (ls :'a NestedList):('a List)=
     let rec loop = List.collect(function 
-    | Elem x -> [x]
-    | List xs -> loop xs)
+        | Elem x -> [x]
+        | List xs -> loop xs)
     loop [ls]
 
-let eliminateConsecutiveDuplicates xs = List.foldBack(fun x acc -> if List.isEmpty acc then [x] elif x = List.head acc then acc else x::acc) xs []
+let eliminateConsecutiveDuplicates xs = List.foldBack (fun x acc -> if List.isEmpty acc then [x] elif x = List.head acc then acc else x::acc) xs []
 let eliminateConsecutiveDuplicates' xs = 
     match xs with
        | [] -> []
@@ -80,8 +81,28 @@ let runLengthEncoding'' xs =
         | [] -> [(1,x)]
         | (n,y)::xs as acc ->
             if x = y then
-                (n+1,y)::xs
+                (n + 1,y)::xs
             else
                 (1,x)::acc
     List.foldBack collect xs []
 //11
+
+type 'a Encoding = Multiple of int * 'a | Single of 'a
+let modifiedRunLengthEncoding xs : 'a Encoding List = 
+    let modifiedPackConsecutiveDuplicatesOfListElementsIntoSublist xs =
+        let f (x, y, xs, xss, acc) = if x = y then (x::y::xs)::xss else [x]::acc
+        let collect x xs =
+            match xs with
+            |[] -> failwith "Empty List"
+            |[]::xss -> [x]::xss
+            |(y::xs)::(xss) as acc -> f (x, y, xs, xss, acc)
+        List.foldBack collect xs [[]]
+    //let f (x,n) = if n = 1 then Single x else Multiple (n,x)
+    xs |> modifiedPackConsecutiveDuplicatesOfListElementsIntoSublist |> List.map(Seq.countBy id >> Seq.head >> fun (x,n) -> if n = 1 then Single x else Multiple (n,x))
+
+let decodeRunLengthEncoding (xs:'a Encoding List) =
+    let expand xs =
+        match xs with
+            | Single x -> [x]
+            | Multiple (n,x) -> List.replicate n x
+    xs |> List.collect expand
