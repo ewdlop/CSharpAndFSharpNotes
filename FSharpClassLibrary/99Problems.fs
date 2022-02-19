@@ -60,7 +60,7 @@ let flatten' (ls :'a NestedList):('a List)=
         | List xs -> loop xs)
     loop [ls]
 
-let eliminateConsecutiveDuplicates xs = List.foldBack (fun x acc -> if List.isEmpty acc then [x] elif x = List.head acc then acc else x::acc) xs []
+let eliminateConsecutiveDuplicates xs = (xs, []) ||> List.foldBack (fun x acc -> if List.isEmpty acc then [x] elif x = List.head acc then acc else x::acc)
 let eliminateConsecutiveDuplicates' xs = 
     match xs with
        | [] -> []
@@ -76,7 +76,7 @@ let packConsecutiveDuplicatesOfListElementsIntoSublists ls =
 let runLengthEncoding xs = xs |> packConsecutiveDuplicatesOfListElementsIntoSublists |> List.map(Seq.countBy id >> Seq.head >> fun (a,b)-> b,a)
 let runLengthEncoding' xs = xs |> packConsecutiveDuplicatesOfListElementsIntoSublists |> List.map(fun xs -> List.length xs, List.head xs)
 let runLengthEncoding'' xs =
-    let collect x acc =
+    let collect x (acc:(int * 'b) list) =
         match acc with
         | [] -> [(1,x)]
         | (n,y)::xs as acc ->
@@ -88,21 +88,42 @@ let runLengthEncoding'' xs =
 //11
 
 type 'a Encoding = Multiple of int * 'a | Single of 'a
-let modifiedRunLengthEncoding xs : 'a Encoding List = 
+let modifiedRunLengthEncoding xs : 'a Encoding list = 
     let modifiedPackConsecutiveDuplicatesOfListElementsIntoSublist xs =
         let f (x, y, xs, xss, acc) = if x = y then (x::y::xs)::xss else [x]::acc
-        let collect x xs =
+        let collect x (xs:'c list list) =
             match xs with
-            |[] -> failwith "Empty List"
-            |[]::xss -> [x]::xss
-            |(y::xs)::(xss) as acc -> f (x, y, xs, xss, acc)
+            | [] -> failwith "Empty List"
+            | []::xss -> [x]::xss
+            | (y::xs)::(xss) as acc -> f (x, y, xs, xss, acc)
         List.foldBack collect xs [[]]
     //let f (x,n) = if n = 1 then Single x else Multiple (n,x)
     xs |> modifiedPackConsecutiveDuplicatesOfListElementsIntoSublist |> List.map(Seq.countBy id >> Seq.head >> fun (x,n) -> if n = 1 then Single x else Multiple (n,x))
 
-let decodeRunLengthEncoding (xs:'a Encoding List) =
+let decodeRunLengthEncoding (xs:'a Encoding list) =
     let expand xs =
         match xs with
             | Single x -> [x]
             | Multiple (n,x) -> List.replicate n x
     xs |> List.collect expand
+
+let runLengthEncodingDirect xs =
+    let collect x (xs:'a Encoding list) =
+        match xs with
+            | [] -> [Single x]
+            | Single y::xs when x = y -> Multiple (2,x)::xs
+            | Single _::_ as c -> Single x::xs
+            | Multiple (n,y)::c when y=x -> Multiple (n+1,x)::xs
+            | xs -> Single x::xs
+    (xs, []) ||> List.foldBack collect 
+
+let duplciateTheElements xs = xs |> List.map (fun x-> [x;x]) |> List.concat
+let rec duplciateTheElements' xs =
+    match xs with
+    | [] -> []
+    | x::xs -> x::x::duplciateTheElements xs
+let duplciateTheElements'' xs = [for x in xs do yield x;yield xs]
+let duplciateTheElements''' xs = xs |> List.collect (fun x-> [x;x])
+let duplciateTheElements'''' xs = (xs,[]) ||> List.foldBack (fun x xs-> x::x::xs)
+let duplicateTheElements''''' xs = ([],xs) ||> List.fold (fun xs x -> xs @ [x;x])
+let duplicateTheElements'''''' xs = xs |> List.collect (List.replicate 2)
