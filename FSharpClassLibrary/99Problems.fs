@@ -59,7 +59,11 @@ let flatten' ls =
     | List xs -> loop xs)
     loop [ls]
 
-//let eliminateConsecutiveDuplicates xs;
+let eliminateConsecutiveDuplicates xs = List.foldBack(fun x acc -> if List.isEmpty acc then [x] elif x = List.head acc then acc else x::acc) xs []
+let eliminateConsecutiveDuplicates' xs = 
+    match xs with
+       | [] -> []
+       | x::Xs -> List.fold(fun acc x -> if x = List.head acc then acc else x::acc) [x] xs |> List.rev
 
 let packConsecutiveDuplicatesOfListElementsIntoSublists ls = 
     let collect x ls =
@@ -67,3 +71,17 @@ let packConsecutiveDuplicatesOfListElementsIntoSublists ls =
         | (y::ls)::xss when x= y -> (x::y::ls)::xss
         | xss -> [x]::xss
     List.foldBack collect ls []
+
+let runLengthEncoding xs = xs |> packConsecutiveDuplicatesOfListElementsIntoSublists |> List.map(Seq.countBy id >> Seq.head >> fun (a,b)-> b,a)
+let runLengthEncoding' xs = xs |> packConsecutiveDuplicatesOfListElementsIntoSublists |> List.map(fun xs -> List.length xs, List.head xs)
+let runLengthEncoding'' xs =
+    let collect x acc =
+        match acc with
+        | [] -> [(1,x)]
+        | (n,y)::xs as acc ->
+            if x = y then
+                (n+1,y)::xs
+            else
+                (1,x)::acc
+    List.foldBack collect xs []
+//11
