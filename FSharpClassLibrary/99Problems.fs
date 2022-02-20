@@ -208,6 +208,37 @@ let removeAt n xs:('a * 'a List) =
             | x::xs, 0 -> (x,(List.rev acc)@xs)
             | x::xs, n -> rmAt (x::acc) xs (n-1)
     rmAt [] xs n
-let removeAt' n xs = 
+let removeAt' n xs:('a * 'a List) = 
     let front,back = splitListIntoTwo xs n
     List.head back, front @ List.tail back
+
+// Problem 21 : Insert an element at a given position into a list.
+
+// Problem 31 : Determine whether a given integer number is prime.
+let IsPrime n =
+    let sqrt n = int <| sqrt(float n)
+    seq {2..sqrt n} |> Seq.exists(fun i -> n % i = 0) |> not
+//Miller-Rabin primality test
+let IsPrime' n = n
+
+// Problem 32 : Determine the greatest common divisor of two positive integer numbers. Use Euclid's algorithm.
+let rec gcd a b = 
+    if b = 0 then
+        abs a
+    else
+        gcd b (a%b)
+
+
+
+// Problem 33 : Determine whether two positive integer numbers are coprime.
+let isCoprime a b = gcd a b = 1
+
+// Problem 34 : Calculate Euler's totient function phi(m).
+let totient n = seq {1..n-1} |> Seq.filter( gcd n >> (=)1) |> Seq.length
+
+// Problem 37 : Calculate Euler's totient function phi(m) (improved).
+let totientImprove n = n;
+
+// Problem 38 : Compare the two methods of calculating Euler's totient function.
+printfn "%d" (totient 1)
+printfn "%d" (totientImprove 1)
