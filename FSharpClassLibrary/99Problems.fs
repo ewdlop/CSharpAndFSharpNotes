@@ -193,10 +193,21 @@ let rotate xs n =
         let ln = List.length xs in abs <| (ln + n)%ln
     let st, nd = splitListIntoTwo xs at
     nd @ st
-
 let rec rotate' xs n = 
     match xs, n with
         | [], _-> []
         | xs, 0 -> xs
         | x::xs, n when n > 0 -> rotate' (xs@[x]) (n-1)
         | xs, n -> rotate' xs (List.length xs + n)
+
+// Problem 20 : Remove the K'th element from a list.
+let removeAt n xs:('a * 'a List) =
+    let rec rmAt acc xs n =
+        match xs, n with
+            | [],_ -> failwith "empty list"
+            | x::xs, 0 -> (x,(List.rev acc)@xs)
+            | x::xs, n -> rmAt (x::acc) xs (n-1)
+    rmAt [] xs n
+let removeAt' n xs = 
+    let front,back = splitListIntoTwo xs n
+    List.head back, front @ List.tail back
