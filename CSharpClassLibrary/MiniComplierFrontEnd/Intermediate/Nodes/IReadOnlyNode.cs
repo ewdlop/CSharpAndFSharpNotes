@@ -1,7 +1,6 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+
+public interface IReadOnlyNode : IEmitable
 {
-    public interface IReadOnlyNode : IEmitable
-    {
-        int Lexline { get; }
-    }
+    int Lexline { get; }
 }

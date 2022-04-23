@@ -1,7 +1,6 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
+
+public record RealToken(float Value): Token(TokenTag.REAL)
 {
-    public record RealToken(float Value): Token(TokenTag.REAL)
-    {
-        public override string ToString() => Value.ToString();
-    }
+    public override string ToString() => Value.ToString();
 }

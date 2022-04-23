@@ -2,16 +2,15 @@
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+
+public record OperationExpression(Token Token, TypeToken TypeToken, INode Node) : Expression(Token,TypeToken, Node)
 {
-    public record OperationExpression(Token Token, TypeToken TypeToken, INode Node) : Expression(Token,TypeToken, Node)
+    public override Expression Reduce()
     {
-        public override Expression Reduce()
-        {
-            var expression = base.Generate();
-            var tempExpressionNode = new TemporaryExpression(TypeToken, Node);
-            Node.Emit($"{tempExpressionNode} = {expression}");
-            return null;
-        }
+        var expression = base.Generate();
+        var tempExpressionNode = new TemporaryExpression(TypeToken, Node);
+        Node.Emit($"{tempExpressionNode} = {expression}");
+        return null;
     }
 }

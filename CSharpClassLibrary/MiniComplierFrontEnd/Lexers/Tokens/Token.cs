@@ -1,7 +1,6 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
+
+public record Token(int Tag)
 {
-    public record Token(int Tag)
-    {
-        public override string ToString() => Tag.ToString();
-    }
+    public override string ToString() => Tag.ToString();
 }

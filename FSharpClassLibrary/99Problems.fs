@@ -228,8 +228,6 @@ let rec gcd a b =
     else
         gcd b (a%b)
 
-
-
 // Problem 33 : Determine whether two positive integer numbers are coprime.
 let isCoprime a b = gcd a b = 1
 

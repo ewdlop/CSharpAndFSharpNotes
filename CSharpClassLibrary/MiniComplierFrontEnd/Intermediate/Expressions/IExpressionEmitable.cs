@@ -1,7 +1,6 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+
+public interface IExpressionEmitable
 {
-    public interface IExpressionEmitable
-    {
-        void EmitJumps(string test, int t, int f);
-    }
+    void EmitJumps(string test, int t, int f);
 }

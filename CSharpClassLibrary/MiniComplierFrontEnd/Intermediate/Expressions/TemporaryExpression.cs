@@ -2,12 +2,11 @@
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+
+public record TemporaryExpression(TypeToken TypeToken, INode Node) : Expression(WordToken.TEMP, TypeToken, Node)
 {
-    public record TemporaryExpression(TypeToken TypeToken, INode Node) : Expression(WordToken.TEMP, TypeToken, Node)
-    {
-        public int Number { get; } = ++Count;
-        private static int Count { get; set; }
-        public override string ToString() => $"t{Number}";
-    }
+    public int Number { get; } = ++Count;
+    private static int Count { get; set; }
+    public override string ToString() => $"t{Number}";
 }

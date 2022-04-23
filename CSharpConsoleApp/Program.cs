@@ -32,6 +32,7 @@ internal static class Program
         {
             Console.WriteLine("1");
         }
+
         Directory.GetDirectories(path, "*", SearchOption.AllDirectories).ToList().ForEach(t => Console.WriteLine(t));
     }
 

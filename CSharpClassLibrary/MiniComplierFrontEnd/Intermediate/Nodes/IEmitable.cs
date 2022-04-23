@@ -1,8 +1,7 @@
-﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes
+﻿namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+
+public interface IEmitable
 {
-    public interface IEmitable
-    {
-        void EmitLabel(int i);
-        void Emit(string s);
-    }
+    void EmitLabel(int i);
+    void Emit(string s);
 }

@@ -1,9 +1,8 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+
+public interface IReadOnlyExpression
 {
-    public interface IReadOnlyExpression
-    {
-        TypeToken TypeToken { get; }
-    }
+    TypeToken TypeToken { get; }
 }
