@@ -5,32 +5,37 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 using System;
+using System.Collections.Generic;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 
-public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
-    where T1: IEnvironment
-    where T2: IStatement
+public abstract class ParserBehavior<T1, T2, T3> : IParserBehavior<T1, T2, T3>
+    where T1 : IEnvironment
+    where T2 : IStatement
     where T3 : IExpression
 {
     private readonly ILexer _lexer;
     private readonly Node _emitterNode;
-    public Token LookAheadToken { get; private set; }
+
+    public Token? LookAheadToken { get; private set; }
     public T1 TopSymbol { get; private set; }
     public int Used { get; private set; }
     protected ParserBehavior(ILexer lexer, Node emitterNode)
     {
         _lexer = lexer;
         _emitterNode = emitterNode;
-        Move();
+    }
+    public virtual void Parse(ReadOnlyMemory<char> characters)
+    {
+        _lexer.Lex(characters);
     }
     public virtual void Error(string s) => throw new Exception($"near line {_lexer.LexLine}: {s}");
-    public virtual void Move() => LookAheadToken = _lexer.Scan();
-    public virtual void Match(int tag)
+    public virtual void LookAhead() => LookAheadToken = _lexer.Scan();
+    public virtual void MatchThenLookAhead(int tag)
     {
-        if (LookAheadToken.Tag == tag)
+        if (LookAheadToken?.Tag == tag)
         {
-            Move();
+            LookAhead();
         }
         else
         {
@@ -43,17 +48,17 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
         int begin = statement.EmitterNode.NewLabel();
         int after = statement.EmitterNode.NewLabel();
         statement.EmitterNode.EmitLabel(begin);
-        statement.Generate(begin,after);
+        statement.Generate(begin, after);
         statement.EmitterNode.EmitLabel(after);
     }
     public virtual void Declare()
     {
-        while (LookAheadToken.Tag == TokenTag.BASIC)
+        while (LookAheadToken?.Tag == TokenTag.BASIC)
         {
             TypeToken typeToken = Type();
             var token = LookAheadToken;
-            Match(TokenTag.ID);
-            Match(';');
+            MatchThenLookAhead(TokenTag.ID);
+            MatchThenLookAhead(';');
             IdExpression idExpression = new((WordToken)token, typeToken, Used, _emitterNode);
             TopSymbol.Put(token, idExpression);
             Used += typeToken.Width;
@@ -62,8 +67,8 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public TypeToken Type()
     {
         TypeToken typeToken = (TypeToken)LookAheadToken;
-        Match(TokenTag.BASIC);
-        if(LookAheadToken.Tag != '[')
+        MatchThenLookAhead(TokenTag.BASIC);
+        if (LookAheadToken.Tag != '[')
         {
             return typeToken;
         }
@@ -74,30 +79,30 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     }
     public TypeToken Dims(TypeToken typeToken)
     {
-        Match('[');
+        MatchThenLookAhead('[');
         Token token = LookAheadToken;
-        Match(TokenTag.NUMBER);
-        Match(']');
-        if(LookAheadToken.Tag =='[')
+        MatchThenLookAhead(TokenTag.NUMBER);
+        MatchThenLookAhead(']');
+        if (LookAheadToken.Tag == '[')
         {
             typeToken = Dims(typeToken);
         }
-        return new ArrayTypeToken(typeToken,((NumberToken)token).Value);
+        return new ArrayTypeToken(typeToken, ((NumberToken)token).Value);
     }
     public T2 Block()
     {
-        Match('{');
+        MatchThenLookAhead('{');
         T1 SavedEnvironment = TopSymbol;
         TopSymbol = (T1)Activator.CreateInstance(typeof(T1), new object[] { TopSymbol });
         Declare();
         T2 statement = Statements();
-        Match('}');
+        MatchThenLookAhead('}');
         TopSymbol = SavedEnvironment;
         return statement;
     }
     public T2 Statements()
     {
-        if(LookAheadToken.Tag == '}')
+        if (LookAheadToken?.Tag == '}')
         {
             return (T2)Intermediate.Statements.Statement.NullStatement;
         }
@@ -111,54 +116,54 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
         IExpression BooleanExpression;
         IStatement statement1, statement2;
         IStatement savedStatement;
-        switch (LookAheadToken.Tag)
+        switch (LookAheadToken?.Tag)
         {
             case ';':
-                Move();
+                LookAhead();
                 return (T2)Intermediate.Statements.Statement.NullStatement;
             case TokenTag.IF:
-                Match(TokenTag.IF);
-                Match('(');
+                MatchThenLookAhead(TokenTag.IF);
+                MatchThenLookAhead('(');
                 BooleanExpression = Boolean();
-                Match(')');
+                MatchThenLookAhead(')');
                 statement1 = Statement();
-                if(LookAheadToken.Tag !=TokenTag.ELSE)
+                if (LookAheadToken?.Tag != TokenTag.ELSE)
                 {
                     return (T2)Activator.CreateInstance(typeof(IfStatement), new object[] { BooleanExpression, statement1, _emitterNode });
                 }
-                Match(TokenTag.ELSE);
+                MatchThenLookAhead(TokenTag.ELSE);
                 statement2 = Statement();
                 return (T2)Activator.CreateInstance(typeof(ElseStatement), new object[] { BooleanExpression, statement1, statement2, _emitterNode });
             case TokenTag.WHILE:
                 T2 whileStatment = (T2)Activator.CreateInstance(typeof(WhileStatement), new object[] { _emitterNode });
                 savedStatement = Intermediate.Statements.Statement.EnclosingStatement;//need to decouple this
                 Intermediate.Statements.Statement.EnclosingStatement = whileStatment;
-                Match(TokenTag.WHILE);
-                Match('(');
+                MatchThenLookAhead(TokenTag.WHILE);
+                MatchThenLookAhead('(');
                 BooleanExpression = Boolean();
-                Match(')');
+                MatchThenLookAhead(')');
                 statement1 = Statement();
                 whileStatment.Init(BooleanExpression, statement1);
                 Intermediate.Statements.Statement.EnclosingStatement = savedStatement;
                 return whileStatment;
             case TokenTag.DO:
-                T2 doStatment = (T2)Activator.CreateInstance(typeof(DoStatement));
+                T2 doStatment = (T2)Activator.CreateInstance(typeof(DoStatement), new object[] { _emitterNode });
                 savedStatement = Intermediate.Statements.Statement.EnclosingStatement;//need to decouple this
                 Intermediate.Statements.Statement.EnclosingStatement = doStatment;
-                Match(TokenTag.DO);
-                statement1 = new Statement(_emitterNode);
-                Match(TokenTag.WHILE);
-                Match('(');
+                MatchThenLookAhead(TokenTag.DO);
+                statement1 = Statement();
+                MatchThenLookAhead(TokenTag.WHILE);
+                MatchThenLookAhead('(');
                 BooleanExpression = Boolean();
-                Match(')');
-                Match(';');
+                MatchThenLookAhead(')');
+                MatchThenLookAhead(';');
                 doStatment.Init(BooleanExpression, statement1);
                 Intermediate.Statements.Statement.EnclosingStatement = savedStatement;
                 return doStatment;
             case TokenTag.BREAK:
-                Match(TokenTag.BREAK);
-                Match(';');
-                return (T2)Activator.CreateInstance(typeof(BreakStatement));
+                MatchThenLookAhead(TokenTag.BREAK);
+                MatchThenLookAhead(';');
+                return (T2)Activator.CreateInstance(typeof(BreakStatement), new object[] { _emitterNode });
             case '{':
                 return Block();
             default:
@@ -167,32 +172,35 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     }
     public T2 Assign()
     {
+        T2 statement = default;
         Token token = LookAheadToken;
-        Match(TokenTag.ID);
+        MatchThenLookAhead(TokenTag.ID);
         IdExpression idExpression = TopSymbol.Get(token);
-        if(idExpression == null)
+        if (idExpression is null)
         {
-            _emitterNode.Error($"{token} undeclared");
+            Error($"{token} undeclared");
         }
-        if (LookAheadToken.Tag == '=')
+        if (LookAheadToken?.Tag == '=')
         {
-            Move();
-            return (T2)Activator.CreateInstance(typeof(SetStatement), new object[] { idExpression, Boolean(), _emitterNode });
+            LookAhead();
+            statement = (T2)Activator.CreateInstance(typeof(SetStatement), new object[] { idExpression, Boolean(), _emitterNode });
         }
         else
         {
             AccessingOperationExpression accessingOperationExpression = Offset(idExpression);
-            Match('=');
-            return (T2)Activator.CreateInstance(typeof(SetElementStatement), new object[] { accessingOperationExpression, Boolean(), _emitterNode });
+            MatchThenLookAhead('=');
+            statement = (T2)Activator.CreateInstance(typeof(SetElementStatement), new object[] { accessingOperationExpression, Boolean(), _emitterNode });
         }
+        MatchThenLookAhead(';');
+        return statement;
     }
     public T3 Boolean()
     {
         T3 expression = Join();
-        while(LookAheadToken.Tag == TokenTag.OR)
+        while (LookAheadToken?.Tag == TokenTag.OR)
         {
             Token token = LookAheadToken;
-            Move();
+            LookAhead();
             expression = (T3)Activator.CreateInstance(typeof(OrExpression), new object[] { token, expression, Join(), _emitterNode });
         }
         return expression;
@@ -200,10 +208,10 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Join()
     {
         T3 expression = Equality();
-        while(LookAheadToken.Tag == TokenTag.AND)
+        while (LookAheadToken?.Tag == TokenTag.AND)
         {
             Token token = LookAheadToken;
-            Move();
+            LookAhead();
             expression = (T3)Activator.CreateInstance(typeof(AndExpression), new object[] { token, expression, Equality(), _emitterNode });
         }
         return expression;
@@ -211,10 +219,10 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Equality()
     {
         T3 expression = Relation();
-        while (LookAheadToken.Tag == TokenTag.EQUAL || LookAheadToken.Tag == TokenTag.NOT_EQUAL)
+        while (LookAheadToken?.Tag == TokenTag.EQUAL || LookAheadToken?.Tag == TokenTag.NOT_EQUAL)
         {
             Token token = LookAheadToken;
-            Move();
+            LookAhead();
             expression = (T3)Activator.CreateInstance(typeof(RelationExpression), new object[] { token, expression, Relation(), _emitterNode });
         }
         return expression;
@@ -222,12 +230,12 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Relation()
     {
         T3 expression = Expression();
-        switch(LookAheadToken.Tag)
+        switch (LookAheadToken?.Tag)
         {
-            case '<':
+            case TokenTag.LESS_THAN or TokenTag.LESS_OR_EQUAL or TokenTag.GREATER_OR_EQUAL or TokenTag.GREATER_THAN:
                 Token token = LookAheadToken;
-                Move();
-                return (T3)Activator.CreateInstance(typeof(RelationExpression), new object[] { token,expression,Expression(), _emitterNode });
+                LookAhead();
+                return (T3)Activator.CreateInstance(typeof(RelationExpression), new object[] { token, expression, Expression(), _emitterNode });
             default:
                 return expression;
         }
@@ -235,10 +243,10 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Expression()
     {
         T3 expression = Term();
-        while (LookAheadToken.Tag is '+' or '-')
+        while (LookAheadToken?.Tag is '+' or '-')
         {
             Token token = LookAheadToken;
-            Move();
+            LookAhead();
             expression = (T3)Activator.CreateInstance(typeof(ArithmeticOperationExpression), new object[] { token, expression, Term(), _emitterNode });
         }
         return expression;
@@ -246,25 +254,25 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Term()
     {
         T3 expression = Unary();
-        while (LookAheadToken.Tag is '*'
+        while (LookAheadToken?.Tag is '*'
             or '/')
         {
             Token token = LookAheadToken;
-            Move();
+            LookAhead();
             expression = (T3)Activator.CreateInstance(typeof(ArithmeticOperationExpression), new object[] { token, expression, Unary(), _emitterNode });
         }
         return expression;
     }
     public T3 Unary()
     {
-        switch (LookAheadToken.Tag)
+        switch (LookAheadToken?.Tag)
         {
             case '-':
-                Move();
+                LookAhead();
                 return (T3)Activator.CreateInstance(typeof(UnaryOperationExpression), new object[] { WordToken.MINUS, Unary(), _emitterNode });
             case '!':
                 Token token = LookAheadToken;
-                Move();
+                LookAhead();
                 return (T3)Activator.CreateInstance(typeof(NotExpression), new object[] { token, Unary(), _emitterNode });
             default:
                 return Factor();
@@ -273,41 +281,41 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
     public T3 Factor()
     {
         T3 expression = default;
-        switch(LookAheadToken.Tag)
+        switch (LookAheadToken?.Tag)
         {
             case '(':
-                Move();
+                LookAhead();
                 expression = Boolean();
-                Match(')');
+                MatchThenLookAhead(')');
                 return expression;
             case TokenTag.NUMBER:
-                expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { TypeToken.INT, _emitterNode });
-                Move();
+                expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { LookAheadToken, TypeToken.INT, _emitterNode });
+                LookAhead();
                 return expression;
             case TokenTag.REAL:
-                expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { TypeToken.FLOAT, _emitterNode });
-                Move();
+                expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { LookAheadToken, TypeToken.FLOAT, _emitterNode });
+                LookAhead();
                 return expression;
             case TokenTag.TRUE:
                 expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { WordToken.TRUE, TypeToken.BOOL, _emitterNode });
-                Move();
+                LookAhead();
                 return expression;
             case TokenTag.FALSE:
-                expression= (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { WordToken.FALSE, TypeToken.BOOL, _emitterNode });
-                Move();
+                expression = (T3)Activator.CreateInstance(typeof(ConstantExpression), new object[] { WordToken.FALSE, TypeToken.BOOL, _emitterNode });
+                LookAhead();
                 return expression;
             case TokenTag.ID:
                 var idExpression = TopSymbol.Get(LookAheadToken);
-                if(idExpression == null)
+                if (idExpression == null)
                 {
-                    _emitterNode.Error($"{LookAheadToken} undeclared");
+                    Error($"{LookAheadToken} undeclared");
                 }
-                Move();
-                if(LookAheadToken.Tag != '[')
+                LookAhead();
+                if (LookAheadToken?.Tag != '[')
                 {
-                    return (T3)Activator.CreateInstance(typeof(IdExpression), new object[] { 
-                        idExpression.Token, 
-                        idExpression.TypeToken, 
+                    return (T3)Activator.CreateInstance(typeof(IdExpression), new object[] {
+                        idExpression.Token,
+                        idExpression.TypeToken,
                         idExpression.Offset,
                         idExpression.Node
                     });
@@ -315,15 +323,15 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
                 else
                 {
                     var accessingOperationExpression = Offset(idExpression);
-                    return (T3)Activator.CreateInstance(typeof(AccessingOperationExpression), new object[] { 
-                        accessingOperationExpression.ArrayExpression, 
-                        accessingOperationExpression.IndexExpression, 
-                        accessingOperationExpression.TypeToken, 
-                        accessingOperationExpression.Node 
+                    return (T3)Activator.CreateInstance(typeof(AccessingOperationExpression), new object[] {
+                        accessingOperationExpression.ArrayExpression,
+                        accessingOperationExpression.IndexExpression,
+                        accessingOperationExpression.TypeToken,
+                        accessingOperationExpression.Node
                     });
                 }
             default:
-                _emitterNode.Error("Syntax error");
+                Error("Syntax error");
                 return expression;
         }
     }
@@ -335,24 +343,24 @@ public abstract class ParserBehavior<T1,T2,T3> : IParserBehavior<T1, T2,T3>
         IExpression arithmeticOperationExpression2;
         IExpression loc;
         TypeToken typeToken = idExpression.TypeToken;
-        Match('[');
+        MatchThenLookAhead('[');
         booleanExpression = Boolean();
-        Match(']');
+        MatchThenLookAhead(']');
         typeToken = ((ArrayTypeToken)typeToken).OfTypeToken;
         constantExpression = new ConstantExpression(typeToken.Width, _emitterNode);
         arithmeticOperationExpression1 = new ArithmeticOperationExpression(new Token('*'), booleanExpression, constantExpression, _emitterNode);
         loc = arithmeticOperationExpression1;
-        while(LookAheadToken.Tag == '[')
+        while (LookAheadToken?.Tag == '[')
         {
-            Match('[');
+            MatchThenLookAhead('[');
             booleanExpression = Boolean();
-            Match(']');
+            MatchThenLookAhead(']');
             typeToken = ((ArrayTypeToken)typeToken).OfTypeToken;
             constantExpression = new ConstantExpression(typeToken.Width, _emitterNode);
             arithmeticOperationExpression1 = new ArithmeticOperationExpression(new Token('*'), booleanExpression, constantExpression, _emitterNode);
             arithmeticOperationExpression2 = new ArithmeticOperationExpression(new Token('+'), loc, arithmeticOperationExpression1, _emitterNode);
             loc = arithmeticOperationExpression2;
         }
-        return new AccessingOperationExpression(idExpression, loc, typeToken,_emitterNode);
+        return new AccessingOperationExpression(idExpression, loc, typeToken, _emitterNode);
     }
 }

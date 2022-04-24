@@ -26,9 +26,9 @@ public class SequenceStatement: Statement
         else
         {
             int label = _node.NewLabel();
-            _statement1.Generate(begin, after);
+            _statement1.Generate(begin, label);
             _node.EmitLabel(label);
-            _statement2.Generate(begin, after);
+            _statement2.Generate(label, after);
         }
     }
 }

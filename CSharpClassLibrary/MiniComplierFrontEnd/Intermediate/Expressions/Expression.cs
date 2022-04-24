@@ -17,7 +17,7 @@ public record Expression(Token OperationToken, TypeToken TypeToken, INode Node) 
         if (t != 0 && f != 0)
         {
             Node.Emit($"if {test} goto L{t}");
-            Node.Emit($"if goto L{f}");
+            Node.Emit($"goto L{f}");
         }
         else if (t != 0)
         {

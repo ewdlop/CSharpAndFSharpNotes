@@ -2,6 +2,7 @@
 
 public static class TokenTag
 {
+    //0-255 is used
     internal const int AND = 256,
     BASIC = 257,//PRIMITIVE
     BREAK = 258,
@@ -23,5 +24,6 @@ public static class TokenTag
     REAL = 274,
     TEMP = 275,
     TRUE = 276,
-    WHILE = 277;
+    WHILE = 277,
+    NULL = 278;
 }

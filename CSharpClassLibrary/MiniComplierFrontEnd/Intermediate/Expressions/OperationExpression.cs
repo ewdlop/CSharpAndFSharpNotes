@@ -11,6 +11,7 @@ public record OperationExpression(Token Token, TypeToken TypeToken, INode Node) 
         var expression = base.Generate();
         var tempExpressionNode = new TemporaryExpression(TypeToken, Node);
         Node.Emit($"{tempExpressionNode} = {expression}");
-        return null;
+        return tempExpressionNode;
     }
+    public override string ToString() => base.ToString();
 }

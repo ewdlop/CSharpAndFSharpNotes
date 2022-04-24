@@ -19,11 +19,11 @@ public class Environment : IEnvironment
     public IReadOnlyDictionary<Token, IdExpression> TokenIdExpression => _tokenIdExpression;
     protected IEnvironment Previous { get; init; }
     public IReadOnlyEnvironment PreviousEnvironment => Previous;
-    public IdExpression Get(Token token)
+    public IdExpression? Get(Token token)
     {
-        for (IReadOnlyEnvironment environment = this; environment != null; environment = environment.PreviousEnvironment)
+        for (IReadOnlyEnvironment environment = this; environment is not null; environment = environment.PreviousEnvironment)
         {
-            if(_tokenIdExpression.TryGetValue(token, out IdExpression Id))
+            if(environment.TokenIdExpression.TryGetValue(token, out IdExpression? Id))
             {
                 return Id;
             }

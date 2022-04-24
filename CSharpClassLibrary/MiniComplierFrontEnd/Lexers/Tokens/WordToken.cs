@@ -15,5 +15,6 @@ public record WordToken(string Lexeme, int Tag) : Token(Tag)
         MINUS = new("minus", TokenTag.MINUS),
         TRUE = new("true", TokenTag.TRUE),
         FALSE = new("false", TokenTag.FALSE),
-        TEMP = new("temp", TokenTag.TEMP);
+        TEMP = new("temp", TokenTag.TEMP),
+        NULL = new("null", TokenTag.NULL);
 }

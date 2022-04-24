@@ -1,16 +1,18 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+using System;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 
-public interface IParserBehavior<T1, T2,T3> : IReadOnlyParserBehavior<T1>
+public interface IParserBehavior<T1, T2, T3> : IReadOnlyParserBehavior<T1>
     where T1 : IEnvironment
     where T2 : IStatement
     where T3 : IExpression
 {
-    void Move();
-    void Match(int tag);
+    void Parse(ReadOnlyMemory<char> enmerable);
+    void LookAhead();
+    void MatchThenLookAhead(int tag);
     void Error(string s);
     void Program();
     void Declare();

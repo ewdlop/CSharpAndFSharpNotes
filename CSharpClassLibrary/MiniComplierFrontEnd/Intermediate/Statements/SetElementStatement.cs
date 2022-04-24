@@ -14,7 +14,7 @@ public class SetElementStatement: Statement
         _arrayExpression = accessingOperationExpression.ArrayExpression;
         _indexExpression = accessingOperationExpression.IndexExpression;
         _expression = expression;
-        if(Check(_arrayExpression.TypeToken,_expression.TypeToken) == null)
+        if(Check(accessingOperationExpression.TypeToken,_expression.TypeToken) == null)
         {
             _node.Error("Type Error");
         }

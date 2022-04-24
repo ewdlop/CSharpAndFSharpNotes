@@ -16,4 +16,6 @@ public record ConstantExpression(Token Token, TypeToken TypeToken, INode Node)
         if (this == TRUE && t != 0) Node.Emit("goto L" + t);
         else if (this == FALSE && f != 0) Node.Emit("goto L" + f);
     }
+
+    public override string ToString() => base.ToString();
 }

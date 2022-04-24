@@ -4,11 +4,11 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
-public class WhileStatement:Statement
+public class WhileStatement : Statement
 {
     public WhileStatement(Node node) : base(node){}
-    public IExpression Expression { get; private set; }
-    public IStatement Statement { get; private set; }
+    public IExpression? Expression { get; private set; }
+    public IStatement? Statement { get; private set; }
     public override void Init(IExpression expression, IStatement statement)
     {
         Expression = expression;

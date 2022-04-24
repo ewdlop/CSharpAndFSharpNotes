@@ -1,5 +1,5 @@
 ﻿using System;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 

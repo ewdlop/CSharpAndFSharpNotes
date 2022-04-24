@@ -1,7 +1,7 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 
 public interface IReadOnlyParserBehavior<T>
     where T : IEnvironment

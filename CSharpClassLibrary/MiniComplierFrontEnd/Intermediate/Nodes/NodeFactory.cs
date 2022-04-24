@@ -1,13 +1,13 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
 using System;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
 public class NodeFactory
 {
-    private readonly LexerBehavior _lexerBehavior;
+    private readonly ILexerBehavior _lexerBehavior;
 
-    public NodeFactory(LexerBehavior lexerBehavior)
+    public NodeFactory(ILexerBehavior lexerBehavior)
     {
         _lexerBehavior = lexerBehavior;
     }
@@ -23,7 +23,7 @@ public class NodeFactory
         return new Node(_lexerBehavior);
     }
 
-    public static INode CreateNode(LexerBehavior lexerBehavior)
+    public static INode CreateNode(ILexerBehavior lexerBehavior)
     {
         return new Node(lexerBehavior);
     }

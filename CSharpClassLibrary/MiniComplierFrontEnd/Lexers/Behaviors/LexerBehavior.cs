@@ -3,36 +3,45 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
 
 public class LexerBehavior : ILexerBehavior
 {
     private Dictionary<string, WordToken> WordTokens { get; init; } = new();
+    public ReadOnlyMemory<char> _readingCharactrs;
+    public ReadOnlyMemory<char>? ReadingCharacters => _readingCharactrs;
     public int Line { get; private set; }
-    public char Peek { get; private set; } = IReadOnlyLexerBehavior.EmptySpace;
+    public char? Peek { get; private set; } = IReadOnlyLexerBehavior.EmptySpace;
     public IReadOnlyDictionary<string, WordToken> ReadOnlyWordTokens => WordTokens;
+    public void Lex(ReadOnlyMemory<char> characters) => _readingCharactrs = characters;
     public virtual void ResetPeek() => Peek = IReadOnlyLexerBehavior.EmptySpace;
-    public virtual void ReadChar() => Peek = Convert.ToChar(Console.Read());
-    public virtual bool ReadChar(char c)
+    public int index = -1;
+    public virtual (bool Read, char? Peek) TryReadChar()
     {
-        ReadChar();
-        if (Peek.CompareTo(c) != 0)
+        if(++index < _readingCharactrs.Length)
         {
-            return false;
+            return (true, _readingCharactrs.Span[index]);
         }
+        return (false, null);
+    }
+    public virtual bool TryPeekAhead(char c)
+    {
+        (bool read, Peek) = TryReadChar();
+        if (!read || !Peek.Equals(c)) return false;
         ResetPeek();
         return true;
     }
-    public virtual bool IsPeek(char c) => Peek.CompareTo(c) == 0;
+    public virtual bool IsPeek(char c) => Peek.Equals(c);
     public virtual bool IsPeekEmptySpace() => IsPeek(IReadOnlyLexerBehavior.EmptySpace);
     public virtual void Reserve(WordToken wordToken) => WordTokens.Add(wordToken.Lexeme, wordToken);
     public virtual Token Scan()
     {
-        for (; ; ReadChar())
-        {
+        bool read = true;
+        for (; read; (read, Peek) = TryReadChar())
+        { 
             if (IsPeekEmptySpace() || IsPeek('\t'))
             {
-                //continue;
+                continue;
             }
             else if (IsPeek('\n'))
             {
@@ -46,7 +55,7 @@ public class LexerBehavior : ILexerBehavior
         switch (Peek)
         {
             case '&':
-                if (ReadChar('&'))
+                if (TryPeekAhead('&'))
                 {
                     return WordToken.AND;
                 }
@@ -55,7 +64,7 @@ public class LexerBehavior : ILexerBehavior
                     return new Token('&');
                 }
             case '|':
-                if (ReadChar('|'))
+                if (TryPeekAhead('|'))
                 {
                     return WordToken.OR;
                 }
@@ -64,7 +73,7 @@ public class LexerBehavior : ILexerBehavior
                     return new Token('|');
                 }
             case '=':
-                if (ReadChar('='))
+                if (TryPeekAhead('='))
                 {
                     return WordToken.EQUAL;
                 }
@@ -73,7 +82,7 @@ public class LexerBehavior : ILexerBehavior
                     return new Token('=');
                 }
             case '!':
-                if (ReadChar('='))
+                if (TryPeekAhead('='))
                 {
                     return WordToken.NOT_EQUAL;
                 }
@@ -82,7 +91,7 @@ public class LexerBehavior : ILexerBehavior
                     return new Token('!');
                 }
             case '<':
-                if (ReadChar('='))
+                if (TryPeekAhead('='))
                 {
                     return WordToken.LESS_OR_EQUAL;
                 }
@@ -91,7 +100,7 @@ public class LexerBehavior : ILexerBehavior
                     return WordToken.LESS_THAN;
                 }
             case '>':
-                if (ReadChar('='))
+                if (TryPeekAhead('='))
                 {
                     return WordToken.GREATER_OR_EQUAL;
                 }
@@ -99,47 +108,41 @@ public class LexerBehavior : ILexerBehavior
                 {
                     return WordToken.GREATER_THAN;
                 }
-
             default:
                 break;
         }
-
-        if (char.IsDigit(Peek))
+        if (Peek is null) return null;
+        if (char.IsDigit(Peek.Value))
         {
             int number = 0;
             do
             {
-                number = (10 * number) + Convert.ToInt32(Peek.ToString(), 10);
-                ReadChar();
-            } while (char.IsDigit(Peek));
+                number = 10 * number + Convert.ToInt32(Peek.ToString(), 10);
+                (_, Peek) = TryReadChar();
+            } while (char.IsDigit(Peek.Value));
             if (!IsPeek('.'))
             {
                 return new NumberToken(number);
             }
             float decimalNumber = number;
             float tenExponent = 10;
-            for (; ; )
+            for ((_, Peek) = TryReadChar(); char.IsDigit(Peek.Value); (_, Peek) = TryReadChar())
             {
-                ReadChar();
-                if (!char.IsDigit(Peek))
-                {
-                    break;
-                }
                 decimalNumber += Convert.ToInt32(Peek.ToString(), 10) / tenExponent;
                 tenExponent *= 10;
             }
+            return new RealNumberToken(decimalNumber);
         }
-
-        if (char.IsLetter(Peek))
+        if (char.IsLetter(Peek.Value))
         {
             var stringBuilder = new StringBuilder();
             do
             {
                 stringBuilder.Append(Peek);
-                ReadChar();
-            } while (char.IsLetterOrDigit(Peek));
+                (_, Peek) = TryReadChar();
+            } while (char.IsLetterOrDigit(Peek.Value));
             string word = stringBuilder.ToString();
-            if (WordTokens.TryGetValue(word, out WordToken wordToken))
+            if (WordTokens.TryGetValue(word, out WordToken? wordToken))
             {
                 return wordToken;
             }
@@ -150,7 +153,7 @@ public class LexerBehavior : ILexerBehavior
                 return wordToken;
             }
         }
-        var token = new Token(Peek);
+        var token = new Token(Peek.Value);
         ResetPeek();
         return token;
     }

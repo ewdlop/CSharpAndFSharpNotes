@@ -8,7 +8,7 @@ public class IfStatement : Statement
 {
     private readonly IExpression _expression;
     private readonly IStatement _statement;
-    public IfStatement(IStatement statement, IExpression expression, Node node):base(node)
+    public IfStatement(IExpression expression, IStatement statement,  Node node):base(node)
     {
         _statement = statement;
         _expression = expression;

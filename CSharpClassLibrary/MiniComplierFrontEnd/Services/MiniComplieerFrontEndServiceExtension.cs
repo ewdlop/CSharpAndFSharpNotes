@@ -5,8 +5,8 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
-using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behavior;
+using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Services;
 
@@ -22,8 +22,8 @@ public static class MiniComplieerFrontEndServiceExtension
             .AddSingleton<NodeFactory>()
             .AddScoped<ILexerBehavior, LexerBehavior>()
             .AddScoped<ILexer, Lexer>()
-            .AddScoped<INode, Node>((serviceProvideer) => { 
-                return serviceProvideer.GetService<NodeFactory>().CreateNode(); 
+            .AddScoped<INode, Node>((serviceProvideer) => {
+                return serviceProvideer.GetService<NodeFactory>()?.CreateNode();
             })
             .AddScoped<IParserBehavior<Environment, Statement, Expression>, ParserBehavior<Environment, Statement, Expression>>()
             .AddScoped<IParser<Environment, Statement, Expression>, Parser<Environment, Statement, Expression>>();

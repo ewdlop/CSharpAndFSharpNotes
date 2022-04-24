@@ -1,11 +1,13 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
-using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behavior;
+using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+using System;
+using System.Collections.Generic;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers;
 
-public class Parser<T1,T2,T3> : IParser<T1, T2, T3>
+public abstract class Parser<T1,T2,T3> : IParser<T1, T2, T3>
     where T1 : IEnvironment
     where T2 : IStatement
     where T3 : IExpression
@@ -15,6 +17,11 @@ public class Parser<T1,T2,T3> : IParser<T1, T2, T3>
     {
         _parserBehavior = parserBehavior;
     }
-    public void Move() => _parserBehavior.Move();
-    public void Match(int tag) => _parserBehavior.Match(tag);
+    public virtual void Program()
+    {
+        _parserBehavior.Program();
+    }
+    public virtual void Parse(ReadOnlyMemory<char> characters) => _parserBehavior.Parse(characters);
+    public virtual void Move() => _parserBehavior.LookAhead();
+    public virtual void Match(int tag) => _parserBehavior.MatchThenLookAhead(tag);
 }

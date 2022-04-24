@@ -5,9 +5,9 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 
 public record RelationExpression(Token Token, IExpression Expression1, IExpression Expression2, INode Node)
-    : LogicalExpression(Token, Expression1, Expression2, Node)
+    : LogicalExpression(Token, Expression1, Expression2, Node, Check(Expression1.TypeToken, Expression2.TypeToken))
 {
-    new public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
+    public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
     {
         if(typeToken1 is ArrayTypeToken || typeToken2 is ArrayTypeToken)
         {
@@ -27,4 +27,5 @@ public record RelationExpression(Token Token, IExpression Expression1, IExpressi
         string test = $"{Expression1.Reduce()} {OperationToken} {Expression2.Reduce()}";
         EmitJumps(test, t, f);
     }
+    public override string ToString() => base.ToString();
 }

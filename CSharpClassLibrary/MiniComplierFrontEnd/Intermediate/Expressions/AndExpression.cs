@@ -13,4 +13,5 @@ public record AndExpression(Token Token, IExpression Expression1, IExpression Ex
         Expression2.Jumping(t, f);
         if (t == 0) Node.EmitLabel(label);
     }
+    public override string ToString() => base.ToString();
 }
