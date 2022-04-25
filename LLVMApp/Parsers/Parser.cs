@@ -11,10 +11,10 @@ public class Parser : IParser
 
     private readonly BaseParserListener? _baseListener;
 
-    public Parser(ILexer? scanner, BaseParserListener? baseParserListener)
+    public Parser(ILexer? scanner, IParserListener? parserListener)
     {
         _scanner = scanner;
-        _baseListener = baseParserListener;
+        _baseListener = new BaseParserListener(parserListener);
     }
 
     public void HandleDefinition()
