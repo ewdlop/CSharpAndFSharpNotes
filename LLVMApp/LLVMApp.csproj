@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="libLLVM" Version="14.0.0" />
+  </ItemGroup>
+
 </Project>

@@ -14,12 +14,12 @@ string test = "{ int i; int j; float v; float x; float[100] a;\n" +
     "x=a[i];a[i]=a[j];a[j]=x;\n" +
     "\n}" +
     "}";
-//string test = "{ float[100] a;\n" +
-//    "while(true){\n" +
-//    "a[50] = 5;\n" +
-//    "}\n" +
-//    "}";
-
+string test2 = "{ float[100] a;\n" +
+    "while(true){\n" +
+    "a[50] = 5;\n" +
+    "}\n" +
+    "}";
+string test3 = "{ int i; i = 2;}";
 
 ILexerBehavior lexerBehavior = new LexerBehavior();
 ILexer lexer = new Lexer(lexerBehavior);
@@ -27,6 +27,6 @@ NodeFactory nodeFactory = new NodeFactory(lexerBehavior);
 Node node = nodeFactory.CreateNode();
 TestParserBehavior parserBehavior = new(lexer,node);
 TestParser parser = new (parserBehavior);
-parser.Parse(test.AsMemory());
+parser.Parse(test3.AsMemory());
 parser.Move();
 parser.Program();
