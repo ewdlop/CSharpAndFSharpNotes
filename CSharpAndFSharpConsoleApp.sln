@@ -111,9 +111,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitWiseOperation", "BitWise
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LLVM", "LLVM", "{02627A78-D51F-4B36-AA5D-C221E6E90347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLVMApp", "LLVMApp\LLVMApp.csproj", "{AC40BC43-5D67-451D-ADEE-9329F05D2082}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLVMApp", "LLVMApp\LLVMApp.csproj", "{AC40BC43-5D67-451D-ADEE-9329F05D2082}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp3", "ConsoleApp3\ConsoleApp3.csproj", "{D025F297-7F6C-4AFD-9DF6-263AE7F23DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp3", "ConsoleApp3\ConsoleApp3.csproj", "{D025F297-7F6C-4AFD-9DF6-263AE7F23DF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{955BB1E1-F777-49EC-BD04-C61559679EEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -663,6 +665,18 @@ Global
 		{D025F297-7F6C-4AFD-9DF6-263AE7F23DF6}.Release|x64.Build.0 = Release|Any CPU
 		{D025F297-7F6C-4AFD-9DF6-263AE7F23DF6}.Release|x86.ActiveCfg = Release|Any CPU
 		{D025F297-7F6C-4AFD-9DF6-263AE7F23DF6}.Release|x86.Build.0 = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|x64.Build.0 = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Debug|x86.Build.0 = Debug|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|x64.ActiveCfg = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|x64.Build.0 = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|x86.ActiveCfg = Release|Any CPU
+		{955BB1E1-F777-49EC-BD04-C61559679EEB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
