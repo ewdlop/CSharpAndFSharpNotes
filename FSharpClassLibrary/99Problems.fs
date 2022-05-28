@@ -132,7 +132,7 @@ let decodeRunLengthEncoding (xs:'a Encoding List) =
     xs |> List.collect expand
 
 // Problem 13 : Decode a run-length encoded list.
-let runLengthEncodingDirect xs =
+let runLengthEncodingDirect  (xs: 'a List) =
     let collect x (xs:'a Encoding List) =
         match xs with
             | [] -> [Single x]
@@ -180,7 +180,7 @@ let splitListIntoTwo xs n :('a List * 'a List) =
             | xs,0 -> xs
             | [],_ -> []
             | _::xs,n -> drop (n-1) xs
-    (take n xs, drop n xs)
+    (take n xs, drop n xs) //builder a list takes take first n, and build a list that drops first n
 
 // Problem 18 : Extract a slice from a list.
 let slicAList xs s e = 
@@ -195,14 +195,14 @@ let slicAList xs s e =
             | [],_ -> []
             | _::xs,n -> drop (n-1) xs
     let diff = e - s
-    xs |> drop (s-1) |> take(diff-1)
-let slicAList' xs s e = [for (x,j) in Seq.zip xs [1..e] do if s <=j then yield x]
-let slicAList'' xs s e = xs |> Seq.zip (seq{1..e}) |> Seq.filter(fst >> (<=)s) |> Seq.map snd
+    xs |> drop (s-1) |> take(diff-1) //drops fist s-1, then only take diff-1 amount after
+let slicAList' xs s e = [for (x,j) in Seq.zip xs [1..e] do if s <=j then yield x] // (x1,1),(x2,2)...,(xs,s),...,(xj,xj),...(xn,n)
+let slicAList'' xs s e = xs |> Seq.zip (seq{1..e}) |> Seq.filter(fst >> (<=)s) |> Seq.map snd //fst and snd
 
 // Problem 19 : Rotate(Shuffle) a list N places to the left.
 let rotate (xs: 'a List) (n: int) : 'a List = 
     let at = 
-        let ln = List.length xs in abs <| (ln + n)%ln
+        let ln = List.length xs in abs <| (ln + n)%ln // at = (ln=List.length xs in abs) + n %(ln= List.length xs in abs)
     let st, nd = splitListIntoTwo xs at
     nd @ st
 let rec rotate' (xs: 'a List) (n: int) : 'a List = 
@@ -217,12 +217,12 @@ let removeAt (n: int) (xs: 'a List) : ('a * 'a List) =
     let rec rmAt (acc : 'a list) xs n =
         match xs, n with
             | [],_ -> failwith "empty list"
-            | x::xs, 0 -> (x,(List.rev acc)@xs)
+            | x::xs, 0 -> (x,(List.rev acc)@xs) //revert then recombine with the rest of xs
             | x::xs, n -> rmAt (x::acc) xs (n-1)
     rmAt [] xs n
 let removeAt' (n: int) (xs: 'a List) : ('a * 'a List) = 
     let front,back = splitListIntoTwo xs n
-    List.head back, front @ List.tail back
+    List.head back, front @ List.tail back //(the one remove, remain) tails remove one element then takes the rest
 
 // Problem 21 : Insert an element at a given position into a list.
     
