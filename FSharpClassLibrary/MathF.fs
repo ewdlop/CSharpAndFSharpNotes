@@ -12,6 +12,7 @@ module MathF =
         | 0 -> 0
         | x when x < 0 -> -1
         | x when x > 0 -> 1
+        | _ -> failwith "somethign is wrong"
     
     //tail reucrison
     let fib2 n =

@@ -47,7 +47,7 @@ type HuffmanCoder(symbols: seq<char>, frequencies : seq<float>) =
         let encodeChar c = 
             match huffmanCodingTable |> Map.tryFind c with
             | Some bits -> bits
-            | None -> failwith "No frequency information provided for character '%A'" c
+            | None -> failwith "No frequency information provided for character '%A'"
         str.ToCharArray()
         |> Array.map encodeChar
         |> Array.concat
