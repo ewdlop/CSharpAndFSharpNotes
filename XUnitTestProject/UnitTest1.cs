@@ -1,52 +1,149 @@
-﻿using CSharpClassLibrary;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 using Xunit.Abstractions;
 
 namespace XUnitTestProject
 {
+    public class Z
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+
+        //public override bool Equals(object other)
+        //{
+        //    return Equals(other as Z);
+        //}
+
+        //public virtual bool Equals(Z other)
+        //{
+        //    if (other == null) { return false; }
+        //    if (ReferenceEquals(this, other)) { return true; }
+        //    return x == other.x && y == other.y;
+        //}
+    }
+    public record X(int x, int y, Z z);
+    public record X2(int x, int y, X z);
+    public record X3(int x, int y);
+    public struct Y
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+    }
+
+    public struct Y2
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+        public Z z { get; set; }
+        //public X x1 { get; set; }
+    }
+
+    public struct Y3
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+        public X3 x1 { get; set; }
+    }
+
+    public struct Y4
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+        public Y5 y1 { get; set; }
+    }
+
+    public struct Y5
+    {
+        public int x { get; set; }
+        public int y { get; set; }
+    }
+
     public class UnitTest1
     {
-        private readonly ITestOutputHelper _output;
-
-        public UnitTest1(ITestOutputHelper output)
+        [Fact]
+        public void TestClass()
         {
-            _output = output;
+            var z1 = new Z() { x = 1, y = 2 };
+            var z2 = new Z() { x = 1, y = 2 };
+            Assert.False(z1 == z2);
+            Assert.False(z1.Equals(z2));
         }
 
         [Fact]
-        public void Test_VarOrKeyword()
+        public void TestRecord()
         {
-            //PeekableEnumerableAdapter<char> it1 = new PeekableEnumerableAdapter<char>("if abc");
-            //PeekableEnumerableAdapter<char> it2 = new PeekableEnumerableAdapter<char>("true abc");
-            //Token token1 = Token.ParsingUsingIterator(it1);
-            //Token token2 = Token.ParsingUsingIterator(it2);
-            //Assert.Equal(TokenType.KEYWORD, token1.Type);
-            //Assert.Equal("if", token1.Value);
-            //Assert.Equal(TokenType.BOOLEAN, token2.Type);
-            //Assert.Equal("true", token2.Value);
-            //it1.Next();
-            //Token token3 = Token.ParsingUsingIterator(it1);
-            //Assert.Equal(TokenType.VARIABLE, token3.Type);
-            //Assert.Equal("abc", token3.Value);
+            var x = new X(1, 2, new Z() { x = 3, y = 4 });
+            var y = new X(1, 2, new Z() { x = 3, y = 4 });
+            Assert.False(x == y);
+            Assert.False(x.Equals(y));
+            var x1 = new X(1, 2, null);
+            var y1 = new X(1, 2, null);
+            Assert.True(x1 == y1);
+            Assert.True(x1.Equals(y1));
+            var x2 = new X2(1, 2, x1);
+            var y2 = new X2(1, 2, y1);
+            Assert.True(x2 == y2);
+            Assert.True(x2.Equals(y2));
+            y = x;
+            Assert.True(y == x);
+            y = x with { };
+            Assert.True(y == x);
         }
-        
-        [Fact]
-        public void Test_MakeString()
-        {
-            //string[] tests = {
-            //"\"123\"",
-            //"\'123\'"};
 
-            //tests.Select(s => {
-            //    try {
-            //        return Token.MakeString(new PeekableEnumerableAdapter<char>(s));
-            //    }
-            //    catch (LexicalException e) {
-            //        _output.WriteLine(e.StackTrace);
-            //        return null;
-            //    }
-            //}).ToList().ForEach(t => Assert.Equal(TokenType.STRING, t.Type));
+        [Fact]
+        public void TestStruct()
+        {
+            var y1 = new Y() { x = 1, y = 2 };
+            var y2 = new Y() { x = 1, y = 2 };
+            var y3 = new Y() { x = 1, y = 3 };
+            Assert.True(y1.Equals(y2));
+            //Assert.True(y1 == y2);
+            Assert.False(y1.Equals(y3));
+
+            var y4 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 }};
+            var y5 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 }};
+            Assert.False(y4.Equals(y5));
+
+            var y6 = new Y3() { x = 1, y = 2, x1 = new X3(3, 4) };
+            var y7 = new Y3() { x = 1, y = 2, x1 = new X3(3, 4) };
+            Assert.True(y6.Equals(y7));
+
+            var y8 = new Y4() { x = 1, y = 2, y1 = new Y5() { x = 3, y = 4 } };
+            var y9 = new Y4() { x = 1, y = 2, y1 = new Y5() { x = 3, y = 4 } };
+            Assert.True(y8.Equals(y9));
+        }
+
+        [Fact]
+        public void TestNull()
+        {
+            Assert.True(null == null);
+            Assert.Null(null);
+            X x1 = null;
+            X x2 = null;
+            Assert.True(x1 == x2);
+            //Assert.True(x1.Equals(x2));
+            Y? y1 = null;
+            Y? y2 = null;
+            //Assert.True(y1.Value.Equals(y2.Value));
+            Assert.Equal(y1, y2);
+        }
+
+        [Fact]
+        public void TestDeafult()
+        {
+            X x1 = default;
+            X x2 = default;
+            Assert.Null(x1);
+            Assert.Null(x2);
+            Assert.True(x1 == x2);
+
+            Y? y1 = default;
+            Y? y2 = default;
+            Assert.Null(y1);
+            Assert.Null(y2);
+
+            Y2 y3 = default;
+            Y2 y4 = default;
+            Assert.True(y3.Equals(y4));
         }
     }
 }
