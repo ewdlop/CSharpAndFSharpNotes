@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Caching.fs" />
     <Compile Include="99Problems.fs" />
     <None Include="QuickSort.fs" />
     <Compile Include="HuffmanTree.fs" />

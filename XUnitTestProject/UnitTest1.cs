@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace XUnitTestProject
@@ -99,8 +101,8 @@ namespace XUnitTestProject
             //Assert.True(y1 == y2);
             Assert.False(y1.Equals(y3));
 
-            var y4 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 }};
-            var y5 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 }};
+            var y4 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 } };
+            var y5 = new Y2() { x = 1, y = 2, z = new Z() { x = 3, y = 4 } };
             Assert.False(y4.Equals(y5));
 
             var y6 = new Y3() { x = 1, y = 2, x1 = new X3(3, 4) };
@@ -144,6 +146,17 @@ namespace XUnitTestProject
             Y2 y3 = default;
             Y2 y4 = default;
             Assert.True(y3.Equals(y4));
+        }
+
+        [Fact]
+        public void Test()
+        {
+            var y = Enumerable.Range(1, 1000000).AsParallel().Aggregate(new List<int> { }, (accum, number) =>
+            {
+                accum.Add(number);
+                return accum;
+            });
+            Assert.Equal(1000000, y.Count);
         }
     }
 }
