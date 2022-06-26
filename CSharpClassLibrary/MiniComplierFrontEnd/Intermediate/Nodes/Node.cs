@@ -1,13 +1,13 @@
 ﻿using System;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
+using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
 public class Node : INode
 {
-    private readonly ILexerBehavior _lexerBehavior;
+    private readonly ITokenizer _lexerBehavior;
     public int Lexline { get; init; }
-    public Node(ILexerBehavior lexerBehavior)
+    public Node(ITokenizer lexerBehavior)
     {
         _lexerBehavior = lexerBehavior;
         Lexline = _lexerBehavior.Line;

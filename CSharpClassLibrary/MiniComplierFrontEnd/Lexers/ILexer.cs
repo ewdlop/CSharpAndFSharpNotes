@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 using System;
 using System.Collections.Generic;
 
@@ -6,8 +6,8 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 
 public interface ILexer
 {
-    IReadOnlyLexerBehavior ReadOnlyLexerCharacterReader { get; }
+    IReadOnlyTokenizer ReadOnlyLexerCharacterReader { get; }
     void Lex(ReadOnlyMemory<char> characters);
-    Tokens.Token Scan();
+    Tokens.Token? Scan();
     int LexLine { get; }
 }

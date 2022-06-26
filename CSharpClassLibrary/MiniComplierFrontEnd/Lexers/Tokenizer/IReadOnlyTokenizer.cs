@@ -1,9 +1,9 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using System.Collections.Generic;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 
-public interface IReadOnlyLexerBehavior
+public interface IReadOnlyTokenizer
 {
     public const char EmptySpace = ' ';
     IReadOnlyDictionary<string, WordToken> ReadOnlyWordTokens { get; }

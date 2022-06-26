@@ -1,20 +1,20 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 using System;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 
 public class NodeFactory
 {
-    private readonly ILexerBehavior _lexerBehavior;
+    private readonly ITokenizer _lexerBehavior;
 
-    public NodeFactory(ILexerBehavior lexerBehavior)
+    public NodeFactory(ITokenizer lexerBehavior)
     {
         _lexerBehavior = lexerBehavior;
     }
 
     internal static Lazy<INode> Node { get; private set; } = new Lazy<INode>(() =>
     {
-        LexerBehavior dummyLexerBehavior = new();
+        Tokenizer dummyLexerBehavior = new();
         return new Node(dummyLexerBehavior);
     });
 
@@ -23,7 +23,7 @@ public class NodeFactory
         return new Node(_lexerBehavior);
     }
 
-    public static INode CreateNode(ILexerBehavior lexerBehavior)
+    public static INode CreateNode(ITokenizer lexerBehavior)
     {
         return new Node(lexerBehavior);
     }

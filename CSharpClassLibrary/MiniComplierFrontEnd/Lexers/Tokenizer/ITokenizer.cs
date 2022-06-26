@@ -1,9 +1,9 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 using System;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Behaviors;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 
-public interface ILexerBehavior : IReadOnlyLexerBehavior
+public interface ITokenizer : IReadOnlyTokenizer
 {
     ReadOnlyMemory<char>? ReadingCharacters { get; }
     void ResetPeek();
@@ -11,5 +11,5 @@ public interface ILexerBehavior : IReadOnlyLexerBehavior
     bool TryPeekAhead(char c);
     void Reserve(WordToken wordToken);
     void Lex(ReadOnlyMemory<char> charactrs);
-    Token Scan();
+    Token? Scan();
 }
