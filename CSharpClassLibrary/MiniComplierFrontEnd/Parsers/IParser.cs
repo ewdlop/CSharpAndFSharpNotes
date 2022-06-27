@@ -10,6 +10,7 @@ public interface IParser<T1, T2, T3>
     where T2 : IStatement
     where T3 : IExpression
 {
+    void Start();
     void Program();
     void Parse(ReadOnlyMemory<char> characters);
     void Move();

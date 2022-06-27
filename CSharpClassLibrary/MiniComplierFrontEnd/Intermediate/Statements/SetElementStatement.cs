@@ -1,6 +1,6 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
@@ -9,14 +9,14 @@ public class SetElementStatement: Statement
     private readonly IdExpression _arrayExpression;
     private readonly IExpression _indexExpression;
     private readonly IExpression _expression;
-    public SetElementStatement(AccessingOperationExpression accessingOperationExpression, Expression expression, Node node):base(node)
+    public SetElementStatement(AccessingOperationExpression accessingOperationExpression, Expression expression, Emitter node):base(node)
     {
         _arrayExpression = accessingOperationExpression.ArrayExpression;
         _indexExpression = accessingOperationExpression.IndexExpression;
         _expression = expression;
         if(Check(accessingOperationExpression.TypeToken,_expression.TypeToken) == null)
         {
-            _node.Error("Type Error");
+            _emitter.Error("Type Error");
         }
     }
     public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
@@ -38,5 +38,5 @@ public class SetElementStatement: Statement
             return null;
         }
     }
-    public override void Generate(int begin, int after) => _node.Emit($"{_arrayExpression} [ {_indexExpression.Reduce()} ] = {_expression.Reduce()}");
+    public override void Generate(int begin, int after) => _emitter.Emit($"{_arrayExpression} [ {_indexExpression.Reduce()} ] = {_expression.Reduce()}");
 }

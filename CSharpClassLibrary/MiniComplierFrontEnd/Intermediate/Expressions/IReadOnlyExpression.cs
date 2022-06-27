@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 

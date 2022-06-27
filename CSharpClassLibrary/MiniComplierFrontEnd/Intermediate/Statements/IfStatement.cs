@@ -1,6 +1,6 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
@@ -8,7 +8,7 @@ public class IfStatement : Statement
 {
     private readonly IExpression _expression;
     private readonly IStatement _statement;
-    public IfStatement(IExpression expression, IStatement statement,  Node node):base(node)
+    public IfStatement(IExpression expression, IStatement statement,  Emitter node):base(node)
     {
         _statement = statement;
         _expression = expression;
@@ -19,9 +19,9 @@ public class IfStatement : Statement
     }
     public override void Generate(int begin, int after)
     {
-        int Label = EmitterNode.NewLabel();
+        int Label = Emitter.NewLabel();
         _expression.Jumping(0, after);
-        _node.EmitLabel(Label);
+        _emitter.EmitLabel(Label);
         _statement.Generate(Label, after);
     }
 }

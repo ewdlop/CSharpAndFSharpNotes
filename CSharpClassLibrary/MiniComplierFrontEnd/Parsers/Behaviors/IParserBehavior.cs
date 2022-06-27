@@ -1,6 +1,7 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 using System;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
@@ -16,19 +17,19 @@ public interface IParserBehavior<T1, T2, T3> : IReadOnlyParserBehavior<T1>
     void Error(string s);
     void Program();
     void Declare();
-    TypeToken Type();
-    TypeToken Dims(TypeToken typeToken);
-    T2 Block();
-    T2 Statements();
-    T2 Statement();
-    T2 Assign();
-    T3 Boolean();
-    T3 Join();
-    T3 Equality();
-    T3 Relation();
-    T3 Expression();
-    T3 Term();
-    T3 Unary();
-    T3 Factor();
-    AccessingOperationExpression Offset(IdExpression id);
+    TypeToken ParseForTypeToken();
+    TypeToken ParseForDimsToken(TypeToken typeToken);
+    T2 ParseForBlockStatement();
+    T2 ParseForStatements();
+    T2 ParseForStatement();
+    T2 ParseForAssignmentStatement();
+    T3 ParseForBooleanExpression();
+    T3 ParseForJoinExpression();
+    T3 ParseForEqualityExpression();
+    T3 ParseForRelationExpression();
+    T3 ParseForArithmeticOperationExpression();
+    T3 ParseForTermExpression();
+    T3 ParseForUnaryExpression();
+    T3 ParseForFactorExpression();
+    AccessingOperationExpression ParseForOffsetExpression(IdExpression id);
 }

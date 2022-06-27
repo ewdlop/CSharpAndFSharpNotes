@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
@@ -8,7 +8,7 @@ public class SequenceStatement: Statement
     private readonly IStatement _statement2;
     public SequenceStatement(IStatement statement1,
                              IStatement statement2,
-                             Node node) :base(node)
+                             Emitter node) :base(node)
     {
         _statement1 = statement1;
         _statement2 = statement2;
@@ -25,9 +25,9 @@ public class SequenceStatement: Statement
         }
         else
         {
-            int label = _node.NewLabel();
+            int label = _emitter.NewLabel();
             _statement1.Generate(begin, label);
-            _node.EmitLabel(label);
+            _emitter.EmitLabel(label);
             _statement2.Generate(label, after);
         }
     }

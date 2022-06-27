@@ -1,10 +1,10 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 
-public record RelationExpression(Token Token, IExpression Expression1, IExpression Expression2, INode Node)
+public record RelationExpression(Token Token, IExpression Expression1, IExpression Expression2, ILabelEmitter Node)
     : LogicalExpression(Token, Expression1, Expression2, Node, Check(Expression1.TypeToken, Expression2.TypeToken))
 {
     public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)

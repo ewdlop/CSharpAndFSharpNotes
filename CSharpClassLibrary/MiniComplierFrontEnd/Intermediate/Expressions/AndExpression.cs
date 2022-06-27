@@ -1,9 +1,9 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 
-public record AndExpression(Token Token, IExpression Expression1, IExpression Expression2, INode Node)
+public record AndExpression(Token Token, IExpression Expression1, IExpression Expression2, ILabelEmitter Node)
     : LogicalExpression(Token, Expression1, Expression2, Node)
 {
     public override void Jumping(int t, int f)

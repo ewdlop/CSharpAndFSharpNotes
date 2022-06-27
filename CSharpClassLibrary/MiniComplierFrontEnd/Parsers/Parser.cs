@@ -3,7 +3,6 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 using System;
-using System.Collections.Generic;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Parsers;
 
@@ -16,6 +15,12 @@ public abstract class Parser<T1,T2,T3> : IParser<T1, T2, T3>
     public Parser(IParserBehavior<T1, T2, T3> parserBehavior)
     {
         _parserBehavior = parserBehavior;
+    }
+
+    public virtual void Start()
+    {
+        Move();
+        Program();
     }
     public virtual void Program()
     {

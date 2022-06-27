@@ -1,12 +1,12 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
 public class DoStatement:Statement
 {
-    public DoStatement(Node node) : base(node){}
+    public DoStatement(Emitter node) : base(node){}
     public IExpression Expression { get; private set; }
     public IStatement Statement { get; private set; }
     public override void Init(IExpression expression, IStatement statement)
@@ -21,9 +21,9 @@ public class DoStatement:Statement
     public override void Generate(int begin, int after)
     {
         After = after;
-        int label = _node.NewLabel();
+        int label = _emitter.NewLabel();
         Statement.Generate(begin, label);
-        _node.EmitLabel(label);
+        _emitter.EmitLabel(label);
         Expression.Jumping(begin, 0);
     }
 }

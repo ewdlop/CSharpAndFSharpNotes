@@ -1,8 +1,8 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
-public record TypeToken(string Lexeme, int Tag, int Width): WordToken(Lexeme, Tag)
+public record TypeToken(string Lexeme, int Tag, int Width) : WordToken(Lexeme, Tag)
 {
     internal static readonly TypeToken
         INT = new("int", TokenTag.BASIC, 4),

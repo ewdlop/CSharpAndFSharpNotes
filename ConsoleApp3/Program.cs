@@ -1,4 +1,4 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 using CSharpClassLibrary.MiniComplierFrontEnd.Parsers;
@@ -23,14 +23,13 @@ string test = "{ int i; int j; float v; float x; float[100] a;\n" +
 
 ITokenizer tokenizer = new Tokenizer();
 ILexer lexer = new Lexer(tokenizer);
-NodeFactory nodeFactory = new NodeFactory(tokenizer);
-Node node = nodeFactory.CreateNode();
+EmitterFactory nodeFactory = new EmitterFactory(tokenizer);
+Emitter node = nodeFactory.CreateEmitter();
 TestParserBehavior parserBehavior = new(lexer, node);
 TestParser parser = new(parserBehavior);
 parser.Parse(test.AsMemory());
-parser.Move();
-parser.Program();
-
+parser.Start();
+Console.WriteLine("");
 
 //await Parallel.ForEachAsync(Values(), async (x, y) => 
 //{

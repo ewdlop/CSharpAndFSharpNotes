@@ -1,16 +1,16 @@
 ﻿using System;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 
-namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 
-public class Node : INode
+public class Emitter : ILabelEmitter
 {
-    private readonly ITokenizer _lexerBehavior;
+    private readonly ITokenizer _tokenzier;
     public int Lexline { get; init; }
-    public Node(ITokenizer lexerBehavior)
+    public Emitter(ITokenizer tokenzier)
     {
-        _lexerBehavior = lexerBehavior;
-        Lexline = _lexerBehavior.Line;
+        _tokenzier = tokenzier;
+        Lexline = _tokenzier.Line;
     }
     private int Labels { get; set; }
     public void Error(string error) => throw new Exception($"near line {Lexline}: {error}");

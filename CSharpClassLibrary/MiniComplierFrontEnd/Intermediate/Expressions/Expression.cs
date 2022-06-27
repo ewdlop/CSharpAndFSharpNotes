@@ -1,10 +1,10 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
-using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 
-public record Expression(Token OperationToken, TypeToken TypeToken, INode Node) : IExpression
+public record Expression(Token OperationToken, TypeToken TypeToken, ILabelEmitter Node) : IExpression
 {
     public virtual IExpression Generate() => this;
     public virtual IExpression Reduce() => this;

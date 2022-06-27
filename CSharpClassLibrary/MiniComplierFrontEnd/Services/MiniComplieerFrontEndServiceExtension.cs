@@ -4,9 +4,9 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
 using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Services;
 
@@ -19,11 +19,11 @@ public static class MiniComplieerFrontEndServiceExtension
         //configure(options);
 
         return services
-            .AddSingleton<NodeFactory>()
+            .AddSingleton<EmitterFactory>()
             .AddScoped<ITokenizer, Tokenizer>()
             .AddScoped<ILexer, Lexer>()
-            .AddScoped<INode, Node>((serviceProvideer) => {
-                return serviceProvideer.GetService<NodeFactory>()?.CreateNode();
+            .AddScoped<ILabelEmitter, Emitter>((serviceProvideer) => {
+                return serviceProvideer.GetRequiredService<EmitterFactory>().CreateEmitter();
             })
             .AddScoped<IParserBehavior<Environment, Statement, Expression>, ParserBehavior<Environment, Statement, Expression>>()
             .AddScoped<IParser<Environment, Statement, Expression>, Parser<Environment, Statement, Expression>>();

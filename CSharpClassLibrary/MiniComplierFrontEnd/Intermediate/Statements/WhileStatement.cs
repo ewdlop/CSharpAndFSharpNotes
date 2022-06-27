@@ -1,12 +1,12 @@
-﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
-using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Nodes;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+﻿using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
+using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Statements;
 
 public class WhileStatement : Statement
 {
-    public WhileStatement(Node node) : base(node){}
+    public WhileStatement(Emitter node) : base(node){}
     public IExpression? Expression { get; private set; }
     public IStatement? Statement { get; private set; }
     public override void Init(IExpression expression, IStatement statement)
@@ -22,9 +22,9 @@ public class WhileStatement : Statement
     {
         After = after;
         Expression.Jumping(0, after);
-        int label = _node.NewLabel();
-        _node.EmitLabel(label);
+        int label = _emitter.NewLabel();
+        _emitter.EmitLabel(label);
         Statement.Generate(label, begin);
-        _node.Emit($"goto L{begin}");
+        _emitter.Emit($"goto L{begin}");
     }
 }

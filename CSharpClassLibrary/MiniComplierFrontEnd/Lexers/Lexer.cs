@@ -1,6 +1,6 @@
 ﻿using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokens;
-using CSharpClassLibrary.MiniComplierFrontEnd.Symbols;
+using CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Tokens;
 using System;
 using System.Collections.Generic;
 
