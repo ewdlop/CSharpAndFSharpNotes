@@ -12,10 +12,10 @@ public class Environment : IEnvironment
         _tokenIdExpression = new Dictionary<Token, IdExpression>();
         Previous = environment;
     }
-    public Environment()//not sure here
-    {
-        _tokenIdExpression = new Dictionary<Token, IdExpression>();
-    }
+    //public Environment()//not sure here
+    //{
+    //    _tokenIdExpression = new Dictionary<Token, IdExpression>();
+    //}
     public IReadOnlyDictionary<Token, IdExpression> TokenIdExpression => _tokenIdExpression;
     protected IEnvironment Previous { get; init; }
     public IReadOnlyEnvironment PreviousEnvironment => Previous;

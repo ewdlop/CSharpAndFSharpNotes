@@ -7,11 +7,11 @@ using LLVMApp.Lexers;
 public class Parser : IParser
 {
 
-    private readonly ILexer? _scanner;
+    private readonly ILexer _scanner;
 
-    private readonly BaseParserListener? _baseListener;
+    private readonly BaseParserListener _baseListener;
 
-    public Parser(ILexer? scanner, IParserListener? parserListener)
+    public Parser(ILexer scanner, IParserListener parserListener)
     {
         _scanner = scanner;
         _baseListener = new BaseParserListener(parserListener);
@@ -19,73 +19,73 @@ public class Parser : IParser
 
     public void HandleDefinition()
     {
-        _baseListener?.EnterRule("HandleDefinition");
+        _baseListener.EnterRule("HandleDefinition");
         FunctionExpressionAST? functionAST = ParseDefinition();
-        _baseListener?.ExitRule(functionAST);
+        _baseListener.ExitRule(functionAST);
         if (functionAST is not null)
         {
-            _baseListener?.Listen();
+            _baseListener.Listen();
         }
         else
         {
             // Skip token for error recovery.
-            _scanner?.GetNextToken();
+            _scanner.GetNextToken();
         }
     }
 
     public void HandleExtern()
     {
-        _baseListener?.EnterRule("HandleExtern");
+        _baseListener.EnterRule("HandleExtern");
 
         PrototypeExpressionAST? prototypeAST = ParseExtern();
 
-        _baseListener?.ExitRule(prototypeAST);
+        _baseListener.ExitRule(prototypeAST);
 
         if (prototypeAST is not null)
         {
-            _baseListener?.Listen();
+            _baseListener.Listen();
         }
         else
         {
             // Skip token for error recovery.
-            _scanner?.GetNextToken();
+            _scanner.GetNextToken();
         }
     }
 
     public void HandleTopLevelExpression()
     {
-        _baseListener?.EnterRule("HandleTopLevelExpression");
+        _baseListener.EnterRule("HandleTopLevelExpression");
 
         var functionAST = ParseTopLevelExpression();
 
-        _baseListener?.ExitRule(functionAST);
+        _baseListener.ExitRule(functionAST);
 
         if (functionAST is not null)
         {
-            _baseListener?.Listen();
+            _baseListener.Listen();
         }
         else
         {
             // Skip token for error recovery.
-            _scanner?.GetNextToken();
+            _scanner.GetNextToken();
         }
     }
     private ExpressionAST? ParseIdentifierExpression()
     {
-        string? idName = _scanner?.LastIdentifier;
+        string? idName = _scanner.LastIdentifier;
 
-        _scanner?.GetNextToken();  // eat identifier.
+        _scanner.GetNextToken();  // eat identifier.
 
-        if (_scanner?.CurrentToken != '(') // Simple variable ref.
+        if (_scanner.CurrentToken != '(') // Simple variable ref.
         {
             return new VariableExpressionAST(idName);
         }
 
         // Call.
         _scanner.GetNextToken();  // eat (
-        List<ExpressionAST> args = new List<ExpressionAST>();
+        List<ExpressionAST> args = new();
 
-        if (_scanner?.CurrentToken != ')')
+        if (_scanner.CurrentToken != ')')
         {
             while (true)
             {
@@ -97,49 +97,49 @@ public class Parser : IParser
 
                 args.Add(arg);
 
-                if (_scanner?.CurrentToken == ')')
+                if (_scanner.CurrentToken == ')')
                 {
                     break;
                 }
 
-                if (_scanner?.CurrentToken != ',')
+                if (_scanner.CurrentToken != ',')
                 {
                     Console.WriteLine("Expected ')' or ',' in argument list");
                     return null;
                 }
 
-                _scanner?.GetNextToken();
+                _scanner.GetNextToken();
             }
         }
 
         // Eat the ')'.
-        _scanner?.GetNextToken();
+        _scanner.GetNextToken();
 
         return new CallExpressionAst(idName, args);
     }
 
     private ExpressionAST? ParseNumberExpression()
     {
-        ExpressionAST result = new NumberExpressionAST(_scanner?.LastNumberValue);
-        _scanner?.GetNextToken();
+        ExpressionAST result = new NumberExpressionAST(_scanner.LastNumberValue);
+        _scanner.GetNextToken();
         return result;
     }
     private ExpressionAST? ParseParensisExpression()
     {
-        _scanner?.GetNextToken();  // eat (.
+        _scanner.GetNextToken();  // eat (.
         ExpressionAST? expression = ParseExpression();
         if (expression is null)
         {
             return null;
         }
 
-        if (_scanner?.CurrentToken != ')')
+        if (_scanner.CurrentToken != ')')
         {
             Console.WriteLine("expected ')'");
             return null;
         }
 
-        _scanner?.GetNextToken(); // eat ).
+        _scanner.GetNextToken(); // eat ).
 
         return expression;
     }
@@ -157,7 +157,7 @@ public class Parser : IParser
 
     public ExpressionAST? ParseIfExpression()
     {
-        _scanner?.GetNextToken(); // eat the if.
+        _scanner.GetNextToken(); // eat the if.
 
         // condition
         ExpressionAST? conditionExpression = ParseExpression();
@@ -166,12 +166,12 @@ public class Parser : IParser
             return null;
         }
 
-        if (_scanner?.CurrentToken != (int)Token.THEN)
+        if (_scanner.CurrentToken != (int)Token.THEN)
         {
             Console.WriteLine("expected then");
         }
 
-        _scanner?.GetNextToken(); // eat the then
+        _scanner.GetNextToken(); // eat the then
 
         ExpressionAST? thenExpression = ParseExpression();
         if (thenExpression is null)
@@ -179,13 +179,13 @@ public class Parser : IParser
             return null;
         }
 
-        if (_scanner?.CurrentToken != (int)Token.ELSE)
+        if (_scanner.CurrentToken != (int)Token.ELSE)
         {
             Console.WriteLine("expected else");
             return null;
         }
 
-        _scanner?.GetNextToken();
+        _scanner.GetNextToken();
 
         ExpressionAST? elseExpression = ParseExpression();
         if (elseExpression is null)
@@ -198,24 +198,24 @@ public class Parser : IParser
 
     public ExpressionAST? ParseForExpression()
     {
-        _scanner?.GetNextToken(); // eat the for.
+        _scanner.GetNextToken(); // eat the for.
 
-        if (_scanner?.CurrentToken != (int)Token.IDENTIFIER)
+        if (_scanner.CurrentToken != (int)Token.IDENTIFIER)
         {
             Console.WriteLine("expected identifier after for");
             return null;
         }
 
         string? idName = _scanner.LastIdentifier;
-        _scanner?.GetNextToken(); // eat identifier.
+        _scanner.GetNextToken(); // eat identifier.
 
-        if (_scanner?.CurrentToken != '=')
+        if (_scanner.CurrentToken != '=')
         {
             Console.WriteLine("expected '=' after for");
             return null;
         }
 
-        _scanner?.GetNextToken(); // eat '='.
+        _scanner.GetNextToken(); // eat '='.
 
         ExpressionAST? startExpression = ParseExpression();
         if (startExpression is null)
@@ -223,13 +223,13 @@ public class Parser : IParser
             return null;
         }
 
-        if (_scanner?.CurrentToken != ',')
+        if (_scanner.CurrentToken != ',')
         {
             Console.WriteLine("expected ',' after for start value");
             return null;
         }
 
-        _scanner?.GetNextToken();
+        _scanner.GetNextToken();
 
         ExpressionAST? endExpression = ParseExpression();
         if (endExpression is null)
@@ -239,9 +239,9 @@ public class Parser : IParser
 
         // The step value is optional;
         ExpressionAST? stepExpression = null;
-        if (_scanner?.CurrentToken == ',')
+        if (_scanner.CurrentToken == ',')
         {
-            _scanner?.GetNextToken();
+            _scanner.GetNextToken();
             stepExpression = ParseExpression();
             if (stepExpression is null)
             {
@@ -249,13 +249,13 @@ public class Parser : IParser
             }
         }
 
-        if (_scanner?.CurrentToken != (int)Token.IN)
+        if (_scanner.CurrentToken != (int)Token.IN)
         {
             Console.WriteLine("expected 'in' after for");
             return null;
         }
 
-        _scanner?.GetNextToken();
+        _scanner.GetNextToken();
         ExpressionAST? bodyExpression = ParseExpression();
         if (bodyExpression is null)
         {
@@ -270,7 +270,7 @@ public class Parser : IParser
     {
         while (true)
         {
-            int? tokenPrecedence = _scanner?.GetTokenPrecedence();
+            int? tokenPrecedence = _scanner.GetTokenPrecedence();
             // If this is a binop that binds at least as tightly as the current binop,
             // consume it, otherwise we are done.
             if (tokenPrecedence < expressionPrecedence)
@@ -278,8 +278,8 @@ public class Parser : IParser
                 return lhs;
             }
             // Okay, we know this is a binop.
-            int? binaryOperation = _scanner?.CurrentToken;
-            _scanner?.GetNextToken();  // eat binop
+            int? binaryOperation = _scanner.CurrentToken;
+            _scanner.GetNextToken();  // eat binop
 
             // Parse the primary expression after the binary operator.
             ExpressionAST? rhs = ParsePrimary();
@@ -290,7 +290,7 @@ public class Parser : IParser
 
             // If BinOp binds less tightly with RHS than the operator after RHS, let
             // the pending operator take RHS as its LHS.
-            int? nextPrecedence = _scanner?.GetTokenPrecedence();
+            int? nextPrecedence = _scanner.GetTokenPrecedence();
             if (tokenPrecedence < nextPrecedence)
             {
                 rhs = ParseBinaryOperationRHS(tokenPrecedence + 1, ref rhs);
@@ -305,7 +305,7 @@ public class Parser : IParser
         }
     }
 
-    private ExpressionAST? ParsePrimary() => _scanner?.CurrentToken switch
+    private ExpressionAST? ParsePrimary() => _scanner.CurrentToken switch
     {
         (int) Token.IDENTIFIER => ParseIdentifierExpression(),
         (int) Token.NUMBER => ParseNumberExpression(),
@@ -318,17 +318,17 @@ public class Parser : IParser
 
     private PrototypeExpressionAST? ParsePrototype()
     {
-        if (_scanner?.CurrentToken != (int)Token.IDENTIFIER)
+        if (_scanner.CurrentToken != (int)Token.IDENTIFIER)
         {
             Console.WriteLine("Expected function name in prototype");
             return null;
         }
 
-        string? functionName = _scanner?.LastIdentifier;
+        string? functionName = _scanner.LastIdentifier;
 
-        _scanner?.GetNextToken();
+        _scanner.GetNextToken();
 
-        if (_scanner?.CurrentToken != '(')
+        if (_scanner.CurrentToken != '(')
         {
             Console.WriteLine("Expected '(' in prototype");
             return null;
@@ -337,7 +337,7 @@ public class Parser : IParser
         List<string> argumentNames = new();
         while (_scanner.GetNextToken() == (int)Token.IDENTIFIER)
         {
-            argumentNames?.Add(_scanner.LastIdentifier);
+            argumentNames.Add(_scanner.LastIdentifier);
         }
 
         if (_scanner.CurrentToken != ')')
@@ -377,12 +377,12 @@ public class Parser : IParser
         }
 
         // Make an anonymous proto.
-        PrototypeExpressionAST proto = new PrototypeExpressionAST(string.Empty, new List<string>());
+        PrototypeExpressionAST proto = new(string.Empty, new List<string>());
         return new FunctionExpressionAST(proto, e);
     }
     private PrototypeExpressionAST? ParseExtern()
     {
-        _scanner?.GetNextToken();  // eat extern.
+        _scanner.GetNextToken();  // eat extern.
         return ParsePrototype();
     }
 }

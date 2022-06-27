@@ -8,5 +8,5 @@ public interface IReadOnlyEnvironment
 {
     IReadOnlyDictionary<Token, IdExpression> TokenIdExpression { get; }
     IReadOnlyEnvironment PreviousEnvironment { get; }
-    public IdExpression Get(Token token);
+    public IdExpression? Get(Token token);
 }

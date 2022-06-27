@@ -1,6 +1,6 @@
 ﻿namespace LLVMApp.AST;
 
-public record BinaryExpressionAST(char? Operation, ExpressionAST? Lhs, ExpressionAST? Rhs) 
+public record BinaryExpressionAST(char Operation, ExpressionAST Lhs, ExpressionAST Rhs) 
     : ExpressionAST(Operation switch
     {
         '+' => ExpressionType.AdditionExpression,
@@ -10,8 +10,9 @@ public record BinaryExpressionAST(char? Operation, ExpressionAST? Lhs, Expressio
         _ => throw new ArgumentException($"operator {Operation} is not a valid operator")
     })
 {
-    public override ExpressionAST? Accept(ExpressionVisitor? visitor)
+    public override ExpressionAST Accept(ExpressionVisitor visitor)
     {
-        return visitor?.VisitBinaryExpressionAST(this);
+        ArgumentNullException.ThrowIfNull(visitor);
+        return visitor.VisitBinaryExpressionAST(this);
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace LLVMApp.AST;
 
-public record NumberExpressionAST(double Value) : ExpressionAST(ExpressionType.NumberExpression)
+public record VariableExpressionAST(string Name) : ExpressionAST(ExpressionType.VariableExpression)
 {
     public override ExpressionAST Accept(ExpressionVisitor visitor)
     {
         ArgumentNullException.ThrowIfNull(visitor);
-        return visitor.VisitNumberExpressionAST(this);
+        return visitor.VisitVariableExpressionAST(this);
     }
 }

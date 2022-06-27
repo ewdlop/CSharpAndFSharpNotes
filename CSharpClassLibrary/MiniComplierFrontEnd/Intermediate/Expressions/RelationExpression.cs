@@ -7,7 +7,7 @@ namespace CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Expressions;
 public record RelationExpression(Token Token, IExpression Expression1, IExpression Expression2, ILabelEmitter Node)
     : LogicalExpression(Token, Expression1, Expression2, Node, Check(Expression1.TypeToken, Expression2.TypeToken))
 {
-    public static TypeToken Check(TypeToken typeToken1, TypeToken typeToken2)
+    public new static TypeToken? Check(TypeToken typeToken1, TypeToken typeToken2)
     {
         if(typeToken1 is ArrayTypeToken || typeToken2 is ArrayTypeToken)
         {

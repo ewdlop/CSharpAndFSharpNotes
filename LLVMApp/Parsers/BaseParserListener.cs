@@ -7,16 +7,16 @@ using System.Collections.Generic;
 public class BaseParserListener
 {
     private static readonly Type IParserListenerType = typeof(IParserListener);
-    private readonly Stack<string> _descentStack = new Stack<string>();
-    private readonly Stack<ASTContext> _ascentStack = new Stack<ASTContext>();
-    private readonly IParserListener? _parserListener;
-    public BaseParserListener(IParserListener? parserListener)
+    private readonly Stack<string> _descentStack = new();
+    private readonly Stack<ASTContext> _ascentStack = new();
+    private readonly IParserListener _parserListener;
+    public BaseParserListener(IParserListener parserListener)
     {
         _parserListener = parserListener;
     }
 
     public void EnterRule(string ruleName) => _descentStack.Push(ruleName);
-    public void ExitRule(ExpressionAST? argument)
+    public void ExitRule(ExpressionAST argument)
     {
         string ruleName = _descentStack.Pop();
         _ascentStack.Push(new ASTContext(IParserListenerType.GetMethod("Exit" + ruleName), _parserListener, argument));

@@ -12,37 +12,37 @@ namespace CSharpClassLibrary.Reflection
 {
     public class Player
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Health { get; set; }
         public int Gold { get; set; }
-        public IList<MiscItem> MiscItems { get; set; }
-        public IList<EquipmentSet> EquipmentSets { get; set; }
+        public IList<MiscItem>? MiscItems { get; set; }
+        public IList<EquipmentSet>? EquipmentSets { get; set; }
 
     }
 
     public class MiscItem
     { 
-        public string MiscItemName { get; set; }
+        public string? MiscItemName { get; set; }
         public int MiscItemWorthValue { get; set; }
     }
 
     public class EquipmentSet
     {
-        public string EquipmentSetName { get; set; }
+        public string? EquipmentSetName { get; set; }
         public int? Priceless { get; set; }
-        public IList<Equipment> Equipments { get; set; }
+        public IList<Equipment>? Equipments { get; set; }
     }
 
     public class Equipment
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int EquipmentWorthValue { get; set; }
-        public IList<Stat> Stats { get; set; }
+        public IList<Stat>? Stats { get; set; }
     }
 
     public class Stat
     {
-        public string EquipmentStatName { get; set; }
+        public string? EquipmentStatName { get; set; }
         public int EquipmentStatBonus { get; set; }
     }
 
@@ -190,8 +190,8 @@ namespace CSharpClassLibrary.Reflection
             //List<Dictionary<PropertyInfo,object>> csvPage = new();
             //csvPage.AttachFlatableObject(test);
 
-            int count = 0;
-            IDictionary<string, int> Dict = new Dictionary<string, int>();
+            //int count = 0;
+            //IDictionary<string, int> Dict = new Dictionary<string, int>();
 
             //var test = GetDecomposedPropertyTuple(player);
 
@@ -219,8 +219,8 @@ namespace CSharpClassLibrary.Reflection
         #region attemp1
         public static void AppendObjectAsDecomposed(this IList<Dictionary<PropertyInfo, object>> page,
                                                     object composedObject,
-                                                    Dictionary<PropertyInfo, object> row = null,
-                                                    Dictionary<PropertyInfo, object> tempRow = null,
+                                                    Dictionary<PropertyInfo, object>? row = null,
+                                                    Dictionary<PropertyInfo, object>? tempRow = null,
                                                     int level = 0)
         {
             if(true)
@@ -461,25 +461,25 @@ namespace CSharpClassLibrary.Reflection
                    .Select(IObjectEnumeratorDictonary => (IObjectEnumeratorDictonary.Property, IObjectEnumeratorDictonary.Enumerator.Current));
 
                 // increase enumerators
-                foreach (var Object in IObjectEnumerableDictonaryArray)
+                foreach ((PropertyInfo Property, IEnumerator<object> Enumerator) in IObjectEnumerableDictonaryArray)
                 {
-                    if(Object.Property.Name.CompareTo("PlayerName")==0)
+                    if(Property.Name.CompareTo("PlayerName")==0)
                     {
-                        Log.Warning(Object.Property.Name);
+                        Log.Warning(Property.Name);
                     }
-                    Log.Warning(Object.Property.Name);
+                    Log.Warning(Property.Name);
                     // reset the slot if it couldn't move next
                     //move next has side effect!!!(it moves then check)
                     //wonder why there is no HasNext()?
-                    if (!Object.Enumerator.MoveNext())
+                    if (!Enumerator.MoveNext())
                     {
                         // stop when the last enumerator resets
-                        if (Object.Property == IObjectEnumerableDictonaryArray.Last().Property)
+                        if (Property == IObjectEnumerableDictonaryArray.Last().Property)
                         {
                            yield break; //this break the loop for IEnumerable
                         }
-                        Object.Enumerator.Reset();
-                        Object.Enumerator.MoveNext();
+                        Enumerator.Reset();
+                        Enumerator.MoveNext();
                         // move to the next enumerator if this reseted
                         // this has to be done because some enuermator has a longer "cycle"
                         continue;
@@ -510,7 +510,7 @@ namespace CSharpClassLibrary.Reflection
                     Nullable.GetUnderlyingType(propertyInfo.PropertyType) is not null)
                 {
                     var peekTupleEnumerable = new List<object> { propertyInfo.GetValue(value) };
-                    if (visitedTuple.TryGetValue(propertyInfo, out IEnumerable<object> enumerable))
+                    if (visitedTuple.TryGetValue(propertyInfo, out IEnumerable<object>? enumerable))
                     {
                         var combinedEnumerable = new List<object>()
 ;                       combinedEnumerable.AddRange(enumerable);
@@ -541,7 +541,7 @@ namespace CSharpClassLibrary.Reflection
             }
             return visitedTuple;
         }
-        private static IEnumerable<object> GetEnumerableOfAObjectValueOfAProperty2(PropertyInfo propertyInfo,
+        private static IEnumerable<object>? GetEnumerableOfAObjectValueOfAProperty2(PropertyInfo propertyInfo,
                                                                                    object original)
         {
             if (original is null
@@ -629,8 +629,8 @@ namespace CSharpClassLibrary.Reflection
             }
         }
         private static void AddPropertiesColumn(this IList<ExpandoObject> csvPage, PropertyInfo composedObjectPropertyInfo,
-           IDictionary<string, object> csvRow = null,
-           IDictionary<string, object> tempRow = null)
+           IDictionary<string, object>? csvRow = null,
+           IDictionary<string, object>? tempRow = null)
         {
             //if (csvRow is null)
             //{
@@ -671,7 +671,7 @@ namespace CSharpClassLibrary.Reflection
         static void AttachFlatableObject2(this IList<ExpandoObject> csvPage,
            object test, ref int count,
            IDictionary<string, int> Dict,
-           IDictionary<string, object> csvRow = null)
+           IDictionary<string, object>? csvRow = null)
         {
             foreach (var results in Decompose(test))
             {
@@ -707,7 +707,7 @@ namespace CSharpClassLibrary.Reflection
                 csvRow = null;
             }
         }
-        static void AttachFlatableObject(this IList<ExpandoObject> csvPage, object layeredObject, IDictionary<string, object> csvRow = null)
+        static void AttachFlatableObject(this IList<ExpandoObject> csvPage, object layeredObject, IDictionary<string, object>? csvRow = null)
         {
             if (layeredObject.GetType()
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance)//bitswise or
@@ -886,7 +886,7 @@ namespace CSharpClassLibrary.Reflection
                 }
             }
         }
-        public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
+        public static IEnumerable<IEnumerable<T>>? CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
         {
             if (sequences == null)
             {
@@ -910,15 +910,7 @@ namespace CSharpClassLibrary.Reflection
         {
             foreach (object element in enumerable)
             {
-                IEnumerable candidate = element as IEnumerable;
-                if (candidate != null)
-                {
-                    yield return Flatten(candidate);
-                }
-                else
-                {
-                    yield return element;
-                }
+                yield return element is IEnumerable candidate ? Flatten(candidate) : element;
             }
         }
         public static IEnumerable<T> Flatten<T>(

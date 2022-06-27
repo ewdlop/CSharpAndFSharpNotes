@@ -2,7 +2,7 @@
 {
     public class CarFactory
     {
-        private Car reserved;
+        private readonly Car reserved;
         private int createdCount;
         private bool LostPower;
         public Car CreateGoodCar()

@@ -3,7 +3,6 @@
     public class Car : ICar
     {
         private readonly IEngine _engine;
-        private object _someInTheTrunk;
         public Car(GoodCarEngine engine)
         {
             _engine = engine;

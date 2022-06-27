@@ -1,10 +1,11 @@
 ﻿namespace LLVMApp.AST;
 
-public record CallExpressionAst(string? Calle, IEnumerable<ExpressionAST>? Arguments)
+public record CallExpressionAst(string Calle, IEnumerable<ExpressionAST> Arguments)
     : ExpressionAST(ExpressionType.CallExpression)
 {
-    public override ExpressionAST? Accept(ExpressionVisitor? visitor)
+    public override ExpressionAST Accept(ExpressionVisitor visitor)
     {
-        return visitor?.VisitCallExpressionAST(this);
+        ArgumentNullException.ThrowIfNull(visitor);
+        return visitor.VisitCallExpressionAST(this);
     }
 }

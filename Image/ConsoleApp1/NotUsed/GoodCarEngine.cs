@@ -2,7 +2,7 @@
 {
     public class GoodCarEngine : IEngine
     {
-        private object piston;
+        private readonly object piston;
         public int TopSpeed => 100;
 
         public int CurrentSpeed { get; set; }

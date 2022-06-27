@@ -17,17 +17,17 @@ public class Lexer : ILexer
 
     public string? LastIdentifier { get; private set; }
 
-    public double? LastNumberValue { get; private set; }
+    public double LastNumberValue { get; private set; }
 
     public Lexer(TextReader reader, Dictionary<char, int>? binOpPrecedence)
     {
+        ArgumentNullException.ThrowIfNull(reader);
         _reader = reader;
         _binaryOperationPrecedence = binOpPrecedence;
     }
 
     public int? GetNextToken()
     {
-        if(_reader is null) return null; 
         while (char.IsWhiteSpace((char)_currentCharCode))
         {
             _currentCharCode = _reader.Read(); ;

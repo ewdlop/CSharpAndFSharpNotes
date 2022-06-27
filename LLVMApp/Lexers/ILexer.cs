@@ -6,7 +6,7 @@ public interface ILexer
 
     string? LastIdentifier { get; }
 
-    double? LastNumberValue { get; }
+    double LastNumberValue { get; }
 
     int? GetTokenPrecedence();
 
