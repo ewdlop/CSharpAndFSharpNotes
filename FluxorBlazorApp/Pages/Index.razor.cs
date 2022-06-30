@@ -1,7 +1,8 @@
-public static class Math
+﻿public static class Math
 {
-    public static Func<C, D> NaturalTransformation<A,B,C,D>(Func<C,D> F, Func<Func<C, D>, Func<C, D>> eta)
+    //Natural Transfomration
+    public static Func<Func<C, D>, Func<C, D>> η_x<C,D>(Func<C,D> F, Func<C,D> G)
     {
-        return eta(F);
+        return F => G;
     }
 }

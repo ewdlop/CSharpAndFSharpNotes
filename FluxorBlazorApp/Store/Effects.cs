@@ -14,7 +14,7 @@ namespace FluxorBlazorApp.Pages
         }
 
         [EffectMethod]
-        public async Task HandleFetchDataAction(FetchDataAction action, IDispatcher dispatcher)
+        public async Task HandleFetchDataAction(FetchDataAction<string> action, IDispatcher dispatcher)
         {
             var forecasts = await WeatherForecastService.GetForecastAsync(DateTime.Now);
             dispatcher.Dispatch(new FetchDataResultAction(forecasts));

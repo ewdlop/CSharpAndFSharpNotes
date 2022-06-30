@@ -28,6 +28,6 @@ public partial class FetchData
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new FetchDataAction());
+        Dispatcher.Dispatch(new FetchDataAction<int>());
     }
 }

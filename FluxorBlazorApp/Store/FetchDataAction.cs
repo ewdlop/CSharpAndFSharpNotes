@@ -1,6 +1,6 @@
 ﻿namespace FluxorBlazorApp.Store
 {
-    public class FetchDataAction
+    public class FetchDataAction<T>
     {
 
     }
