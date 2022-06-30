@@ -2,7 +2,7 @@ using FluxorBlazorApp.Data;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using FluxorBlazorApp.Middlewares;
+//using FluxorBlazorApp.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +12,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddFluxor(o => o
                 .ScanAssemblies(typeof(Program).Assembly)
-                .UseRouting()
-                .AddMiddleware<LoggingMiddleware>());
+                .UseRouting());
+                //.AddMiddleware<LoggingMiddleware>());
 builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
