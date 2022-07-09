@@ -70,15 +70,43 @@ public class UnitTest1
         Assert.Equal((x ^ y).GetRuler(), (x - y).GetRuler());
     }
 
+    //[Theory]
+    //[InlineData(2, 1)]
+    //[InlineData(4, 2)]
+    //[InlineData(8, 3)]
+    //[InlineData(16, 4)]
+    //public void Ruler2(int x, int k)
+    //{
+    //    Assert.Equal(k, x.GetRuler2());
+    //    Assert.Equal(x.GetRuler2() + 1, (2 * x).GetRuler2());
+    //    Assert.Equal((x ^ k).GetRuler(), (x - k).GetRuler2());
+    //}
+
     [Theory]
-    [InlineData(2, 1)]
-    [InlineData(4, 2)]
-    [InlineData(8, 3)]
-    [InlineData(16, 4)]
-    public void Ruler2(int x, int k)
+    [InlineData(2, true)]
+    [InlineData(3, true)]
+    [InlineData(5, true)]
+    [InlineData(7, true)]
+    [InlineData(9, false)]
+    [InlineData(11, true)]
+    [InlineData(13, true)]
+    [InlineData(15, false)]
+    public void IsPrimeBigEndian(int x, bool isPrime)
     {
-        Assert.Equal(k, x.GetRuler2());
-        Assert.Equal(x.GetRuler2() + 1, (2 * x).GetRuler2());
-        Assert.Equal((x ^ k).GetRuler(), (x - k).GetRuler2());
+        Assert.Equal(isPrime, x.IsPrimeBigEndian());
+    }
+
+    [Theory]
+    [InlineData(2, true)]
+    [InlineData(3, true)]
+    [InlineData(5, true)]
+    [InlineData(7, true)]
+    [InlineData(9, false)]
+    [InlineData(11, true)]
+    [InlineData(13, true)]
+    [InlineData(15, false)]
+    public void IsPrimeLittleEndian(int x, bool isPrime)
+    {
+        Assert.Equal(isPrime, x.IsPrimeLittleEndian());
     }
 }
