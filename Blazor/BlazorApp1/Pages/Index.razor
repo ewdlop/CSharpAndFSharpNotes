@@ -1,9 +1,31 @@
-﻿@page "/"
+﻿@using System.Threading
+@using BlazorApp1.Services
+@implements IDisposable
+@inject ClipboardService ClipboardService
+@page "/"
 
-<PageTitle>Index</PageTitle>
+<button class="btn btn-primary" @onclick="CopyToClipboard" disabled=@state.IsDisabled>
+    <i class="@state.ClassName"></i> @state.Text
+</button>
 
-<h1>Hello, world!</h1>
+@code {
+    CancellationTokenSource cts = new();
+    State state = new("Copy", "oi oi-clipboard");
 
-Welcome to your new app.
+    async Task CopyToClipboard()
+    {
+        var temp = state;
+        state = new("Copied", "oi oi-check", IsDisabled: true);
+        await ClipboardService.WriteTextAsync("https://www.meziantou.net".AsMemory());
+        await Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
+        state = temp;
+    }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    public void Dispose()
+    {
+        cts.Cancel(); // Cancel Task.Delay
+        cts.Dispose();
+    }
+
+    record State(string Text, string ClassName, bool IsDisabled = false);
+}

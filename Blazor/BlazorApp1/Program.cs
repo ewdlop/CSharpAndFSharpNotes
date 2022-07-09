@@ -1,5 +1,6 @@
 using BlazorApp1.Areas.Identity.Data;
 using BlazorApp1.Data;
+using BlazorApp1.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,8 @@ builder.Services.AddDefaultIdentity<BlazorApp1User>(options => options.SignIn.Re
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<ClipboardService>();
+
 
 var app = builder.Build();
 
