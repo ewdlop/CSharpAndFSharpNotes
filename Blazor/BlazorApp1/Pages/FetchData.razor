@@ -1,48 +1,14 @@
 ﻿@page "/fetchdata"
 
-<PageTitle>Weather forecast</PageTitle>
+<div>Parent Count: @parentCount</div>
 
-@using BlazorApp1.Data
-@inject WeatherForecastService ForecastService
+<button @onclick="UpateParentCount">ParentCount</button>
+<button @onclick="UpateParentCountAsync">ParentCountAsync</button>
+<button @onclick="UpateCount">CountField</button>
+<button @onclick="UpateCountAsync">CountField</button>
+<button @onclick="UpateCountProperty">CountProperty</button>
+<button @onclick="UpateCountPropertyAsync">CountProperty</button>
+<button @onclick="StateHasChangedTest">StateHasChange</button>
+<button @onclick="StateHasChangedTestAsync">StateHasChangeAsync</button>
 
-<h1>Weather forecast</h1>
-
-<p>This component demonstrates fetching data from a service.</p>
-
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@code {
-    private WeatherForecast[]? forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
-    }
-}
+<Child TestField="@count" TestProperty="@CountProperty"></Child>
