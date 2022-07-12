@@ -5,6 +5,8 @@ public partial class FetchData
     public int count = 0;
     public int CountProperty = 0;
     public int parentCount = 0;
+    private int i;
+
     private void StateHasChangedTest()
     {
         Console.WriteLine("==================StateHasChanged==================");
@@ -25,6 +27,7 @@ public partial class FetchData
     private async Task UpateParentCountAsync()
     {
         Console.WriteLine("==================UpateParentCountAsync==================");
+        Console.WriteLine($"ParentCount:{parentCount}");
         await Task.Delay(1);
         parentCount++;
     }
@@ -56,8 +59,10 @@ public partial class FetchData
 
     protected override void OnInitialized()
     {
+        i++;
         Console.WriteLine("====");
         Console.WriteLine("Parent OnInitialized");
+        Console.WriteLine($"i:{i}");
         base.OnInitialized();
     }
 
@@ -84,11 +89,12 @@ public partial class FetchData
         Console.WriteLine("Parent OnAfterRender");
         if(firstRender)
         {
-            parentCount++;
-            CountProperty++;
-            count++;
-            StateHasChanged();
+            //parentCount++;
+            //CountProperty++;
+            //count++;
+            //StateHasChanged();
         }
+        Console.WriteLine($"ParentCount:{parentCount}");
         base.OnAfterRender(firstRender);
     }
 

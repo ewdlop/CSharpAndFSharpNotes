@@ -39,7 +39,7 @@ public static class PrimeNumber
         if (x switch {
                 <=0 => false,
                 2 => true,
-                >= 1024 => throw new NotSupportedException("Does not work for integer greater than or equal to 1024"),
+                >= 1024 => throw new NotDefineException("Does not work for integer greater than or equal to 1024"),
                 _ => true
             })
         {
@@ -59,7 +59,7 @@ public static class PrimeNumber
             {
                 <= 0 => false,
                 2 => true,
-                >= 1024 => throw new NotSupportedException("Does not work for integer greater than or equal to 1024"),
+                >= 1024 => throw new NotDefineException("Does not work for integer greater than or equal to 1024"),
                 _ => true
             })
         {

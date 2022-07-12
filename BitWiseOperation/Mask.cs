@@ -15,7 +15,7 @@ public static class Mask
         if(k == d || k > d) throw new ApplicationException("k must be less than d");
         int k1 = Convert.ToInt32(k);
         int d1 = Convert.ToInt32(d);
-        return (2 << (2 << d1) - 1) / (2<< (2 << k1) + 1);
+        return (2 << (2 << d1 - 1) - 1) / (2<< (2 << k1 - 1) + 1);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public static class Mask
         if(k < 0) throw new ApplicationException("k must be great than or equal to 0");
         if(d <= 0) throw new ApplicationException("d must be greater than 0");
         if(k > d) throw new ApplicationException("k must be less than d");
-        return (2 << (2 << d) - 1) / (2 << (2 << k) + 1);
+        return (2 << (2 << d - 1) - 1) / (2 << (2 << k - 1) + 1);
     }
 
     public static int Divide(this int dividend, int divisor)

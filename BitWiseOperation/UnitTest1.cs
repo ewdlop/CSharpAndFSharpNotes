@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xunit;
 
 namespace BitWiseOperation;
@@ -44,8 +45,8 @@ public class UnitTest1
     public void Shift(byte x, byte y)
     {
         const int power = 2;
-        Assert.Equal(Math.Round(Convert.ToDecimal((int)Math.Pow(2,power)*x)),Convert.ToDecimal(x << power));
-        Assert.Equal(Math.Round(Convert.ToDecimal(x / (int)Math.Pow(2, power))), Convert.ToDecimal(x >> power));
+        Assert.Equal(Math.Round(Convert.ToDecimal((2 << power - 1) *x)),Convert.ToDecimal(x << power));
+        Assert.Equal(Math.Round(Convert.ToDecimal(x / (2 << power - 1))), Convert.ToDecimal(x >> power));
         Assert.Equal((x&y)<< power, (x<< power) &(y<< power));
     }
 
@@ -55,7 +56,7 @@ public class UnitTest1
     public void Mod(byte x, byte y)
     {
         const int power = 2;
-        Assert.Equal(x% (int)Math.Pow(2, power), x&((int)Math.Pow(2, power)-1));
+        Assert.Equal(x% (2 << power - 1), x&((2 << power - 1) - 1));
     }
 
     [Theory]
@@ -70,6 +71,16 @@ public class UnitTest1
         Assert.Equal((x ^ y).GetRuler(), (x - y).GetRuler());
     }
 
+    [Theory]
+    [InlineData(2, 1)]
+    [InlineData(4, 2)]
+    [InlineData(8, 3)]
+    [InlineData(16, 4)]
+    public void Ruler3(int x, int y)
+    {
+        Assert.Equal(y, x.GetRuler3());
+    }
+
     //[Theory]
     //[InlineData(2, 1)]
     //[InlineData(4, 2)]
@@ -78,8 +89,6 @@ public class UnitTest1
     //public void Ruler2(int x, int k)
     //{
     //    Assert.Equal(k, x.GetRuler2());
-    //    Assert.Equal(x.GetRuler2() + 1, (2 * x).GetRuler2());
-    //    Assert.Equal((x ^ k).GetRuler(), (x - k).GetRuler2());
     //}
 
     [Theory]
@@ -108,5 +117,48 @@ public class UnitTest1
     public void IsPrimeLittleEndian(int x, bool isPrime)
     {
         Assert.Equal(isPrime, x.IsPrimeLittleEndian());
+    }
+
+    [Theory]
+    [InlineData(32, 5)]
+
+    public void LeftmostBitPlace(int x, int leftmostBitPlace)
+    {
+        Assert.NotEqual(leftmostBitPlace, x.LeftMostBitPlace1());
+    }
+
+    [Theory]
+    [InlineData(2, 2)]
+    [InlineData(3, 2)]
+    [InlineData(4, 4)]
+    [InlineData(5, 4)]
+    [InlineData(8, 8)]
+    [InlineData(9, 8)]
+    [InlineData(16, 16)]
+    [InlineData(32, 32)]
+    [InlineData(64, 64)]
+    [InlineData(128, 128)]
+    public void ExtractLeftMostBit(int x, int ExtractLeftMostBit)
+    {
+        Assert.Equal(ExtractLeftMostBit, x.ExtractLeftMostBit());
+        Assert.Equal(ExtractLeftMostBit, x.ExtractLeftMostBit2());
+    }
+
+    [Theory]
+    [InlineData(2)]
+    [InlineData(4)]
+    [InlineData(8)]
+    [InlineData(16)]
+    public void SideWaySums(int x)
+    {
+        Assert.Equal(x.GetRuler3(), 1 + (x-1).SidewaysSum() - x.SidewaysSum());
+    }
+    
+    [Theory]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void SideWaySums2(int n)
+    {
+        Assert.Equal(n - n.SidewaysSum(), Enumerable.Range(1, n).Select(i => i.GetRuler()).Sum());
     }
 }
