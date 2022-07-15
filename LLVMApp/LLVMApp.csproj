@@ -12,6 +12,7 @@
     <PackageReference Include="libLLVM" Version="14.0.0" />
     <PackageReference Include="libLLVM.runtime.win-x64" Version="14.0.0" />
     <PackageReference Include="LLVMSharp" Version="14.0.0-beta1" />
+    <PackageReference Include="LLVMSharp.Interop" Version="14.0.0-beta1" />
   </ItemGroup>
 
 </Project>

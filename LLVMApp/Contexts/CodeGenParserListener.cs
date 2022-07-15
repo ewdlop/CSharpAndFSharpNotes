@@ -69,11 +69,16 @@ public unsafe class CodeGenParserListener : IParserListener
         LLVMValueRef anonymousFunction = _visitor.PopStack();
         LLVM.DumpValue(anonymousFunction);
         delegate* managed<LLVMOpaqueExecutionEngine*, LLVMOpaqueValue*, void*> delgeateFunc = &LLVM.GetPointerToGlobal;
+        
+        
         delgeateFunc(_executionEngine, anonymousFunction);
         //stuck rip
         //var delgeateFunc = Marshal.GetDelegateForFunctionPointer<Program.Delegate>();
-        LLVM.RunFunctionPassManager(_passManager, anonymousFunction);
-        LLVM.DumpValue(anonymousFunction);
-        //Console.WriteLine($"Evaluated to {delgeateFunc()}" );
+        if(LLVM.RunFunctionPassManager(_passManager, anonymousFunction) != 1);
+        {
+            LLVM.DumpValue(anonymousFunction);
+            //Console.WriteLine($"Evaluated to {delgeateFunc()}" );
+        }
+
     }
 }

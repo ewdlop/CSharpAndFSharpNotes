@@ -7,6 +7,7 @@ namespace LLVMApp.Contexts;
 public unsafe class LLVMContext : IDisposable
 {
     private readonly sbyte* _name;
+    //LLVMOpaqueExecutionEngine
     private readonly LLVMOpaqueExecutionEngine* _engine;
     private LLVMModuleRef _module;
     private LLVMPassManagerRef _passManager;
@@ -33,6 +34,7 @@ public unsafe class LLVMContext : IDisposable
         LLVM.InitializeX86TargetInfo();
         LLVM.InitializeX86Target();
         LLVM.InitializeX86TargetMC();
+      
         fixed (LLVMOpaqueExecutionEngine** enginePtr = &_engine)
         {
             fixed (sbyte* errorMessagePtr = &_errorMessage)
