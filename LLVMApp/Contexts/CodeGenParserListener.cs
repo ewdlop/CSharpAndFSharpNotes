@@ -1,6 +1,7 @@
 ﻿using LLVMApp.AST;
 using LLVMApp.Parsers;
 using LLVMSharp.Interop;
+using System.Runtime.InteropServices;
 
 namespace LLVMApp.Contexts;
 
@@ -8,17 +9,17 @@ public unsafe class CodeGenParserListener : IParserListener
 {
     private readonly CodeGenVisitor _visitor;
 
-    private readonly LLVMOpaqueExecutionEngine* _ee;
+    private readonly LLVMOpaqueExecutionEngine* _executionEngine;
 
     private readonly LLVMPassManagerRef _passManager;
 
     public CodeGenParserListener(
-        LLVMOpaqueExecutionEngine* ee, 
+        LLVMOpaqueExecutionEngine* executionEngine, 
         LLVMPassManagerRef passManager,
         CodeGenVisitor visitor)
     {
         _visitor = visitor;
-        _ee = ee;
+        _executionEngine = executionEngine;
         _passManager = passManager;
     }
     
@@ -26,13 +27,7 @@ public unsafe class CodeGenParserListener : IParserListener
 
     public void EnterHandleDefinition(FunctionExpressionAST data)
     {
-        ArgumentNullException.ThrowIfNull(data);        
-        _visitor.Visit(data);
-        LLVMValueRef function = _visitor.Pop();
-        LLVM.DumpValue(function);
 
-        LLVM.RunFunctionPassManager(_passManager, function);
-        LLVM.DumpValue(function); // Dump the function for exposition purposes.
     }
 
     public void EnterHandleExtern(PrototypeExpressionAST data)
@@ -47,16 +42,38 @@ public unsafe class CodeGenParserListener : IParserListener
 
     public void ExitHandleDefinition(FunctionExpressionAST data)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(data);
+        _visitor.Visit(data);
+        LLVMValueRef function = _visitor.PopStack();
+        LLVM.DumpValue(function);
+
+        if(LLVM.RunFunctionPassManager(_passManager, function) != 1)
+        {
+            LLVM.DumpValue(function); // Dump the function for exposition purposes.
+        }
+        else
+        {
+            
+        }
     }
 
     public void ExitHandleExtern(PrototypeExpressionAST data)
     {
-        throw new NotImplementedException();
+        _visitor.Visit(data);
+        LLVM.DumpValue(_visitor.PopStack());
     }
 
     public void ExitHandleTopLevelExpression(FunctionExpressionAST data)
     {
-        throw new NotImplementedException();
+        _visitor.Visit(data);
+        LLVMValueRef anonymousFunction = _visitor.PopStack();
+        LLVM.DumpValue(anonymousFunction);
+        delegate* managed<LLVMOpaqueExecutionEngine*, LLVMOpaqueValue*, void*> delgeateFunc = &LLVM.GetPointerToGlobal;
+        delgeateFunc(_executionEngine, anonymousFunction);
+        //stuck rip
+        //var delgeateFunc = Marshal.GetDelegateForFunctionPointer<Program.Delegate>();
+        LLVM.RunFunctionPassManager(_passManager, anonymousFunction);
+        LLVM.DumpValue(anonymousFunction);
+        //Console.WriteLine($"Evaluated to {delgeateFunc()}" );
     }
 }

@@ -19,7 +19,7 @@ public unsafe record CodeGenVisitor : ExpressionVisitor
         _builder = builder;
     }
 
-    public LLVMValueRef Pop() => _valueStack.Pop();
+    public LLVMValueRef PopStack() => _valueStack.Pop();
 
     public void ClearResultStack() => _valueStack.Clear();
 

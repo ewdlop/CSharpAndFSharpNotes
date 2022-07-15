@@ -1,10 +1,15 @@
 ﻿using LLVMApp.Contexts;
 
-Run();
-unsafe static void Run()
-{
+namespace LLVMApp;
 
-    sbyte* name = stackalloc sbyte[] { Convert.ToSByte('J'), Convert.ToSByte('I'), Convert.ToSByte('T') };
-    using LLVMContext context = new(name);
-    context.Start();
+public sealed class Program
+{
+    public delegate double Delegate();
+
+    public unsafe static void Main(string[] args)
+    {
+        sbyte* name = stackalloc sbyte[] { Convert.ToSByte('J'), Convert.ToSByte('I'), Convert.ToSByte('T') };
+        using LLVMContext context = new(name);
+        context.Start();
+    }
 }

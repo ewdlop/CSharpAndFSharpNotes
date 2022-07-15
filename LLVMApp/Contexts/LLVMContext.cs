@@ -4,8 +4,9 @@ using LLVMSharp.Interop;
 
 namespace LLVMApp.Contexts;
 
-public unsafe record LLVMContext(sbyte* Name) : IDisposable
+public unsafe class LLVMContext : IDisposable
 {
+    private readonly sbyte* _name;
     private readonly LLVMOpaqueExecutionEngine* _engine;
     private LLVMModuleRef _module;
     private LLVMPassManagerRef _passManager;
@@ -15,12 +16,17 @@ public unsafe record LLVMContext(sbyte* Name) : IDisposable
     private readonly sbyte _errorMessage;
     private bool disposedValue;
 
+    public LLVMContext(sbyte* name)
+    {
+        _name = name;
+    }
+
     public void Start()
     {
         //https://llvm.org/docs/_images/MCJIT-engine-builder.png
         // Make the module, which holds all the code.
 
-        _module = LLVM.ModuleCreateWithName(Name);
+        _module = LLVM.ModuleCreateWithName(_name);
         _builder = LLVM.CreateBuilder();
 
         LLVM.LinkInMCJIT(); //https://llvm.org/docs/MCJITDesignAndImplementation.html
@@ -68,6 +74,7 @@ public unsafe record LLVMContext(sbyte* Name) : IDisposable
                 
             }
         }
+        
         IParserListener codeGenlistener = new CodeGenParserListener(_engine, _passManager, new CodeGenVisitor(_module, _builder));
         Dictionary<char, int> binaryOperatorPrecedence = new()
         {
@@ -81,6 +88,10 @@ public unsafe record LLVMContext(sbyte* Name) : IDisposable
         parser = new Parser(scanner, codeGenlistener);
 
         MainLoop();
+
+        
+        // Dispose of the module, pass manager, and builder.
+        Dispose(true);
     }
 
     private void MainLoop()
