@@ -1,10 +1,12 @@
 ﻿using LLVMApp.AST;
 using LLVMSharp.Interop;
+using System.Runtime.InteropServices;
 
 namespace LLVMApp.Contexts;
 
 public unsafe record CodeGenVisitor : ExpressionVisitor
 {
+    private const string addtmp = "addtmp";
     //private static readonly LLVMBool LLVMBoolFalse = new LLVMBool(0);
     private static readonly LLVMValueRef NullValue = new(IntPtr.Zero);
     private readonly LLVMModuleRef _module;
@@ -58,11 +60,15 @@ public unsafe record CodeGenVisitor : ExpressionVisitor
 
         LLVMValueRef n;
 
-        //switch (node.NodeType)
-        //{
-        //    case ExpressionType.AdditionExpression:
-        //        n = LLVM.BuildFAdd(_builder, l, r, "addtmp");
-        //        break;
+        IntPtr addtmpPtr = IntPtr.Zero;
+        addtmpPtr = Marshal.StringToHGlobalAnsi(addtmp);
+        //System.Security.SecureString s = new System.Security.SecureString();
+        //Marshal.SecureStringToGlobalAllocUnicode(addtmpPtr);
+        switch (node.NodeType)
+        {
+           case ExpressionType.AdditionExpression:
+                n = LLVM.BuildFAdd(_builder, l, r, (sbyte*)addtmpPtr);
+                break;
         //    case ExpressionType.SubtractExpression:
         //        n = LLVM.BuildFSub(_builder, l, r, "subtmp");
         //        break;
@@ -75,7 +81,7 @@ public unsafe record CodeGenVisitor : ExpressionVisitor
         //        break;
         //    default:
         //        throw new Exception("invalid binary operator");
-        //}
+        }
 
         //_valueStack.Push(n);
         return node;

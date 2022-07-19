@@ -25,5 +25,4 @@ namespace CSharpClassLibrary.FP
         public static Future<T> Unit<T>(this T value) => new(value);
     }
 
-
 }

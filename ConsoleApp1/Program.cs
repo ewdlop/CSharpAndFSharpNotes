@@ -2,4 +2,4 @@
 using BenchmarkDotNet.Running;
 
 //BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<LazyTasks>();
-BenchmarkRunner.Run<ParallelCalls>();
+BenchmarkRunner.Run<DelegateClass>();
