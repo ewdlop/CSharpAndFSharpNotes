@@ -1,4 +1,6 @@
-﻿@*@using System.Threading
+﻿@page "/"
+
+@*@using System.Threading
 @using BlazorApp1.Services
 @implements IDisposable
 @inject ClipboardService ClipboardService
@@ -29,3 +31,21 @@
 
     record State(string Text, string ClassName, bool IsDisabled = false);
 }*@
+
+<div style="height:500px; overflow-y:scroll" tabindex="-1">
+    <Virtualize Context="employee" ItemsProvider="@LoadEmployees">
+        <ItemContent>
+            <p @key="employee">
+                test
+            </p>
+        </ItemContent>
+        <Placeholder>
+            <p>
+                Loading&hellip;
+            </p>
+        </Placeholder>
+    </Virtualize>
+</div>
+
+
+        

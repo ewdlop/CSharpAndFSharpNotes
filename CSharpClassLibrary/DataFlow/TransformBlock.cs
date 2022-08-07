@@ -1,5 +1,8 @@
 ﻿using Nito;
 using System;
+using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
