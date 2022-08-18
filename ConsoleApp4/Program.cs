@@ -1,4 +1,12 @@
-﻿//// See https://aka.ms/new-console-template for more information
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+using CommunityToolkit.HighPerformance.Buffers;
+using FASTER.core;
+using System.Buffers;
+using System.Diagnostics;
+//// See https://aka.ms/new-console-template for more information
 //Console.WriteLine("Hello, World!");
 
 //CustomTaskScheduler customTaskScheduler = new();
@@ -46,5 +54,126 @@
 //        throw new NotImplementedException();
 //    }
 //}
+BenchmarkRunner.Run<BenchmarkTest>();
 
-using CommunityToolkit;
+int[] buffer2 = ArrayPool<int>.Shared.Rent(5);
+
+try
+{
+    // Slice the span, as it might be larger than the requested size
+    Span<int> span2 = buffer2.AsSpan(0, 5);
+
+    // Use the span here
+}
+finally
+{
+    ArrayPool<int>.Shared.Return(buffer2);
+}
+
+using SpanOwner<int> buffer = SpanOwner<int>.Allocate(5);
+
+Span<int> span = buffer.Span;
+
+[MemoryDiagnoser]
+[SimpleJob(RuntimeMoniker.Net60)]
+public class BenchmarkTest
+{
+
+    [Benchmark]
+    public void Test()
+    {
+        GetBytesFromFile("test.txt");
+    }
+
+    [Benchmark]
+    public void Test2()
+    {
+        GetBytesFromFile2("test.txt");
+    }        
+
+    static MemoryOwner<byte> GetBytesFromFile(string path)
+    {
+        using Stream stream = File.OpenRead(path);
+
+        MemoryOwner<byte> buffer = MemoryOwner<byte>.Allocate((int)stream.Length);
+
+        stream.Read(buffer.Span);
+        return buffer;
+    }
+
+
+    static (byte[] Buffer, int Length) GetBytesFromFile2(string path)
+    {
+        using Stream stream = File.OpenRead(path);
+
+        byte[] buffer = ArrayPool<byte>.Shared.Rent((int)stream.Length);
+        
+        stream.Read(buffer, 0, (int)stream.Length);
+        return (buffer, (int)stream.Length);
+    }
+
+    static async Task<(byte[] Buffer, int Length)> GetBytesFromFile2Async(string path)
+    {
+        using Stream stream = File.OpenRead(path);
+
+        byte[] buffer = ArrayPool<byte>.Shared.Rent((int)stream.Length);
+
+        await stream.ReadAsync(buffer.AsMemory(0, (int)stream.Length));
+
+        return (buffer, (int)stream.Length);
+    }
+
+    static async Task<MemoryOwner<byte>> GetBytesFromFileAsync(string path)
+    {
+        using Stream stream = File.OpenRead(path);
+
+        MemoryOwner<byte> buffer = MemoryOwner<byte>.Allocate((int)stream.Length);
+
+        await stream.ReadAsync(buffer.Memory);
+
+        return buffer;
+    }
+
+    static string GetHost(string url)
+    {
+        // We assume the input might start either with eg. https:// (or other prefix),
+        // or directly with the host name. Furthermore, we also assume that the input
+        // URL will always have a '/' character right after the host name.
+        // For instance: "https://docs.microsoft.com/dotnet/api/system.string.intern".
+        int
+            prefixOffset = url.AsSpan().IndexOf(stackalloc char[] { ':', '/', '/' }),
+            startIndex = prefixOffset == -1 ? 0 : prefixOffset + 3,
+            endIndex = url.AsSpan(startIndex).IndexOf('/');
+
+        // In this example, it would be "docs.microsoft.com"
+        ReadOnlySpan<char> span = url.AsSpan(startIndex, endIndex);
+
+        return StringPool.Shared.GetOrAdd(span);
+    }
+    static void Faster()
+    {
+        FasterKVSettings<long, long> settings = new FasterKVSettings<long, long>("c:/temp"); // backing storage device
+        using FasterKV<long, long> store = new FasterKV<long, long>(settings);
+
+        // Create a session per sequence of interactions with FASTER
+        // We use default callback functions with a custom merger: RMW merges input by adding it to value
+        using ClientSession<long, long, long, long, Empty, IFunctions<long, long, long, long, Empty>>
+            session = store.NewSession(new SimpleFunctions<long, long>((a, b) => a + b));
+        
+
+
+        long key = 1, value = 1, input = 10, output = 0;
+
+        // Upsert and Read
+        session.Upsert(ref key, ref value);
+        session.Read(ref key, ref output);
+        Debug.Assert(output == value);
+
+        //https://en.wikipedia.org/wiki/Read%E2%80%93modify%E2%80%93write
+        // Read-Modify-Write (add input to value)
+        session.RMW(ref key, ref input);
+        session.RMW(ref key, ref input, ref output);
+        Debug.Assert(output == value + 20);
+    }
+}
+
