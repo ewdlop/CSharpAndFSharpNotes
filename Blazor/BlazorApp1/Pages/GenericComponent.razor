@@ -1,0 +1,28 @@
+﻿@typeparam TItem
+@using System.Diagnostics.CodeAnalysis
+
+@*<table class="table">
+    <thead>
+        <tr>@TableHeader</tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Items)
+        {
+            if (RowTemplate is not null)
+            {
+                <tr>@RowTemplate(item)</tr>
+            }
+        }
+    </tbody>
+</table>
+
+<GenericComponent Items="pets">
+    <TableHeader>
+        <th>ID</th>
+        <th>Name</th>
+    </TableHeader>
+    <RowTemplate Context="pet">
+        <td>@pet.PetId</td>
+        <td>@pet.Name</td>
+    </RowTemplate>
+</GenericComponent>*@
