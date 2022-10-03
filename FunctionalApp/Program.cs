@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿// See https://aka.ms/new-consoMonadle-template for more information
 
 Not<Not<int>> proof_of_not_not_int = CreateDoubleNegative(5);
 
