@@ -175,5 +175,13 @@ public class BenchmarkTest
         session.RMW(ref key, ref input, ref output);
         Debug.Assert(output == value + 20);
     }
+
+    public static string FindCollectionName(Type type) =>
+    type switch
+    {
+        _ when typeof(int).IsAssignableFrom(type) => "Messages",
+        _ when typeof(double).IsAssignableFrom(type) => "UserData",
+        _ => ""
+    };
 }
 
