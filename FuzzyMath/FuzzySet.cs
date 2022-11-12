@@ -12,7 +12,7 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
     public required Func<T1, T2> MemberShip { get; init; }
     public required Func<T2, T2> Negator { get; set; } 
     public required Func<T2, T2, T2> TNorm { get; init; }
-    public FuzzySet<T1, T2> Complement => this with
+    public FuzzySet<T1, T2> ToComplement => this with
     {
         MemberShip = element => Negator(MemberShip(element))
     };

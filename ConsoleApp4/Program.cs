@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
+using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
 using FASTER.core;
 using System.Buffers;
@@ -183,5 +184,56 @@ public class BenchmarkTest
         _ when typeof(double).IsAssignableFrom(type) => "UserData",
         _ => ""
     };
+}
+
+public static class ListPattern
+{
+    public static void Test()
+    {
+        int[] fibonacci = { 1, 2, 3, 5, 8 };
+        bool result = false;
+
+        // result is false, length not matching
+        result = fibonacci is [_, _, 3, _];
+
+        // result is false, 3 is not at same position
+        result = fibonacci is [_, _, _, 3, _];
+
+        // result is false, length is matching but 2 and 3 not at same positions
+        result = fibonacci is [2, _, 3, _, _];
+
+        // result is true, single element and its position and length is matching
+        result = fibonacci is [1, _, _, _, _];
+
+        // result is true, multiple elements and their positions and length is matching
+        result = fibonacci is [1, _, 3, _, _];
+
+        result = fibonacci switch
+        {
+            [_, _, 3, _] => true,
+            [_, _, _, 3, _] => true,
+            [2, _, 3, _, _] => true,
+            [1, _, _, _, _] => true,
+            [0, _, 3, _, _] => true,
+            _ => false
+        };
+
+        var s = fibonacci.AsSpan() switch
+        {
+            [] => 0,
+            /*[var first, _] => first*/
+            [var head, var next,..var rest] => head + next + rest[0],
+            ////[var first, .., var last] => first + last,
+            ////[var first, ..var anyBesideLast, var last] => first + anyBesideLast[0] + last,
+            [var head, .. var tail] => head + tail[0],
+        };
+
+        List<int> list = new List<int> { 1, 2, 3, 5, 8 };
+        int s2 = list.AsSpan() switch
+        {
+            [var head, var next, .. var rest] => head + next + rest[0],
+            _ => 0
+        };
+    }
 }
 

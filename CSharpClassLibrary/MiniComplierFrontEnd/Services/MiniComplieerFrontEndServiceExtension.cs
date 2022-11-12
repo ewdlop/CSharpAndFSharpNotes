@@ -7,6 +7,7 @@ using CSharpClassLibrary.MiniComplierFrontEnd.Lexers;
 using CSharpClassLibrary.MiniComplierFrontEnd.Parsers.Behaviors;
 using CSharpClassLibrary.MiniComplierFrontEnd.Lexers.Tokenizer;
 using CSharpClassLibrary.MiniComplierFrontEnd.Intermediate.Emitters;
+using Environment = CSharpClassLibrary.MiniComplierFrontEnd.Symbols.Environment;
 
 namespace CSharpClassLibrary.MiniComplierFrontEnd.Services;
 
