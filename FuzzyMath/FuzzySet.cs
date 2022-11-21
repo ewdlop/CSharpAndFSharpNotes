@@ -3,7 +3,7 @@
 namespace FuzzyMath;
 
 public record FuzzySet<T1,T2> where T1: INumber<T1>
-    where T2: INumber<T2>
+    where T2: struct, INumber<T2> 
 {
     public required HashSet<T1> BaseSet { get; init; }
     /// <summary>
@@ -97,7 +97,7 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
     /// Calcuate distinct cuts, actual defintion is harder to compute
     /// </summary>
     /// <returns></returns>
-    public HashSet<T2> LevelSet() => BaseSet.Select(e => MemberShip(e)).ToHashSet();
+    public IEnumerable<T2> AsLevel => BaseSet.Select(e => MemberShip(e));
     public bool IsEmpty => BaseSet.All(e => MemberShip(e) == T2.Zero);
     public bool IsSetEqual(FuzzySet<T1,T2> set) => BaseSet.All(e => MemberShip(e) == set.MemberShip(e));
     public bool IsIncludedIn(FuzzySet<T1, T2> set) => BaseSet.All(e => MemberShip(e) <= set.MemberShip(e));

@@ -236,4 +236,3 @@ public static class ListPattern
         };
     }
 }
-
