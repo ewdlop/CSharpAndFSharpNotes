@@ -176,7 +176,7 @@ namespace Expression4
         {
             LazyValue = new Lazy<T>(() => eval());
         }
-        public Lazy<T> LazyValue { get; init; }
+        private Lazy<T> LazyValue { get; init; }
 
         public T Eval() => LazyValue.Value;
     }
@@ -191,8 +191,76 @@ namespace Expression4
         {
             LazyValue = new Lazy<string?>(() => print());
         }
-        public Lazy<string?> LazyValue { get; init; }
+        private Lazy<string?> LazyValue { get; init; }
 
+        public string? Print() => LazyValue.Value;
+    }
+
+    public class EvalAlgebra<T> : IExprAlgebra<IEvalExpression<T>, T> where T : INumber<T>
+    {
+        public static IEvalExpression<T> Literal(T n)
+            => new Expression<T>(() => n);
+
+        public static IEvalExpression<T> Add(IEvalExpression<T> a, IEvalExpression<T> b)
+            => new Expression<T>(() => a.Eval() + b.Eval());
+    }
+
+    public class PrintAlgebra<T> : IExprAlgebra<PrintExpression<T>, T> where T : INumber<T>
+    {
+        public static PrintExpression<T> Literal(T n)
+            => new PrintExpression<T>(n.ToString);
+
+        public static PrintExpression<T> Add(PrintExpression<T> a, PrintExpression<T> b)
+            => new PrintExpression<T>(() => $"({a.Print()} + {b.Print()})");
+    }
+
+    public interface IExprAlgebraExt<T1, T2> : IExprAlgebra<T1, T2> where T2 : INumber<T2>
+    {
+        abstract static T1 Mult(T1 a, T1 b);
+    }
+
+    public class EvalAlgebraExt<T> : EvalAlgebra<T>, IExprAlgebraExt<IEvalExpression<T>, T> where T : INumber<T>
+    {
+        public static IEvalExpression<T> Mult(IEvalExpression<T> a, IEvalExpression<T> b)
+            => new Expression<T>(() => a.Eval() * b.Eval());
+    }
+}
+
+namespace Expression5 //memozie and static?
+{
+    public interface IExprAlgebra<T1, T2> where T2 : INumber<T2>
+    {
+        static abstract T1 Literal(T2 n);
+        static abstract T1 Add(T1 a, T1 b);
+    }
+
+    public interface IEvalExpression<T>
+    {
+        T Eval();
+    }
+
+    public record Expression<T> : IEvalExpression<T> where T : INumber<T>
+    {
+        public Expression(Func<T> eval)
+        {
+            LazyValue = new Lazy<T>(() => eval());
+        }
+        private Lazy<T> LazyValue { get; init; }
+
+        public T Eval() => LazyValue.Value;
+    }
+    public interface IPrintExpression
+    {
+        public string? Print();
+    }
+
+    public class PrintExpression<T> : IPrintExpression
+    {
+        public PrintExpression(Func<string?> print)
+        {
+            LazyValue = new Lazy<string?>(() => print());
+        }
+        private Lazy<string?> LazyValue { get; init; }
 
         public string? Print() => LazyValue.Value;
     }
