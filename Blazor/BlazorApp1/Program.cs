@@ -1,9 +1,8 @@
 using BlazorApp1.Areas.Identity.Data;
 using BlazorApp1.Data;
 using BlazorApp1.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Identity;
+using Fluxor;
+using Fluxor.Persist.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +16,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<ClipboardService>();
+var currentAssembly = typeof(Program).Assembly;
+builder.Services.AddFluxor(options => 
+    options.ScanAssemblies(currentAssembly).UsePersist());
 
 
 var app = builder.Build();
