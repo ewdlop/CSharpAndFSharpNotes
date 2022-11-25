@@ -1,0 +1,13 @@
+﻿@using MudBlazor
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@page "/store/"
+
+<MudTextField @bind-Value="@NormalText"
+              HelperText="@NormalText" Label="Normal" Variant="Variant.Outlined"
+              Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search"/>
+
+<MudButton Variant="Variant.Filled" OnClick="Add">Add</MudButton>
+@foreach (string item in UrlStoreState.Value.Items)
+{
+    <MudChip Text="@item" />
+}

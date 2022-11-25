@@ -2,8 +2,8 @@ using BlazorApp1.Areas.Identity.Data;
 using BlazorApp1.Data;
 using BlazorApp1.Services;
 using Fluxor;
-using Fluxor.Persist.Middleware;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BlazorApp1ContextConnection");builder.Services.AddDbContext<BlazorApp1Context>(options =>
@@ -17,9 +17,9 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<ClipboardService>();
 var currentAssembly = typeof(Program).Assembly;
-builder.Services.AddFluxor(options => 
-    options.ScanAssemblies(currentAssembly).UsePersist());
-
+builder.Services.AddFluxor(options =>
+    options.ScanAssemblies(currentAssembly));/*.UsePersist());*/
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

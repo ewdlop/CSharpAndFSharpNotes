@@ -9,8 +9,8 @@ public class InMemoryStateStorage : IObjectStateStorage
 
     public ValueTask<object> GetStateAsync(string statename)
     {
-        if (_store.ContainsKey(statename))
-            return ValueTask.FromResult(_store[statename]);
+        if (_store.TryGetValue(statename, out object? value))
+            return ValueTask.FromResult(value);
         return default;
     }
 
