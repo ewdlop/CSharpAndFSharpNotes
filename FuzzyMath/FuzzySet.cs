@@ -54,7 +54,7 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
         MemberShip = element => T2.Max(T2.Min(MemberShip(element),T2.One - set.MemberShip(element)), T2.Min(set.MemberShip(element), T2.One - MemberShip(element)))
     };
 
-    public Func<T1, T2> NormalizedMemberShip => e => MemberShip(e) / Height;
+    public Func<T1, T2> NormalizedMemberShip => Height != T2.Zero ? e => MemberShip(e) / Height : throw new NotDefinedException();
     public Func<T2, T2, T2> SNorm => (m1, m2) => T2.One - TNorm(T2.One - m1, T2.One - m2);
     //public T2 Cardinality() => BaseSet.Sum(e=> MemberShip(e))
     public T2 Cardinality(Func<T1, T2>? memberShip = null)
@@ -125,6 +125,9 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
         //CheckConvexity for all (element1, element2, 0 <= step <= 1)
         throw new NotDefinedException();
     }
+
+    public T2 Distance(FuzzySet<T1, T2> fuzzySet) 
+        => BaseSet.Select(e => T2.Abs(MemberShip(e) - fuzzySet.MemberShip(e))).Max();
 }
 
 [Serializable]
