@@ -1,6 +1,7 @@
 ﻿using LLVMApp.AST;
 using LLVMSharp.Interop;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace LLVMApp.Contexts;
 
@@ -60,30 +61,54 @@ public unsafe record CodeGenVisitor : ExpressionVisitor
 
         LLVMValueRef n;
 
-        IntPtr addtmpPtr = IntPtr.Zero;
+        IntPtr addtmpPtr;
         addtmpPtr = Marshal.StringToHGlobalAnsi(addtmp);
         //System.Security.SecureString s = new System.Security.SecureString();
         //Marshal.SecureStringToGlobalAllocUnicode(addtmpPtr);
-        switch (node.NodeType)
+
+        n = node.NodeType switch
         {
-           case ExpressionType.AdditionExpression:
-                n = LLVM.BuildFAdd(_builder, l, r, (sbyte*)addtmpPtr);
-                break;
-        //    case ExpressionType.SubtractExpression:
-        //        n = LLVM.BuildFSub(_builder, l, r, "subtmp");
-        //        break;
-        //    case ExpressionType.MultiplyExpression:
-        //        n = LLVM.BuildFMul(_builder, l, r, "multmp");
-        //        break;
-        //    case ExpressionType.LessThanExpression:
-        //        // Convert bool 0/1 to double 0.0 or 1.0
-        //        n = LLVM.BuildUIToFP(_builder, LLVM.BuildFCmp(_builder, LLVMRealPredicate.LLVMRealULT, l, r, "cmptmp"), LLVM.DoubleType(), "booltmp");
-        //        break;
-        //    default:
-        //        throw new Exception("invalid binary operator");
+            ExpressionType.AdditionExpression => LLVM.BuildFAdd(_builder, l, r, (sbyte*)addtmpPtr),
+            ExpressionType.SubtractExpression => LLVM.BuildFSub(_builder, l, r, (sbyte*)addtmpPtr),
+            ExpressionType.MultiplyExpression => LLVM.BuildFMul(_builder, l, r, (sbyte*)addtmpPtr),
+            ExpressionType.LessThanExpression => LLVM.BuildFCmp(_builder, LLVMRealPredicate.LLVMRealOLT, l, r, (sbyte*)addtmpPtr),
+            _ => throw new ArgumentException($"operator {node.Operation} is not a valid operator")
+        };
+        _valueStack.Push(n);
+        return node;
+    }
+
+    public override ExpressionAST VisitCallExpressionAST(CallExpressionAst node)
+    {
+        IntPtr nodeCallee;
+        nodeCallee = Marshal.StringToHGlobalAnsi(addtmp);
+
+        LLVMOpaqueValue* calleeF = LLVM.GetNamedFunction(_module, (sbyte*)nodeCallee);
+        IntPtr calleeP = new IntPtr(calleeF);
+        if (calleeP == IntPtr.Zero)
+        {
+            throw new Exception("Unknown function referenced");
         }
 
-        //_valueStack.Push(n);
+        ExpressionAST[] arguments = node.Arguments.ToArray();
+        if (LLVM.CountParams(calleeF) != node.Arguments.Count())
+        {
+            throw new Exception("Incorrect # arguments passed");
+        }
+
+        int argumentCount = arguments.Length;
+        LLVMOpaqueValue** argsV = stackalloc LLVMOpaqueValue*[Math.Max(argumentCount, 1)];
+        for (int i = 0; i < argumentCount; ++i)
+        {
+            Visit(arguments[i]);
+            argsV[i] = _valueStack.Pop();
+        }
+
+        IntPtr calltmp;
+        calltmp = Marshal.StringToHGlobalAnsi("calltmp");
+        LLVMOpaqueType* retType = LLVM.GetReturnType(LLVM.GetElementType(LLVM.TypeOf(calleeF)));
+        _valueStack.Push(LLVM.BuildCall2(_builder, retType, calleeF, argsV, (uint)argumentCount, (sbyte*)calltmp));
+
         return node;
     }
 }
