@@ -1,15 +1,18 @@
-﻿namespace Parsers.A;
+﻿using System.Globalization;
+using System.Numerics;
 
-public interface INodeVisitor
+namespace Parsers.A;
+
+public interface INodeVisitor<T> where T: INumber<T>
 {
-    int Visit(Node node);
+    T Visit(Node<T> node);
 }
 
-public class Evaluator : INodeVisitor
+public class Evaluator<T> : INodeVisitor<T> where T : INumber<T>
 {
-    public int Visit(Node node) => node.Type switch
+    public T Visit(Node<T> node) => node.Type switch
     {
-        NodeType.Value => int.Parse(node.Value),
+        NodeType.Value => T.Parse(node.Value, CultureInfo.CurrentCulture),
         NodeType.Operator => node.Value switch
         {
             "+" => node.Children[0].Accept(this) + node.Children[1].Accept(this),
@@ -18,6 +21,6 @@ public class Evaluator : INodeVisitor
             "/" => node.Children[0].Accept(this) / node.Children[1].Accept(this),
             _ => throw new Exception("Unknown operator")
         },
-        _ => 0
+        _ => T.Zero
     };
 }
