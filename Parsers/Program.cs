@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Parsers.A;
+using System.Linq.Expressions;
 
 Console.WriteLine("Hello, World!");
 
@@ -18,3 +19,14 @@ var visitor = new Evaluator<int>();
 
 // Evaluate the AST and print the result
 Console.WriteLine(ast.Accept(visitor));
+
+expression = "2 * 3 + 4";
+//Console.WriteLine(Parsers.B.Parser.Parse<int>(expression).Compile().DynamicInvoke());
+
+var expr = TestMethod(i => i + 1);
+
+Console.WriteLine(Expression.Lambda<Func<int, int>>(expr.Body, expr.Parameters).Compile().Invoke(1));
+static LambdaExpression TestMethod(Expression<Func<int, int>> expression)
+{
+    return expression;
+}
