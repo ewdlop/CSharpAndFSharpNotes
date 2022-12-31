@@ -22,22 +22,35 @@ if (result.Errors.Any())
 }
 else
 {
-    foreach (SqlBatch batch in result.Script.Batches)
+    IterateSqlNode(result.Script);
+    //foreach (SqlBatch batch in result.Script.Batches)
+    //{
+    //    foreach (var statement in batch.Statements)
+    //    {
+    //        switch (statement)
+    //        {
+    //            case SqlSelectStatement selectStatement:
+    //                Console.WriteLine(statement.GetType().Name);
+    //                ProcessSelectStatement(selectStatement);
+    //                break;
+    //            default:
+    //                Console.WriteLine("Unsupported statment. Printing inner XML");
+    //                Console.WriteLine(statement.Xml);
+    //                break;
+    //        }
+    //    }
+    //}
+}
+static void IterateSqlNode(SqlCodeObject sqlCodeObject, int indent = 0)
+{
+    if (sqlCodeObject == null || sqlCodeObject.Children == null)
     {
-        foreach (var statement in batch.Statements)
-        {
-            switch (statement)
-            {
-                case SqlSelectStatement selectStatement:
-                    Console.WriteLine(statement.GetType().Name);
-                    ProcessSelectStatement(selectStatement);
-                    break;
-                default:
-                    Console.WriteLine("Unsupported statment. Printing inner XML");
-                    Console.WriteLine(statement.Xml);
-                    break;
-            }
-        }
+        return;
+    }
+    foreach (var child in sqlCodeObject.Children)
+    {
+        Console.WriteLine($"{new string(' ', indent)}Sql:{child.Sql}/Type:{child.GetType().Name}");
+        IterateSqlNode(child, indent + 2);
     }
 }
 

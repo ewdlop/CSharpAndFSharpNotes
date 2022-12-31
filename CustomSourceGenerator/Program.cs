@@ -4,8 +4,17 @@ using System.IO;
 using System.Text;
 using System;
 
+
+
 namespace SourceGenerator
 {
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+        }
+    }
+
     [Generator]
     public class MathsGenerator : ISourceGenerator
     {
@@ -48,13 +57,13 @@ namespace SourceGenerator
                     // Get name of generated namespace from file name
                     string fileName = Path.GetFileNameWithoutExtension(file.Path);
 
-                    // Parse and gen the formulas functions
-                    var tokens = Lexer.Tokenize(mathString);
-                    var code = Parser.Parse(tokens);
+                    //// Parse and gen the formulas functions
+                    //var tokens = Lexer.Tokenize(mathString);
+                    //var code = Parser.Parse(tokens);
 
                     var codeFileName = $@"{fileName}.g.cs";
 
-                    context.AddSource(codeFileName, SourceText.From(code, Encoding.UTF8));
+                    //context.AddSource(codeFileName, SourceText.From(code, Encoding.UTF8));
                 }
             }
         }
