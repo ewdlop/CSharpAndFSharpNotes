@@ -64,3 +64,8 @@ static void ProcessSelectStatement(SqlSelectStatement selectStatement)
     SqlWhereClause whereClause = query.WhereClause;
     Console.WriteLine($"where {whereClause.Expression.Sql}");
 }
+
+static void Test()
+{
+    
+}
