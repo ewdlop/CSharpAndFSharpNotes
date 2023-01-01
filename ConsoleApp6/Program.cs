@@ -3,7 +3,7 @@ using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
 //using Antlr4.Runtime;
 //using Antlr4.Runtime.Tree;
 
-string sql = "SELECT\r\nFirstName, LastName, Total\r\nFROM Orders\r\nWHERE Total = (SELECT MAX(Total) FROM Orders);";
+string sql = "SELECT FirstName, LastName, Total\r\nFROM Orders\r\nWHERE Total = (SELECT MAX(Total) FROM Orders);";
 
 //AntlrInputStream antlrInputStream = new AntlrInputStream(sql);
 //SqlLexer lexer = new SqlLexer(antlrInputStream);
@@ -12,6 +12,7 @@ string sql = "SELECT\r\nFirstName, LastName, Total\r\nFROM Orders\r\nWHERE Total
 //IParseTree tree = parser.select_statement();
 
 ParseResult result = Parser.Parse(sql);
+
 
 if (result.Errors.Any())
 {

@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Microsoft.SqlServer.Management.SqlParser.Parser;
+
+<PageTitle>Index</PageTitle>
 
 @*@using System.Threading
 @using BlazorApp1.Services
@@ -48,4 +51,38 @@
 </div>
 *@
 
-        
+@*<button @onclick="Add">Add</button>
+@State.Value.ClickCount*@
+
+<p class="tokens">
+@foreach (Token token in SQLTokens)
+{
+    switch(token.Id)
+    {
+        case (int)Tokens.TOKEN_SELECT:
+            <em style="color:darkcyan;font-style:normal">@token.Text</em>
+        break;
+        case (int)Tokens.TOKEN_FROM:
+            <em style="color:darkcyan;font-style:normal">@token.Text</em>
+        break;
+        case (int)Tokens.TOKEN_ID:
+            <em style="color:darkblue;font-style:normal">@token.Text</em>
+        break;
+        case (int)Tokens.TOKEN_WHERE:
+            <em style="color:darkcyan;font-style:normal">@token.Text</em>
+            break;
+        case (int)Tokens.TOKEN_DESC:
+            <em style="color:darkgoldenrod;font-style:normal">@token.Text</em>            
+            break;
+        default:
+            @token.Text
+        break;
+    }
+}
+</p>
+
+
+@foreach (Token token in SQLTokens)
+{
+    <div>@($"{token.Type}({token.Id}):{token.Text}")</div>
+}
