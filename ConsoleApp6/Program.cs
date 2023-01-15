@@ -1,5 +1,7 @@
-﻿using Microsoft.SqlServer.Management.SqlParser.Parser;
+﻿using Microsoft.SqlServer.Management.SqlParser.Metadata;
+using Microsoft.SqlServer.Management.SqlParser.Parser;
 using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
+using static Antlr4.Runtime.Atn.SemanticContext;
 //using Antlr4.Runtime;
 //using Antlr4.Runtime.Tree;
 
@@ -12,6 +14,12 @@ string sql = "SELECT FirstName, LastName, Total\r\nFROM Orders\r\nWHERE Total = 
 //IParseTree tree = parser.select_statement();
 
 ParseResult result = Parser.Parse(sql);
+string s = """
+SELECT COUNT(DISTINCT RX_PATIENT_DMREFID)/ 60 FROM "AMYT12DB"."WORK"."AMRYT_MYALEPT_EDA_STEP3"
+WHERE DX_PATIENT_DMREFID IS NOT NULL
+AND DIAGNOSIS_CODE_NO_SEPARATOR IN('K760', 'K7581')
+AND MONTH_DIFF_FLAG = '12M'
+""";
 
 
 if (result.Errors.Any())
@@ -64,9 +72,4 @@ static void ProcessSelectStatement(SqlSelectStatement selectStatement)
     Console.WriteLine($"from tables {string.Join(", ", fromClause.TableExpressions.Select(_ => _.Sql))}");
     SqlWhereClause whereClause = query.WhereClause;
     Console.WriteLine($"where {whereClause.Expression.Sql}");
-}
-
-static void Test()
-{
-    
 }
