@@ -59,7 +59,32 @@ public partial class Index
         base.OnInitialized();
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(5000);
+        await base.OnInitializedAsync();
+    }
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        return base.OnAfterRenderAsync(firstRender);
+    }
 
     public void Add()
     {
