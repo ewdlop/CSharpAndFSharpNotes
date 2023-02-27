@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IronPython" Version="3.4.0" />
     <PackageReference Include="libLLVM" Version="14.0.0" />
   </ItemGroup>
 

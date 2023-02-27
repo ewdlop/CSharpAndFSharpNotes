@@ -125,38 +125,36 @@ public sealed class QueuedTaskScheduler : TaskScheduler, IDisposable
     /// The scheduler associated with the found task.  Due to security checks inside of TPL,  
     /// this scheduler needs to be used to execute that task.
     /// </param>
-    private void FindNextTask(out Task? targetTask, out PriortizedTaskScheduler? scheduler)
+    private (Task? targetTask, PriortizedTaskScheduler? scheduler) FindNextTask()
     {
-        targetTask = null;
-        scheduler = null;
-
         // Look through each of our queue groups in sorted order.
         // This ordering is based on the priority of the queues.
-        foreach (var queueGroup in _queueGroups)
+        lock(_queueGroups)
         {
-            var queues = queueGroup.Value;
-
-            // Within each group, iterate through the queues in a round-robin
-            // fashion.  Every time we iterate again and successfully find a task, 
-            // we'll start in the next location in the group.
-
-            //is this loop thread-safe?
-            foreach (int i in queues.CreateSearchOrder())
+            foreach (var queueGroup in _queueGroups)
             {
-                scheduler = queues[i];
-                var items = scheduler._workItems;
-                if (!items.IsEmpty && items.TryDequeue(out Task? task))
+                var queues = queueGroup.Value;
+
+                // Within each group, iterate through the queues in a round-robin
+                // fashion.  Every time we iterate again and successfully find a task, 
+                // we'll start in the next location in the group.
+
+                foreach (int i in queues.CreateSearchOrder())
                 {
-                    targetTask = task;
-                    if (scheduler._disposed && items.IsEmpty)
+                    var items = queues[i]._workItems;
+                    if (!items.IsEmpty && items.TryDequeue(out Task? task))
                     {
-                        RemoveQueue(scheduler);
+                        if (queues[i]._disposed && items.IsEmpty)
+                        {
+                            RemoveQueue(queues[i]);
+                        }
+                        queues.NextQueueIndex = (queues.NextQueueIndex + 1) % queueGroup.Value.Count;
+                        return (task, queues[i]);
                     }
-                    queues.NextQueueIndex = (queues.NextQueueIndex + 1) % queueGroup.Value.Count;
-                    return;
                 }
             }
         }
+        return (null, null);
     }
 
     /// <summary>Queues a task to the scheduler.</summary>
@@ -200,21 +198,20 @@ public sealed class QueuedTaskScheduler : TaskScheduler, IDisposable
                     if (taskQueue.IsEmpty) break;
                     if (taskQueue.TryDequeue(out Task? result))
                     {
-                        // If the task is null, it's a placeholder for a task in the round-robin queues.
-                        // Find the next one that should be processed.
-                        PriortizedTaskScheduler? queueForTargetTask = null;
                         if (result == null)
                         {
-                            FindNextTask(out result, out queueForTargetTask);
-                        }
+                            // If the task is null, it's a placeholder for a task in the round-robin queues.
+                            // Find the next one that should be processed.
+                            (result, PriortizedTaskScheduler? queueForTargetTask) = FindNextTask();
 
-                        // Now if we finally have a task, run it.  If the task
-                        // was associated with one of the round-robin schedulers, we need to use it
-                        // as a thunk to execute its task.
-                        if (result != null)
-                        {
-                            if (queueForTargetTask != null) queueForTargetTask.ExecuteTask(result);
-                            else TryExecuteTask(result);
+                            // Now if we finally have a task, run it.  If the task
+                            // was associated with one of the round-robin schedulers, we need to use it
+                            // as a thunk to execute its task.
+                            if (result != null)
+                            {
+                                if (queueForTargetTask != null) queueForTargetTask.ExecuteTask(result);
+                                else TryExecuteTask(result);
+                            }
                         }
                     }
                 }
@@ -394,7 +391,7 @@ public sealed class QueuedTaskScheduler : TaskScheduler, IDisposable
 
         /// <summary>Runs the specified ask.</summary>
         /// <param name="task">The task to execute.</param>
-        internal void ExecuteTask(Task task) { TryExecuteTask(task); }
+        internal void ExecuteTask(Task task) => TryExecuteTask(task);
 
         /// <summary>Gets the maximum concurrency level to use when processing tasks.</summary>
         public override int MaximumConcurrencyLevel => _pool.MaximumConcurrencyLevel;

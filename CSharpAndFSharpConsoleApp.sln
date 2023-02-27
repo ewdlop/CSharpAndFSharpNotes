@@ -143,11 +143,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "Parsers\Parsers.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Five", "Five", "{EF149CA4-F8EE-4972-AFEF-5303E1C57451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxorBlazorWebAssemblyApp.Server", "FluxorBlazorWebAssemblyApp\Server\FluxorBlazorWebAssemblyApp.Server.csproj", "{F55A3A5F-A764-4A17-8566-0A71F1BF801F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluxorBlazorWebAssemblyApp.Server", "FluxorBlazorWebAssemblyApp\Server\FluxorBlazorWebAssemblyApp.Server.csproj", "{F55A3A5F-A764-4A17-8566-0A71F1BF801F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxorBlazorWebAssemblyApp.Client", "FluxorBlazorWebAssemblyApp\Client\FluxorBlazorWebAssemblyApp.Client.csproj", "{12D32257-4D54-4CE3-826B-F528DF83476C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluxorBlazorWebAssemblyApp.Client", "FluxorBlazorWebAssemblyApp\Client\FluxorBlazorWebAssemblyApp.Client.csproj", "{12D32257-4D54-4CE3-826B-F528DF83476C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxorBlazorWebAssemblyApp.Shared", "FluxorBlazorWebAssemblyApp\Shared\FluxorBlazorWebAssemblyApp.Shared.csproj", "{92D25CF6-E4F9-44FC-ABB8-7BC3F5AF248B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluxorBlazorWebAssemblyApp.Shared", "FluxorBlazorWebAssemblyApp\Shared\FluxorBlazorWebAssemblyApp.Shared.csproj", "{92D25CF6-E4F9-44FC-ABB8-7BC3F5AF248B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
