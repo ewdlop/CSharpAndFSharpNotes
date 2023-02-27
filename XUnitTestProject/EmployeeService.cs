@@ -6,9 +6,13 @@ namespace XUnitTestProject;
 public class EmployeeService
 {
     private readonly IDbContextFactory<AppDbContext> _dbFactory;
-    public EmployeeService(IDbContextFactory<AppDbContext> dbFactory)
+    private readonly IEmployeeRepository _employeeRepository;
+    public EmployeeService(
+        IDbContextFactory<AppDbContext> dbFactory,
+        IEmployeeRepository employeeRepository)
     {
         _dbFactory = dbFactory;
+        _employeeRepository = employeeRepository;
     }
 
     public async Task<Employee> GetEmployeeById(int id)
@@ -22,5 +26,11 @@ public class EmployeeService
         using var context = await _dbFactory.CreateDbContextAsync();
         context.Employees.Add(employee);
         await context.SaveChangesAsync();
+    }
+
+    public bool SetBestEmployee(Employee employee)
+    {
+        _employeeRepository.BestEmployee = employee;
+        return true;
     }
 }
