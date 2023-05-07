@@ -1,6 +1,6 @@
 ﻿@page "/"
 
 <PageTitle>Index</PageTitle>
-
+<div>@SynchronizationContext.Current?.GetHashCode()</div>
 <button @onclick="OnClick">@Environment.CurrentManagedThreadId</button>
 
