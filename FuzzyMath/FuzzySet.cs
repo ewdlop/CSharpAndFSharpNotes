@@ -1,11 +1,12 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 
 namespace FuzzyMath;
 
 public record FuzzySet<T1,T2> where T1: INumber<T1>
     where T2: struct, INumber<T2> 
 {
-    public required HashSet<T1> BaseSet { get; init; }
+    public required ImmutableHashSet<T1> BaseSet { get; init; }
     /// <summary>
     /// T -> [0,1]
     /// </summary>
@@ -79,22 +80,22 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
     /// </summary>
     /// <param name="element"></param>
     /// <returns></returns>
-    public bool NotIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.Zero;
-    public bool FullyIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.One;
-    public bool PartiallyIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) > T2.Zero && MemberShip(element) < T2.One;
-    public bool CrossOverPoint(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.CreateChecked(0.5);
+    public bool IsNotIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.Zero;
+    public bool IsFullyIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.One;
+    public bool IsPartiallyIncluded(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) > T2.Zero && MemberShip(element) < T2.One;
+    public bool IsCrossOverPoint(T1 element) => CheckBaseSetMemberShip(element) && MemberShip(element) == T2.CreateChecked(0.5);
     /// <summary>
     /// Crisp Sets
     /// </summary>
     /// <param name="cut"></param>
     /// <returns></returns>
-    public IEnumerable<T1> AsAlaphaCut(T2 cut) => BaseSet.Where(e => MemberShip(e) >= cut);
-    public IEnumerable<T1> AsStrongAlaphaCut(T2 cut) => BaseSet.Where(e => MemberShip(e) > cut);
+    public IEnumerable<T1> AsAlphaCut(T2 cut) => BaseSet.Where(e => MemberShip(e) >= cut);
+    public IEnumerable<T1> AsStrongAlphaCut(T2 cut) => BaseSet.Where(e => MemberShip(e) > cut);
     public IEnumerable<T1> AsSupport() => BaseSet.Where(e => MemberShip(e) > T2.Zero);
     public IEnumerable<T1> AsKernel() => BaseSet.Where(e => MemberShip(e) == T2.Zero);
     public IEnumerable<T1> AsCore() => BaseSet.Where(e => MemberShip(e) == T2.Zero);
     /// <summary>
-    /// Calcuate distinct cuts, actual defintion is harder to compute
+    /// Calculate distinct cuts, actual definition is harder to compute
     /// </summary>
     /// <returns></returns>
     public IEnumerable<T2> AsLevel => BaseSet.Select(e => MemberShip(e));

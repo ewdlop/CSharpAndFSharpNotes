@@ -1,9 +1,5 @@
 ﻿using BenchmarkApp;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Environments;
-using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Toolchains.InProcess.Emit;
 
 //BenchmarkDotNet.Reports.Summary summary = BenchmarkRunner.Run<LazyTasks>();
 //BenchmarkRunner.Run<ReadOnlyListRecordClass>(ManualConfig.CreateMinimumViable()
@@ -11,4 +7,13 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 //        .WithToolchain(InProcessEmitToolchain.Instance)
 //        .WithRuntime(CoreRuntime.Core60)));
 
-BenchmarkRunner.Run<ReadOnlyListRecordClass>();
+//BenchmarkRunner.Run<ReadOnlyListRecordClass>(); 
+//BenchmarkRunner.Run<SplitterTest>();
+
+//Trie<int> trie = new Trie<int>(77, '.');
+//for (int i = 0; i < stopWords.Length; i++)
+//{
+//    trie.InsertWord(stopWords[i], i);
+//}
+
+BenchmarkRunner.Run<TrieTest2>();

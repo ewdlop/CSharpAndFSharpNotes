@@ -1,44 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Environments;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Toolchains.InProcess.Emit;
-using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 
 namespace BenchmarkApp;
-public class InProcessEmitConfig6Attribute : ConfigAttribute
-{
-    public InProcessEmitConfig6Attribute() : base(typeof(InProcessEmit6Config))
-    {
-    }
-}
-
-public class InProcessEmitConfig7Attribute : ConfigAttribute
-{
-    public InProcessEmitConfig7Attribute() : base(typeof(InProcessEmit7Config))
-    {
-    }
-}
-
-public class InProcessEmit6Config : ManualConfig
-{
-    public InProcessEmit6Config()
-    {
-        AddJob(Job.Default
-            .WithToolchain(InProcessEmitToolchain.Instance)
-            .WithRuntime(CoreRuntime.Core60));
-    }
-}
-
-public class InProcessEmit7Config : ManualConfig
-{
-    public InProcessEmit7Config()
-    {
-        AddJob(Job.Default
-            .WithToolchain(InProcessEmitToolchain.Instance)
-            .WithRuntime(CoreRuntime.Core70));
-    }
-}
 
 [InProcessEmitConfig6]
 [MemoryDiagnoser]
