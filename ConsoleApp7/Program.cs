@@ -1,8 +1,12 @@
 ﻿// Create a ServiceBusClient that will authenticate through Active Directory
 using Azure;
+using Azure.Core.Amqp;
 using Azure.Identity;
+using Azure.Messaging;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -10,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using System.Transactions;
 using System.Xml;
+using static System.Formats.Asn1.AsnWriter;
 {
     string fullyQualifiedNamespace = "yournamespace.servicebus.windows.net";
     await using ServiceBusClient client = new ServiceBusClient(fullyQualifiedNamespace, new DefaultAzureCredential());
@@ -525,6 +530,591 @@ using System.Xml;
         TestModel? output = JsonSerializer.Deserialize<TestModel>(receivedJson);
     }
 }
+
+//Claim check pattern
+{
+    string queueName = "<queue_name>";
+    var containerClient = new BlobContainerClient("<storage connection string>", "claim-checks");
+    await containerClient.CreateIfNotExistsAsync();
+    //byte[] body = ServiceBusTestUtilities.GetRandomBuffer(1000000);
+    byte[] body = Encoding.UTF8.GetBytes("Hello world");
+    string blobName = Guid.NewGuid().ToString();
+    await containerClient.UploadBlobAsync(blobName, new BinaryData(body));
+    var message = new ServiceBusMessage
+    {
+        ApplicationProperties =
+        {
+            ["blob-name"] = blobName
+    }
+    };
+
+    var client = new ServiceBusClient("<service bus connection string>");
+    ServiceBusSender sender = client.CreateSender(queueName);
+    await sender.SendMessageAsync(message);
+
+    ServiceBusReceiver receiver = client.CreateReceiver(queueName);
+    ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync();
+    if (receivedMessage.ApplicationProperties.TryGetValue("blob-name", out object blobNameReceived))
+    {
+        var blobClient = new BlobClient("<storage connection string>", "claim-checks", (string)blobNameReceived);
+        BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
+        BinaryData messageBody = downloadResult.Content;
+
+        // Once we determine that we are done with the message, we complete it and delete the corresponding blob.
+        await receiver.CompleteMessageAsync(receivedMessage);
+        await blobClient.DeleteAsync();
+    }
+}
+//Integrating with the CloudEvent type
+{
+    string connectionString = "<connection_string>";
+    string queueName = "<queue_name>";
+
+    // since ServiceBusClient implements IAsyncDisposable we create it with "await using"
+    await using var client = new ServiceBusClient(connectionString);
+
+    // create the sender
+    ServiceBusSender sender = client.CreateSender(queueName);
+
+    // create a payload using the CloudEvent type
+    var cloudEvent = new CloudEvent(
+        "/cloudevents/example/source",
+        "Example.Employee",
+        new Employee { Name = "Homer", Age = 39 });
+    ServiceBusMessage message = new ServiceBusMessage(new BinaryData(cloudEvent))
+    {
+        ContentType = "application/cloudevents+json"
+    };
+
+    // send the message
+    await sender.SendMessageAsync(message);
+
+    // create a receiver that we can use to receive and settle the message
+    ServiceBusReceiver receiver = client.CreateReceiver(queueName);
+
+    // receive the message
+    ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync();
+
+    // deserialize the message body into a CloudEvent
+    CloudEvent? receivedCloudEvent = CloudEvent.Parse(receivedMessage.Body);
+
+    // deserialize to our Employee model
+    Employee? receivedEmployee = receivedCloudEvent?.Data?.ToObjectFromJson<Employee>();
+
+    // prints 'Homer'
+    Console.WriteLine(receivedEmployee?.Name);
+
+    // prints '39'
+    Console.WriteLine(receivedEmployee?.Age);
+
+    // complete the message, thereby deleting it from the service
+    await receiver.CompleteMessageAsync(receivedMessage);
+}
+//Managing rules
+{
+    string connectionString = "<connection_string>";
+    string topicName = "<topic_name>";
+    string subscriptionName = "<subscription_name>";
+
+    await using var client = new ServiceBusClient(connectionString);
+
+    await using ServiceBusRuleManager ruleManager = client.CreateRuleManager(topicName, subscriptionName);
+
+    // By default, subscriptions are created with a default rule that always evaluates to True. In order to filter, we need
+    // to delete the default rule. You can skip this step if you create the subscription with the ServiceBusAdministrationClient,
+    // and specify a the FalseRuleFilter in the create rule options.
+    await ruleManager.DeleteRuleAsync(RuleProperties.DefaultRuleName);
+    await ruleManager.CreateRuleAsync("brand-filter", new CorrelationRuleFilter { Subject = "Toyota" });
+
+    // create the sender
+    ServiceBusSender sender = client.CreateSender(topicName);
+
+    ServiceBusMessage[] messages =
+    {
+        new ServiceBusMessage { Subject = "Ford", ApplicationProperties = { { "Price", 25000 } } },
+        new ServiceBusMessage { Subject = "Toyota", ApplicationProperties = { { "Price", 28000 } } },
+        new ServiceBusMessage { Subject = "Honda", ApplicationProperties = { { "Price", 35000 } } }
+    };
+
+    // send the messages
+    await sender.SendMessagesAsync(messages);
+
+    // create a receiver for our subscription that we can use to receive and settle the message
+    ServiceBusReceiver receiver = client.CreateReceiver(topicName, subscriptionName);
+
+    // receive the message - we only get back the Toyota message
+    while (true)
+    {
+        ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(5));
+        if (receivedMessage == null)
+        {
+            break;
+        }
+        Console.WriteLine($"Brand: {receivedMessage.Subject}, Price: {receivedMessage.ApplicationProperties["Price"]}");
+        await receiver.CompleteMessageAsync(receivedMessage);
+    }
+
+    await ruleManager.CreateRuleAsync("price-filter", new SqlRuleFilter("Price < 30000"));
+    await ruleManager.DeleteRuleAsync("brand-filter");
+
+    // we can also use the rule manager to iterate over the rules on the subscription.
+    await foreach (RuleProperties rule in ruleManager.GetRulesAsync())
+    {
+        // we should only have 1 rule at this point - "price-filter"
+        Console.WriteLine(rule.Name);
+    }
+
+    // send the messages again - because the subscription rules are evaluated when the messages are first enqueued, adding rules
+    // for messages that are already in a subscription would have no effect.
+    await sender.SendMessagesAsync(messages);
+
+    // receive the messages - we get back both the Ford and the Toyota
+    while (true)
+    {
+        ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(5));
+        if (receivedMessage is null)
+        {
+            break;
+        }
+        Console.WriteLine($"Brand: {receivedMessage.Subject}, Price: {receivedMessage.ApplicationProperties["Price"]}");
+    }
+}
+
+//Advanced configuration
+{
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
+    {
+        TransportType = ServiceBusTransportType.AmqpWebSockets,
+        WebProxy = new WebProxy("https://myproxyserver:80")
+    });
+}
+
+//Initiating the connection with a custom endpoint
+{
+    // Connect to the service using a custom endpoint
+    string connectionString = "<connection_string>";
+    string customEndpoint = "<custom_endpoint>";
+
+    var options = new ServiceBusClientOptions
+    {
+        CustomEndpointAddress = new Uri(customEndpoint)
+    };
+
+    ServiceBusClient client = new ServiceBusClient(connectionString, options);
+}
+//Customizing the retry options
+{
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
+    {
+        RetryOptions = new ServiceBusRetryOptions
+        {
+            TryTimeout = TimeSpan.FromSeconds(60),
+            MaxRetries = 3,
+            Delay = TimeSpan.FromSeconds(.8)
+        }
+    });
+}
+//Using prefetch
+{
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString);
+    ServiceBusReceiver receiver = client.CreateReceiver("<queue-name>", new ServiceBusReceiverOptions
+    {
+        PrefetchCount = 10
+    });
+}
+{
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString);
+    ServiceBusProcessor processor = client.CreateProcessor("<queue-name>", new ServiceBusProcessorOptions
+    {
+        PrefetchCount = 10
+    });
+}
+//Configuring a lock lost handler when using the processor
+{
+    string connectionString = "<connection_string>";
+    var client = new ServiceBusClient(connectionString);
+
+    // create a processor that we can use to process the messages
+    await using ServiceBusProcessor processor = client.CreateProcessor("<queue-name>");
+
+    // configure the message and error handler to use
+    processor.ProcessMessageAsync += MessageHandler;
+    processor.ProcessErrorAsync += ErrorHandler;
+
+    Task SomeExpensiveProcessingAsync(ServiceBusReceivedMessage message, CancellationToken cancellationToken)
+    {
+        // simulate some expensive processing
+        return Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+    }
+    async Task MessageHandler(ProcessMessageEventArgs args)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(args.CancellationToken);
+
+        try
+        {
+            args.MessageLockLostAsync += MessageLockLostHandler;
+
+            // We thread our linked token through to our expensive processing so that we can cancel it in the event of a lock lost exception,
+            // or when the processor is being stopped.
+            await SomeExpensiveProcessingAsync(args.Message, cts.Token);
+        }
+        finally
+        {
+            // Finally, we remove the handler to avoid a memory leak.
+            args.MessageLockLostAsync -= MessageLockLostHandler;
+        }
+
+        Task MessageLockLostHandler(MessageLockLostEventArgs lockLostArgs)
+        {
+            // We have access to the exception, if any, that triggered the lock lost event.
+            // If no exception was provided, the lock was considered lost by the client based on the lock expiry time.
+            Console.WriteLine(lockLostArgs.Exception);
+            cts.Cancel();
+            return Task.CompletedTask;
+        }
+    }
+
+    Task ErrorHandler(ProcessErrorEventArgs args)
+    {
+        // the error source tells me at what point in the processing an error occurred
+        Console.WriteLine(args.ErrorSource);
+        // the fully qualified namespace is available
+        Console.WriteLine(args.FullyQualifiedNamespace);
+        // as well as the entity path
+        Console.WriteLine(args.EntityPath);
+        Console.WriteLine(args.Exception.ToString());
+        return Task.CompletedTask;
+    }
+
+    // start processing
+    await processor.StartProcessingAsync();
+
+    // since the processing happens in the background, we add a Console.ReadKey to allow the processing to continue until a key is pressed.
+    Console.ReadKey();
+}
+//using ServiceBusSessionProcessor
+{
+    string connectionString = "<connection_string>";
+    var client = new ServiceBusClient(connectionString);
+
+    // create a processor that we can use to process the messages
+    await using ServiceBusSessionProcessor processor = client.CreateSessionProcessor("<queue-name>");
+
+    // configure the message and error handler to use
+    processor.ProcessMessageAsync += MessageHandler;
+    processor.ProcessErrorAsync += ErrorHandler;
+
+    Task SomeExpensiveProcessingAsync(ServiceBusReceivedMessage message, CancellationToken cancellationToken)
+    {
+        // simulate some expensive processing
+        return Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+    }
+
+    async Task MessageHandler(ProcessSessionMessageEventArgs args)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(args.CancellationToken);
+
+        try
+        {
+            args.SessionLockLostAsync += SessionLockLostHandler;
+
+            // We thread our linked token through to our expensive processing so that we can cancel it in the event of a lock lost exception,
+            // or when the processor is being stopped.
+            await SomeExpensiveProcessingAsync(args.Message, cts.Token);
+        }
+        finally
+        {
+            // Finally, we remove the handler to avoid a memory leak.
+            args.SessionLockLostAsync -= SessionLockLostHandler;
+        }
+
+        Task SessionLockLostHandler(SessionLockLostEventArgs lockLostArgs)
+        {
+            // We have access to the exception, if any, that triggered the lock lost event.
+            // If no exception was provided, the lock was considered lost by the client based on the lock expiry time.
+            Console.WriteLine(lockLostArgs.Exception);
+            cts.Cancel();
+            return Task.CompletedTask;
+        }
+    }
+
+    Task ErrorHandler(ProcessErrorEventArgs args)
+    {
+        // the error source tells me at what point in the processing an error occurred
+        Console.WriteLine(args.ErrorSource);
+        // the fully qualified namespace is available
+        Console.WriteLine(args.FullyQualifiedNamespace);
+        // as well as the entity path
+        Console.WriteLine(args.EntityPath);
+        Console.WriteLine(args.Exception.ToString());
+        return Task.CompletedTask;
+    }
+
+    // start processing
+    await processor.StartProcessingAsync();
+
+    // since the processing happens in the background, we add a Console.ReadKey to allow the processing to continue until a key is pressed.
+    Console.ReadKey();
+}
+
+//Message body
+{
+    string queueName = "<queue_name>";
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString);
+
+    ServiceBusReceiver receiver = client.CreateReceiver(queueName);
+    ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync();
+
+    AmqpAnnotatedMessage amqpMessage = receivedMessage.GetRawAmqpMessage();
+    if (amqpMessage.Body.TryGetValue(out object? value))
+    {
+        // handle the value body
+    }
+    else if (amqpMessage.Body.TryGetSequence(out IEnumerable<IList<object>>? sequence))
+    {
+        // handle the sequence body
+    }
+    else if (amqpMessage.Body.TryGetData(out IEnumerable<ReadOnlyMemory<byte>>? data))
+    {
+        // handle the data body - note that unlike when accessing the Body property of the received message,
+        // we actually get back a list of byte arrays, not a single byte array. If you were to access the Body property,
+        // the data would be flattened into a single byte array.
+    }
+
+    ServiceBusSender sender = client.CreateSender(queueName);
+
+    var message = new ServiceBusMessage();
+    message.GetRawAmqpMessage().Body = AmqpMessageBody.FromValue(42);
+    await sender.SendMessageAsync(message);
+}
+
+//Setting miscellaneous properties
+{
+    string queueName = "<queue_name>";
+    string connectionString = "<connection_string>";
+    ServiceBusClient client = new ServiceBusClient(connectionString);
+    ServiceBusSender sender = client.CreateSender(queueName);
+
+    var message = new ServiceBusMessage("message with AMQP properties set");
+    AmqpAnnotatedMessage amqpMessage = message.GetRawAmqpMessage();
+
+    // set some properties of the AMQP header
+    amqpMessage.Header.Durable = true;
+    amqpMessage.Header.Priority = 1;
+
+    // set some custom properties in the footer
+    amqpMessage.Footer["custom-footer-property"] = "custom-footer-value";
+
+    // set some custom properties in the message annotations
+    amqpMessage.MessageAnnotations["custom-message-annotation"] = "custom-message-annotation-value";
+
+    // set some custom properties in the delivery annotations
+    amqpMessage.DeliveryAnnotations["custom-delivery-annotation"] = "custom-delivery-annotation-value";
+    await sender.SendMessageAsync(message);
+
+    ServiceBusReceiver receiver = client.CreateReceiver(queueName);
+    ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveMessageAsync();
+
+    AmqpAnnotatedMessage receivedAmqpMessage = receivedMessage.GetRawAmqpMessage();
+    AmqpMessageHeader header = receivedAmqpMessage.Header;
+
+    bool? durable = header.Durable;
+    byte? priority = header.Priority;
+    string customFooterValue = (string)receivedAmqpMessage.Footer["custom-footer-property"];
+    string customMessageAnnotation = (string)receivedAmqpMessage.MessageAnnotations["custom-message-annotation"];
+    string customDeliveryAnnotation = (string)receivedAmqpMessage.DeliveryAnnotations["custom-delivery-annotation"];
+}
+
+class Employee
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+//Extensibility
+public class PluginSender : ServiceBusSender
+{
+    private IEnumerable<Func<ServiceBusMessage, Task>> _plugins;
+
+    internal PluginSender(string queueOrTopicName, ServiceBusClient client, IEnumerable<Func<ServiceBusMessage, Task>> plugins) : base(client, queueOrTopicName)
+    {
+        _plugins = plugins;
+    }
+
+    public override async Task SendMessageAsync(ServiceBusMessage message, CancellationToken cancellationToken = default)
+    {
+        foreach (var plugin in _plugins)
+        {
+            await plugin.Invoke(message);
+        }
+        await base.SendMessageAsync(message, cancellationToken).ConfigureAwait(false);
+    }
+}
+
+public class PluginReceiver : ServiceBusReceiver
+{
+    private IEnumerable<Func<ServiceBusReceivedMessage, Task>> _plugins;
+
+    internal PluginReceiver(string queueName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusReceiverOptions options) :
+        base(client, queueName, options)
+    {
+        _plugins = plugins;
+    }
+
+    internal PluginReceiver(string topicName, string subscriptionName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusReceiverOptions options) :
+        base(client, topicName, subscriptionName, options)
+    {
+        _plugins = plugins;
+    }
+
+    public override async Task<ServiceBusReceivedMessage> ReceiveMessageAsync(TimeSpan? maxWaitTime = null, CancellationToken cancellationToken = default)
+    {
+        ServiceBusReceivedMessage message = await base.ReceiveMessageAsync(maxWaitTime, cancellationToken).ConfigureAwait(false);
+
+        foreach (var plugin in _plugins)
+        {
+            await plugin.Invoke(message);
+        }
+        return message;
+    }
+}
+
+public class PluginProcessor : ServiceBusProcessor
+{
+    private IEnumerable<Func<ServiceBusReceivedMessage, Task>> _plugins;
+
+    internal PluginProcessor(string queueName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusProcessorOptions options) :
+        base(client, queueName, options)
+    {
+        _plugins = plugins;
+    }
+
+    internal PluginProcessor(string topicName, string subscriptionName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusProcessorOptions options) :
+        base(client, topicName, subscriptionName, options)
+    {
+        _plugins = plugins;
+    }
+
+    protected override async Task OnProcessMessageAsync(ProcessMessageEventArgs args)
+    {
+        foreach (var plugin in _plugins)
+        {
+            await plugin.Invoke(args.Message);
+        }
+
+        await base.OnProcessMessageAsync(args);
+    }
+}
+
+public class PluginSessionProcessor : ServiceBusSessionProcessor
+{
+    private IEnumerable<Func<ServiceBusReceivedMessage, Task>> _plugins;
+    private IEnumerable<Func<Exception, Task>> _errorPlugins;
+
+    internal PluginSessionProcessor(string queueName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusSessionProcessorOptions options) :
+        base(client, queueName, options)
+    {
+        _plugins = plugins;
+    }
+
+    internal PluginSessionProcessor(string topicName, string subscriptionName, ServiceBusClient client, IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins, ServiceBusSessionProcessorOptions options) :
+        base(client, topicName, subscriptionName, options)
+    {
+        _plugins = plugins;
+    }
+
+    protected override async Task OnProcessSessionMessageAsync(ProcessSessionMessageEventArgs args)
+    {
+        foreach (var plugin in _plugins)
+        {
+            await plugin.Invoke(args.Message);
+        }
+
+        await base.OnProcessSessionMessageAsync(args);
+    }
+
+    protected override async Task OnProcessErrorAsync(ProcessErrorEventArgs args)
+    {
+        foreach (var errorPlugin in _errorPlugins)
+        {
+            await errorPlugin.Invoke(args.Exception);
+        }
+        await base.OnProcessErrorAsync(args);
+    }
+}
+
+public static class ServiceBusClientExtension
+{
+    public static PluginSender CreatePluginSender(
+    this ServiceBusClient client,
+    string queueOrTopicName,
+    IEnumerable<Func<ServiceBusMessage, Task>> plugins)
+    {
+        return new PluginSender(queueOrTopicName, client, plugins);
+    }
+
+    public static PluginReceiver CreatePluginReceiver(
+        this ServiceBusClient client,
+        string queueName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusReceiverOptions options = default)
+    {
+        return new PluginReceiver(queueName, client, plugins, options ?? new ServiceBusReceiverOptions());
+    }
+
+    public static PluginReceiver CreatePluginReceiver(
+        this ServiceBusClient client,
+        string topicName,
+        string subscriptionName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusReceiverOptions options = default)
+    {
+        return new PluginReceiver(topicName, subscriptionName, client, plugins, options ?? new ServiceBusReceiverOptions());
+    }
+
+    public static PluginProcessor CreatePluginProcessor(
+        this ServiceBusClient client,
+        string queueName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusProcessorOptions options = default)
+    {
+        return new PluginProcessor(queueName, client, plugins, options ?? new ServiceBusProcessorOptions());
+    }
+
+    public static PluginProcessor CreatePluginProcessor(
+        this ServiceBusClient client,
+        string topicName,
+        string subscriptionName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusProcessorOptions options = default)
+    {
+        return new PluginProcessor(topicName, subscriptionName, client, plugins, options ?? new ServiceBusProcessorOptions());
+    }
+
+    public static PluginSessionProcessor CreatePluginSessionProcessor(
+        this ServiceBusClient client,
+        string queueName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusSessionProcessorOptions options = default)
+    {
+        return new PluginSessionProcessor(queueName, client, plugins, options ?? new ServiceBusSessionProcessorOptions());
+    }
+
+    public static PluginSessionProcessor CreatePluginSessionProcessor(
+        this ServiceBusClient client,
+        string topicName,
+        string subscriptionName,
+        IEnumerable<Func<ServiceBusReceivedMessage, Task>> plugins,
+        ServiceBusSessionProcessorOptions options = default)
+    {
+        return new PluginSessionProcessor(topicName, subscriptionName, client, plugins, options ?? new ServiceBusSessionProcessorOptions());
+    }
+}
+
 
 public class TestModel
 {
