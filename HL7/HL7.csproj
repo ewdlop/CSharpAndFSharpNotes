@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.3" />
+    <PackageReference Include="HL7-dotnetcore" Version="2.36.0" />
+    <PackageReference Include="Hl7.Fhir.Specification.R4" Version="5.3.0" />
   </ItemGroup>
 
 </Project>

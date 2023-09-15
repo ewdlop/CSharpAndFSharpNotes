@@ -36,5 +36,4 @@ namespace FunctionApp2
             log.LogInformation($"MessageId={messageId}");
         }
     }
-    }
 }
