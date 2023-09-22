@@ -13,6 +13,7 @@ namespace FunctionApp1
     /// </summary>
     public class Startup : FunctionsStartup
     {
+        const string CosmosConnectionString = "AccountEndpoint=https://localhost:8081/;AccountKey=;";
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddHttpClient();
@@ -23,7 +24,7 @@ namespace FunctionApp1
                 {
                     HttpClientFactory = httpClientFactory.CreateClient
                 };
-                return new CosmosClient("<connection-string>", cosmosClientOptions);
+                return new CosmosClient(CosmosConnectionString, cosmosClientOptions);
             });
         }
     }

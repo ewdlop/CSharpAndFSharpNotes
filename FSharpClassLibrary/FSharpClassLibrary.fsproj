@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="sql\SqlLexer.fsl" />
+    <None Include="sql\SqlParser.fsp" />
+    <Compile Include="SQL\Sql.fs" />
     <Compile Include="Fuzzy.fs" />
     <Compile Include="Caching.fs" />
     <Compile Include="99Problems.fs" />

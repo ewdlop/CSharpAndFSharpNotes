@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,11 @@ namespace FunctionApp2
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-
-        public Function1(ILogger<Function1> log)
+        private readonly CosmosClient _cosmosDBClient;
+        public Function1(ILogger<Function1> log,CosmosClient cosmosDBClient)
         {
             _logger = log;
+            _cosmosDBClient = cosmosDBClient;
         }
 
         [FunctionName("Function1")]
