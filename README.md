@@ -1,4 +1,4 @@
 # CSharpAndFSharp
 
-The main entry is from the C# console app.</br>
+Bunch of C#/F#/.Net/Azure .Net libraries notes<br>
 LINQPAD: https://www.linqpad.net/
