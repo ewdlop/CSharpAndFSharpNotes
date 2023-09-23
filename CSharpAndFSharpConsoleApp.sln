@@ -155,13 +155,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication3", "WebAppli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp7", "ConsoleApp7\ConsoleApp7.csproj", "{56343E4D-A968-426E-8D0F-31EB30D0170F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosDBClient", "CosmosDBClient\CosmosDBClient.csproj", "{2FF3F5D5-C98F-4B00-98BD-CFA76C06CF1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosDBClient", "CosmosDBClient\CosmosDBClient.csproj", "{2FF3F5D5-C98F-4B00-98BD-CFA76C06CF1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApp1", "FunctionApp1\FunctionApp1.csproj", "{43A3BA76-BB5F-433E-B006-81F1FC807701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp1", "FunctionApp1\FunctionApp1.csproj", "{43A3BA76-BB5F-433E-B006-81F1FC807701}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApp2", "FunctionApp2\FunctionApp2.csproj", "{0E48C6C5-FB28-4709-B210-027DD5B7D3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2", "FunctionApp2\FunctionApp2.csproj", "{0E48C6C5-FB28-4709-B210-027DD5B7D3BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HL7", "HL7\HL7.csproj", "{E6E7FED7-C316-42F5-AC05-15D180314E86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HL7", "HL7\HL7.csproj", "{E6E7FED7-C316-42F5-AC05-15D180314E86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp12", "CSharp12\CSharp12.csproj", "{5EC12E84-0F7C-4084-91CE-15A056B50CB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -963,6 +965,18 @@ Global
 		{E6E7FED7-C316-42F5-AC05-15D180314E86}.Release|x64.Build.0 = Release|Any CPU
 		{E6E7FED7-C316-42F5-AC05-15D180314E86}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6E7FED7-C316-42F5-AC05-15D180314E86}.Release|x86.Build.0 = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|x64.Build.0 = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Debug|x86.Build.0 = Debug|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|x64.ActiveCfg = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|x64.Build.0 = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|x86.ActiveCfg = Release|Any CPU
+		{5EC12E84-0F7C-4084-91CE-15A056B50CB9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
