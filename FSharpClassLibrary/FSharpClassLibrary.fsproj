@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ARM.fs" />
     <None Include="sql\SqlLexer.fsl" />
     <None Include="sql\SqlParser.fsp" />
     <Compile Include="SQL\Sql.fs" />
@@ -30,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Farmer" Version="1.7.29" />
     <PackageReference Include="FsLexYacc" Version="10.2.0" />
     <PackageReference Include="FsLexYacc.Runtime" Version="10.2.0" />
   </ItemGroup>
