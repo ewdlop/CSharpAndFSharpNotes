@@ -2,6 +2,7 @@ module ARM
 
 open Farmer
 open Farmer.Builders
+open Farmer.CosmosDb
 
 let plan = servicePlan {
     name "theFarm"
@@ -10,6 +11,12 @@ let plan = servicePlan {
 
 let ai = appInsights {
     name "insights"
+}
+
+let cosmosDb = cosmosDb {
+    name "Tasks"
+    account_name "isaac-to-do-app-cosmos"
+    consistency_policy Session
 }
 
 let planets = [ "jupiter"; "mars"; "pluto"; "venus" ]
@@ -62,6 +69,7 @@ let deployment = arm {
         myWebApp
         transactionalDb
         etlProcessor
+        cosmosDb
     ]
     add_resources webApps
 }

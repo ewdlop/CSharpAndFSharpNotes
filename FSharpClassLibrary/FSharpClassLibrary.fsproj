@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="MontleCarlo.fs" />
     <Compile Include="ARM.fs" />
     <None Include="sql\SqlLexer.fsl" />
     <None Include="sql\SqlParser.fsp" />
