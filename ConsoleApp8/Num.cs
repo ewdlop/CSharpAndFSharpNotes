@@ -1,8 +1,10 @@
-﻿namespace ConsoleApp8;
+﻿using System.Numerics;
 
-public record Num(Token Value) : AST
+namespace ConsoleApp8;
+
+public record Num<T>(Token Value) : AST<T> where T : INumber<T>
 {
-    public override T Accept<T>(IASTVisitor<T> visitor)
+    public override T Accept(IASTVisitor<T> visitor)
     {
         return visitor.VisitNum(this);
     }

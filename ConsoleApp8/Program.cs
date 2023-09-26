@@ -2,9 +2,9 @@
 
 string input = "(3+5)*2";
 Lexer lexer = new Lexer(input);
-Parser parser = new Parser(lexer);
-AST tree = parser.Parse();
+Parser<double> parser = new Parser<double>(lexer);
+AST<double> tree = parser.Parse();
 
-Evaluator evaluator = new Evaluator();
+Evaluator<double> evaluator = new Evaluator<double>();
 double result = tree.Accept(evaluator);
 Console.WriteLine(result);  // Outputs: 16

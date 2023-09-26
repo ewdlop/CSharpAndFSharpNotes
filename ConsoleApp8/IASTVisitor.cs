@@ -1,12 +1,14 @@
-﻿namespace ConsoleApp8;
+﻿using System.Numerics;
 
-public interface IASTVisitor<T>
+namespace ConsoleApp8;
+
+public interface IASTVisitor<T> where T : INumber<T>
 {
-    T VisitBinOp(BinOp binOp);
-    T VisitNum(Num num);
+    T VisitBinOp(BinOp<T> binOp);
+    T VisitNum(Num<T> num);
 }
 
-public abstract record AST
+public abstract record AST<T> where T : INumber<T>
 {
-    public abstract T Accept<T>(IASTVisitor<T> visitor);
+    public abstract T Accept(IASTVisitor<T> visitor);
 }

@@ -1,17 +1,18 @@
-﻿namespace ConsoleApp8;
+﻿using System.Numerics;
 
-public class Parser(Lexer lexer)
+namespace ConsoleApp8;
+
+public class Parser<T>(Lexer lexer) where T : INumber<T>
 {
     private Token currentToken = lexer.GetNextToken();
     public Token CurrentToken => currentToken;
-    // Corresponds to EXPRESSION -> TERM '+' EXPRESSION | TERM
-    public AST Expression()
+    public AST<T> Expression()
     {
-        var node = Term();
+        AST<T> node = Term();
 
         while (CurrentToken.Type == TokenType.Plus || CurrentToken.Type == TokenType.Minus)
         {
-            var token = CurrentToken;
+            Token token = CurrentToken;
             if (token.Type == TokenType.Plus)
             {
                 Eat(TokenType.Plus);
@@ -21,15 +22,15 @@ public class Parser(Lexer lexer)
                 Eat(TokenType.Minus);
             }
 
-            node = new BinOp(node, token, Term());
+            node = new BinOp<T>(node, token, Term());
         }
 
         return node;
     }
 
-    public AST Term()
+    public AST<T> Term()
     {
-        var node = Factor();
+        AST<T> node = Factor();
 
         while (CurrentToken.Type == TokenType.Times || CurrentToken.Type == TokenType.Div)
         {
@@ -43,25 +44,25 @@ public class Parser(Lexer lexer)
                 Eat(TokenType.Div);
             }
 
-            node = new BinOp(node, token, Factor());
+            node = new BinOp<T>(node, token, Factor());
         }
 
         return node;
     }
 
-    public AST Factor()
+    public AST<T> Factor()
     {
-        var token = CurrentToken;
+        Token token = CurrentToken;
 
         if (token.Type == TokenType.Number)
         {
             Eat(TokenType.Number);
-            return new Num(token);
+            return new Num<T>(token);
         }
         else if (token.Type == TokenType.LeftParenthesis)
         {
             Eat(TokenType.LeftParenthesis);
-            var node = Expression();
+            AST<T> node = Expression();
             Eat(TokenType.RightParenthesis);
             return node;
         }
@@ -69,7 +70,7 @@ public class Parser(Lexer lexer)
         throw new Exception("Syntax Error");
     }
 
-    public AST Parse()
+    public AST<T> Parse()
     {
         return Expression();
     }

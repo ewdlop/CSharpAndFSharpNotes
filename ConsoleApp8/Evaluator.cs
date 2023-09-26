@@ -1,8 +1,11 @@
-﻿namespace ConsoleApp8;
+﻿using System.Globalization;
+using System.Numerics;
 
-public class Evaluator : IASTVisitor<double>
+namespace ConsoleApp8;
+
+public class Evaluator<T> : IASTVisitor<T> where T : INumber<T>
 {
-    public double VisitBinOp(BinOp binOp)
+    public T VisitBinOp(BinOp<T> binOp)
     {
         if (binOp.Op.Type == TokenType.Plus)
             return binOp.Left.Accept(this) + binOp.Right.Accept(this);
@@ -16,8 +19,8 @@ public class Evaluator : IASTVisitor<double>
         throw new Exception($"Unknown operator: {binOp.Op.Type}");
     }
 
-    public double VisitNum(Num num)
+    public T VisitNum(Num<T> num)
     {
-        return double.Parse(num.Value.Value ?? string.Empty);
+        return T.TryParse(num.Value.Value ?? string.Empty, CultureInfo.CurrentCulture.NumberFormat,out T? result) ? result : T.Zero;
     }
 }
