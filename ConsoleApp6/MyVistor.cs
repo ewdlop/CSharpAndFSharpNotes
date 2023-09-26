@@ -18,7 +18,7 @@ public class MyVistor : TSqlFragmentVisitor
     {
         //node.Dump();
         PrintAndTrackVisit(node);
-        node.Statements.Dump();
+        //node.Statements.Dump();
         foreach (TSqlStatement statment in node.Statements)
         {
             TrackStatementExpression(statment);
@@ -55,7 +55,7 @@ public class MyVistor : TSqlFragmentVisitor
         if (expression is BinaryQueryExpression binaryQuery)
         {
             TrackQueryExpression(binaryQuery.FirstQueryExpression);
-            binaryQuery.FirstQueryExpression.GetType().Dump();
+            //binaryQuery.FirstQueryExpression.GetType().Dump();
             TrackQueryExpression(binaryQuery.SecondQueryExpression);
         }
         else if (expression is QuerySpecification query)
