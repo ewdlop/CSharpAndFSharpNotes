@@ -14,13 +14,13 @@ progress:
 
 //i am not convincing myself yet
 
-IEnumerable<bool> Machine(int[] x)
+IEnumerable<int> Machine(int[] x)
 {
     while(x is not null && x is not [.. var head, var y] && x is not [int z, .. var tail] && x is not [])
     {
-        yield return true;
+        yield return 1;
     }
-    yield return false;
+    yield return 0;
 }
 Copyright disclaimar license cc 3.0.
 
