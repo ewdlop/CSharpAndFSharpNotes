@@ -12,10 +12,13 @@ Func< List<int>, bool> Oracle = (List<int> x) => x is not null && x is not [.. v
 
 progress:
 
-List<int> x = new List<int>() { 0 };
-while (x is not null && x is not [.. var head, var y] && x is not [int z, .. var tail] && x is not [])
+IEnumerable<bool> Machine(List<int> x)
 {
-    Console.WriteLine("Hello");
+    while(x is not null && x is not [.. var head, var y] && x is not [int z, .. var tail] && x is not [])
+    {
+        yield return true;
+    }
+    yield return false;
 }
 
 Copyright disclaimar license cc 3.0.
