@@ -121,22 +121,12 @@ public record FuzzySet<T1,T2> where T1: INumber<T1>
         return CheckBaseSetMemberShip(element1) && CheckBaseSetMemberShip(element2) &&
             MemberShip(step * element1 + (T1.One - step) * element2) >= T2.Min(MemberShip(element1), MemberShip(element2));
     }
-    public bool IsConvex()
-    {
-        //CheckConvexity for all (element1, element2, 0 <= step <= 1)
-        throw new NotDefinedException();
-    }
+    //public bool IsConvex()
+    //{
+    //    //CheckConvexity for all (element1, element2, 0 <= step <= 1)
+    //    return (BaseSet is IList<T1> U && (U.AsReadOnly() is not [_, var x, _] && U.AsReadOnly() is not [_, var y, _] && x != y);
+    //}
 
     public T2 Distance(FuzzySet<T1, T2> fuzzySet) 
         => BaseSet.Select(e => T2.Abs(MemberShip(e) - fuzzySet.MemberShip(e))).Max();
-}
-
-[Serializable]
-public class NotDefinedException : Exception
-{
-    public NotDefinedException(){ }
-
-    public NotDefinedException(string message): base(message){ }
-
-    public NotDefinedException(string message, Exception innerException): base(message, innerException){ }
 }
