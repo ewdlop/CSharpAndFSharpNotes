@@ -1,0 +1,21 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Raster (Bitmap) Canvas</h1>
+
+<p>The canvas below is using pixels in memory. Click and drag to move the text.</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col border rounded p-2 canvas-container">
+
+            <SkiaSharp.Views.Blazor.SKCanvasView @ref="_skiaView" OnPaintSurface="OnPaintSurface" IgnorePixelScaling="true"
+                          @onpointerdown="OnPointerDown"
+                          @onpointermove="OnPointerMove"
+                          @onpointerup="OnPointerUp" />
+
+        </div>
+    </div>
+</div>
+
