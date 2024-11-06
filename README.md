@@ -1,8 +1,11 @@
 # CSharpAndFSharpNotes
 
-Bunch of C#/F#/.Net/Azure .Net libraries notes<br>
+Bunch of C#/ F#/ .Net/ Azure .Net libraries notes<br>
+
 LINQPAD: https://www.linqpad.net/<br>
+
 Q#: https://learn.microsoft.com/en-us/azure/quantum/overview-what-is-qsharp-and-qdk
+
 F#: https://tryfsharp.fsbolero.io/
 
 # Category-theory AND functional programming
