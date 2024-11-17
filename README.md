@@ -6,6 +6,10 @@ LINQPAD: https://www.linqpad.net/<br>
 
 Q#: https://learn.microsoft.com/en-us/azure/quantum/overview-what-is-qsharp-and-qdk
 
+# Fiddle
+
+https://dotnetfiddle.net/
+
 F#: https://tryfsharp.fsbolero.io/
 
 # Category-theory AND functional programming
