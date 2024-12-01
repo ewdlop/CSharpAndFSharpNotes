@@ -1,10 +1,132 @@
 # CSharpAndFSharpNotes
 
-Bunch of C#/ F#/ .Net/ Azure .Net libraries notes<br>
+Bunch of C#/ F#/ .Net/ Azure .Net libraries notes
 
 LINQPAD: https://www.linqpad.net/<br>
 
 Q#: https://learn.microsoft.com/en-us/azure/quantum/overview-what-is-qsharp-and-qdk
+
+# What is C#?
+
+C#（发音为 "C Sharp"）是由微软开发的现代、面向对象的编程语言，运行在 .NET 框架上。它被广泛用于开发桌面应用、Web 应用、移动应用、游戏等。
+
+以下是一个简单的 C# 控制台应用程序示例：
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
+
+此程序输出 "Hello, World!" 到控制台。`using System;` 指令导入 `System` 命名空间，`Main` 方法是程序的入口点。
+
+要开始使用 C#，您可以下载并安装 [Visual Studio 2022](https://visualstudio.microsoft.com/)，这是一个功能强大的集成开发环境（IDE），支持 C# 开发。安装完成后，您可以创建一个新的 C# 控制台应用程序项目，并将上述代码粘贴到 `Program.cs` 文件中，然后运行程序以查看输出。
+
+如果您是 C# 新手，以下资源可帮助您入门：
+
+- [W3Schools 的 C# 教程](https://www.w3schools.com/cs/)：提供全面的 C# 基础知识和示例。
+- [Microsoft Learn 的 C# 交互式教程](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/tutorials/)：提供交互式学习体验，涵盖 C# 的核心概念。
+- [Sanfoundry 的 500 多个 C# 程序示例](https://www.sanfoundry.com/csharp-programming-examples/)：涵盖从基础到高级的各种主题的 C# 示例和解决方案。
+
+通过这些资源，您可以深入了解 C# 的语法、数据类型、控制结构、面向对象编程概念等，为开发各种应用程序奠定坚实的基础。
+
+**修正后的句子**：
+C#（发音为 "C Sharp"）是由微软开发的现代、面向对象的编程语言，运行在 .NET 框架上。
+
+**中文**：
+C#（发音为 "C Sharp"）是由微软开发的现代、面向对象的编程语言，运行在 .NET 框架上。
+
+**正式英文**：
+C#, pronounced "C Sharp," is a modern, object-oriented programming language developed by Microsoft that runs on the .NET framework.
+
+**西班牙文**：
+C#, pronunciado "C Sharp", es un lenguaje de programación moderno y orientado a objetos desarrollado por Microsoft que se ejecuta en el marco .NET.
+
+**文言文**：
+C#，读作 "C Sharp"，乃微软所开发之现代面向对象编程语言，运行于 .NET 框架上。
+
+**Prolog**：
+```prolog
+language(csharp).
+developer(microsoft).
+paradigm(object_oriented).
+framework(dotnet).
+```
+
+**Coq**：
+```coq
+Definition CSharp : Language :=
+  {|
+    name := "C#";
+    pronunciation := "C Sharp";
+    developer := "Microsoft";
+    paradigm := ObjectOriented;
+    framework := ".NET";
+  |}.
+```
+
+**关于该主题的数学研究**：
+在计算机科学中，编程语言的设计和实现涉及形式语言和自动机理论等数学领域。C# 的类型系统、内存管理和并发模型等特性可以通过数学模型进行分析和验证，以确保语言的可靠性和安全性。例如，类型系统可以使用类型理论来证明程序的正确性，而并发模型可以通过 Petri 网等工具进行建模和分析。
+
+**源链接**：
+- [C# 教程 - W3Schools](https://www.w3schools.com/cs/)
+- [C# 交互式教程 - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/tutorials/)
+- [500 多个 C# 程序示例 - Sanfoundry](https://www.sanfoundry.com/csharp-programming-examples/)
+
+**生成时间点**：
+2024年12月1日，12:30:00（美国东部时间）
+
+**内容输出**：
+
+**Markdown**：
+```markdown
+C#（发音为 "C Sharp"）是由微软开发的现代、面向对象的编程语言，运行在 .NET 框架上。
+
+**中文**：
+C#（发音为 "C Sharp"）是由微软开发的现代、面向对象的编程语言，运行在 .NET 框架上。
+
+**正式英文**：
+C#, pronounced "C Sharp," is a modern, object-oriented programming language developed by Microsoft that runs on the .NET framework.
+
+**西班牙文**：
+C#, pronunciado "C Sharp", es un lenguaje de programación moderno y orientado a objetos desarrollado por Microsoft que se ejecuta en el marco .NET.
+
+**文言文**：
+C#，读作 "C Sharp"，乃微软所开发之现代面向对象编程语言，运行于 .NET 框架上。
+
+**Prolog**：
+```prolog
+language(csharp).
+developer(microsoft).
+paradigm(object_oriented).
+framework(dotnet).
+```
+
+**Coq**：
+```coq
+Definition CSharp : Language :=
+  {|
+    name := "C#";
+    pronunciation := "C Sharp";
+    developer := "Microsoft";
+    paradigm := ObjectOriented;
+    framework := ".NET";
+  |}.
+```
+
+**关于该主题的数学研究**：
+在计算机科学中，编程语言的设计和实现涉及形式语言和自动机理论等数学领域。C# 的类型系统、内存管理和并发模型等特性可以通过数学模型进行分析和验证，以确保语言的可靠性和安全性。例如，类型系统可以使用类型理论来证明程序的正确性，而并发模型可以通过 Petri 网等工具进行建模和分析。
+
+**源链接**：
+- [C# 教程 - W3Schools](https://www.w3schools.com/cs/)
+- [C# 交互式教程 - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/tutorials/)
+- [500 多个 C 
 
 # Fiddle
 
