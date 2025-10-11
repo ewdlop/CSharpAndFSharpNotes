@@ -1,1 +1,1 @@
-﻿
+﻿Console.BackgroundColor = ConsoleColor.DarkBlue;

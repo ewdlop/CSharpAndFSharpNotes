@@ -1,4 +1,5 @@
-﻿for (var n = 0; n <= 10; ++n)
+﻿#if false
+for (var n = 0; n <= 10; ++n)
 {
     FibonacciCps(n, fib => Console.WriteLine($"{n}: {fib}"));
 }
@@ -16,3 +17,5 @@ static void FibonacciCps(int n, Action<int> continuation)
             break;
     }
 }
+
+#endif
