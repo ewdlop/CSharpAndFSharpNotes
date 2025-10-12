@@ -248,7 +248,7 @@ A common guideline in programming is the **90/10 Rule** (or 80/20 Rule), which s
 
 ### 5. **Examples of Premature Optimization Pitfalls**
 
-   - **Loop Unrolling**: Manually unrolling loops in the hopes of performance gains, even when the loop is not a bottleneck.
+   - **Loop Unrolling**: Manually unrolling loops in the hopes of performance gains, even when the loop is not a bottleneck. <--- not yielding?
    - **Complex Caching Mechanisms**: Adding caching layers or memoization in parts of the code where there’s little measurable impact on runtime.
    - **Avoiding Abstraction**: Writing overly specific code (e.g., using inline code instead of functions) to reduce “function call overhead” when the real bottleneck lies elsewhere.
 
