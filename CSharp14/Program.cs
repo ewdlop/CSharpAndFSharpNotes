@@ -2,6 +2,7 @@
 using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+
 Console.WriteLine("C# 14 Extension Methods with 'extension' keyword");
 var numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 Console.WriteLine("Numbers less than 5: " + string.Join(", ", numbers.小於(5)));
@@ -20,8 +21,27 @@ Console.WriteLine($"{factorialNumber}! = {factorialNumber.階乘()}");
 int divisorNumber = 28;
 Console.WriteLine($"Factors of {divisorNumber}: " + string.Join(", ", divisorNumber.因數()));
 
+Test test = new Test(42);
+test?.X = 100;
+
 namespace CSharp14
 {
+    //A header
+    public delegate bool TryParse<T>(string text, out T result);
+
+
+    public class Test(int x)
+    {
+        public int? X = x;
+    }
+
+
+    public class TryParse
+    {
+        public static TryParse<int> parse1 = Int32.TryParse;
+        public static TryParse<int> parse2 = (string text, out int result) => parse1(text, out result);
+    }
+
     public static class IEnumerableExtensions
     {
         extension(IEnumerable<int> source)
@@ -36,6 +56,11 @@ namespace CSharp14
                 => source.Where(x => x > threshold);
         }
 
+        extension(IEnumerable<int> source)
+        {
+            public IEnumerable<int> 大於(int threshold)
+                => source.Where(x => x > threshold);
+        }
 
         extension(string s)
         {
