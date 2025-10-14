@@ -1,8 +1,6 @@
 ﻿using CSharp14;
 using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
-
 Console.WriteLine("C# 14 Extension Methods with 'extension' keyword");
 var numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 Console.WriteLine("Numbers less than 5: " + string.Join(", ", numbers.小於(5)));
@@ -120,6 +118,12 @@ namespace CSharp14
                 => source.Where(x => x > threshold);
         }
 #endif
+
+        extension<T>(IEnumerable<T> source) where T : INumber<T>
+        {
+            public IEnumerable<T> As大於(T threshold)
+                => source.Where(x => x > threshold);
+        }
     }
 
 
