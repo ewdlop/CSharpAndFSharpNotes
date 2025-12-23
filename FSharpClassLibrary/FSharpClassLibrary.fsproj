@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -9,11 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="SQL\Sql.fs" />
+    <None Include="SQL\README.md" />
+    <FsLex Include="SQL\SqlLexer.fsl">
+      <OtherFlags>--module SqlLexer --unicode</OtherFlags>
+    </FsLex>
+    <FsYacc Include="SQL\SqlParser.fsy">
+      <OtherFlags>--module SqlParser</OtherFlags>
+    </FsYacc>
+    <Compile Include="SqlParser.fsi" />
+    <Compile Include="SqlParser.fs" />
+    <Compile Include="SqlLexer.fs" />
+    <Compile Include="FileName.fs" />
     <Compile Include="MontleCarlo.fs" />
     <Compile Include="ARM.fs" />
-    <None Include="sql\SqlLexer.fsl" />
-    <None Include="sql\SqlParser.fsp" />
-    <Compile Include="SQL\Sql.fs" />
     <Compile Include="Fuzzy.fs" />
     <Compile Include="Caching.fs" />
     <Compile Include="99Problems.fs" />
@@ -33,8 +42,8 @@
 
   <ItemGroup>
     <PackageReference Include="Farmer" Version="1.7.29" />
-    <PackageReference Include="FsLexYacc" Version="10.2.0" />
-    <PackageReference Include="FsLexYacc.Runtime" Version="10.2.0" />
+    <PackageReference Include="FsLexYacc" Version="11.3.0" />
+    <PackageReference Include="FsLexYacc.Runtime" Version="11.3.0" />
   </ItemGroup>
 
   <ItemGroup>
