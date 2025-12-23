@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.25" />
     <ProjectReference Include="..\Shared\RealTimeBlazorWebassemblyApp.Shared.csproj" />
   </ItemGroup>
 

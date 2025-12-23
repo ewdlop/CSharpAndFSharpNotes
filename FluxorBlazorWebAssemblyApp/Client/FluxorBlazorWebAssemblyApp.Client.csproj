@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.14" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <ProjectReference Include="..\Shared\FluxorBlazorWebAssemblyApp.Shared.csproj" />
   </ItemGroup>
 
